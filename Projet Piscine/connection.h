@@ -13,7 +13,10 @@ class Connection
         Connection(int index, Node* a, Node* b);
         ~Connection();
 
-        int getIndex() {return m_index;};
+        int getIndex() const {return m_index;};
+        Node* getNodeA() const {return m_node_a;};
+        Node* getNodeB() const {return m_node_b;};
+        std::vector<float> getWeights() const {return m_weights;};
 
         void addWeight(float w) {m_weights.push_back(w);};
 

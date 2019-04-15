@@ -13,7 +13,9 @@ class Node
         Node(int index, float x, float y);
         ~Node();
 
-        int getIndex() {return m_index;};
+        int   getIndex() const {return m_index;};
+        float getX    () const {return m_x    ;};
+        float getY    () const {return m_y    ;};
 
     private:
         int m_index;

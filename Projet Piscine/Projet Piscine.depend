@@ -1,29 +1,48 @@
 # depslib dependency file v1.0
-1555340067 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\connection.cpp
+1555351033 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\connection.cpp
 	"connection.h"
 
-1555343438 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\connection.h
+1555354333 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\connection.h
 	"node.h"
 	<vector>
 
-1555343427 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\node.h
+1555351634 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\node.h
 	"connection.h"
 	<vector>
 
-1555343389 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\main.cpp
+1555353147 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\main.cpp
 	<iostream>
 	"graph.h"
 
-1555343476 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\graph.h
+1555352647 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\graph.h
 	"node.h"
 	"connection.h"
+	"svgfile.h"
 	<string>
 	<iostream>
 	<fstream>
 
-1555340026 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\node.cpp
+1555351033 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\node.cpp
 	"node.h"
 
-1555343526 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\graph.cpp
+1555354502 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\graph.cpp
 	"graph.h"
+
+1555354843 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\svgfile.h
+	<string>
+	<fstream>
+	<set>
+
+1555352629 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\couleur.cpp
+	"couleur.h"
+	"svgfile.h"
+	<iostream>
+
+1555351379 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\couleur.h
+	<string>
+	<cstdint>
+
+1555353935 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\svgfile.cpp
+	<iostream>
+	<sstream>
 

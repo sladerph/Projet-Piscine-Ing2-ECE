@@ -32,7 +32,13 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="connection.cpp" />
+		<Unit filename="connection.h" />
+		<Unit filename="graph.cpp" />
+		<Unit filename="graph.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="node.cpp" />
+		<Unit filename="node.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
