@@ -34,11 +34,15 @@
 		</Compiler>
 		<Unit filename="connection.cpp" />
 		<Unit filename="connection.h" />
+		<Unit filename="couleur.cpp" />
+		<Unit filename="couleur.h" />
 		<Unit filename="graph.cpp" />
 		<Unit filename="graph.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="node.cpp" />
 		<Unit filename="node.h" />
+		<Unit filename="svgfile.cpp" />
+		<Unit filename="svgfile.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
