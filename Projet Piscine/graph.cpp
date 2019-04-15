@@ -193,6 +193,70 @@ Graph::~Graph()
     //dtor
 }
 
+std::vector<bool> Graph::getPrim(int weight, float* totalWeight)
+{
+    std::vector<bool> shortestPath (m_connections.size(),false);
+    std::unordered_set<int> usedIdList;
+    std::unordered_set<int> unusedIdList;
+    std::vector<Connection*> orderedConnections = sortConnections(m_connections, weight);
+    for(int i = 0; i < m_ordre; i++)
+        unusedIdList.insert(i);
+    unusedIdList.erase(m_nodes[0]->getIndex());
+    usedIdList.insert(m_nodes[0]->getIndex());
+    while(!unusedIdList.empty())
+    {
+        for(size_t i = 0; i < orderedConnections.size(); i++)
+        {
+            if((usedIdList.find(orderedConnections[i]->getNodeA()->getIndex())==usedIdList.end())
+               ^(usedIdList.find(orderedConnections[i]->getNodeB()->getIndex())==usedIdList.end()))
+            {
+                shortestPath[orderedConnections[i]->getIndex()] = true;
+                if(usedIdList.find(orderedConnections[i]->getNodeA()->getIndex())==usedIdList.end())
+                {
+                    unusedIdList.erase(orderedConnections[i]->getNodeA()->getIndex());
+                    usedIdList.insert(orderedConnections[i]->getNodeA()->getIndex());
+                }
+                else
+                {
+                    unusedIdList.erase(orderedConnections[i]->getNodeB()->getIndex());
+                    usedIdList.insert(orderedConnections[i]->getNodeB()->getIndex());
+                }
+                i=0;
+            }
+        }
+    }
+    for(size_t i=0; i < shortestPath.size(); i++)
+    {
+        if(shortestPath[i])
+        {
+            *totalWeight+=m_connections[i]->getWeights()[weight];
+        }
+    }
+    return shortestPath;
+}
+
+
+std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight)
+{
+    Connection* temp;
+    for(size_t i = 0; i < connections.size()-1; i++)
+    {
+        if(connections[i]->getWeights()[weight]>connections[i+1]->getWeights()[weight])
+        {
+            temp = connections[i];
+            connections[i]=connections[i+1];
+            connections[i+1]=temp;
+            i=0;
+        }
+    }
+    std::vector<Connection*> connectionVector;
+    for(size_t i = 0; i < connections.size(); i++)
+        connectionVector.push_back(connections[i]);
+    return connectionVector;
+}
+
+
+
 
 
 

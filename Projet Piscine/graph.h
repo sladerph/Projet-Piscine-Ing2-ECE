@@ -8,6 +8,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <unordered_set>
 
 #define XOFFSET 50
 #define YOFFSET 50
@@ -25,6 +26,8 @@ class Graph
         Node* getNode(int index);
         Connection* getConnection(int index);
 
+        std::vector<bool> getPrim(int weight, float* totalWeight);
+
     private:
         std::vector<Node*> m_nodes;
         std::vector<Connection*> m_connections;
@@ -32,5 +35,8 @@ class Graph
         int m_ordre;
 
 };
+
+std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight);
+
 
 #endif // GRAPH_H
