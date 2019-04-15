@@ -109,7 +109,7 @@ void Svgfile::addTriangle(double x1, double y1, double x2, double y2,
             << "\" />\n";
 }
 
-void Svgfile::addLine(double x1, double y1, double x2, double y2, std::string color)
+void Svgfile::addLine(double x1, double y1, double x2, double y2, std::string color, int strokeWidth)
 {
     m_ostrm << "<line "
             << attrib("x1", x1)
@@ -117,6 +117,7 @@ void Svgfile::addLine(double x1, double y1, double x2, double y2, std::string co
             << attrib("x2", x2)
             << attrib("y2", y2)
             << attrib("stroke", color)
+            << attrib("stroke-width", strokeWidth)
             << "/>\n";
 }
 

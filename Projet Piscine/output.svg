@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="300" height="300">
+
+<line x1="100" y1="100" x2="100" y2="200" stroke="green" stroke-width="3" />
+<text text-anchor="middle" x="100" y="150" fill="red" dominant-baseline="central" >2</text>
+<text text-anchor="middle" x="110" y="150" fill="red" dominant-baseline="central" >;</text>
+<text text-anchor="middle" x="120" y="150" fill="red" dominant-baseline="central" >5</text>
+<line x1="200" y1="100" x2="100" y2="200" stroke="green" stroke-width="3" />
+<text text-anchor="middle" x="150" y="150" fill="red" dominant-baseline="central" >3</text>
+<text text-anchor="middle" x="160" y="150" fill="red" dominant-baseline="central" >;</text>
+<text text-anchor="middle" x="170" y="150" fill="red" dominant-baseline="central" >6</text>
+<line x1="100" y1="200" x2="200" y2="200" stroke="green" stroke-width="3" />
+<text text-anchor="middle" x="150" y="200" fill="red" dominant-baseline="central" >6</text>
+<text text-anchor="middle" x="160" y="200" fill="red" dominant-baseline="central" >;</text>
+<text text-anchor="middle" x="170" y="200" fill="red" dominant-baseline="central" >9</text>
+<circle cx="100" cy="100" r="20" fill="rgb(0,0,0)" />
+<text text-anchor="middle" x="100" y="100" fill="rgb(255,255,255)" dominant-baseline="central" >0</text>
+<circle cx="200" cy="100" r="20" fill="rgb(0,0,0)" />
+<text text-anchor="middle" x="200" y="100" fill="rgb(255,255,255)" dominant-baseline="central" >1</text>
+<circle cx="100" cy="200" r="20" fill="rgb(0,0,0)" />
+<text text-anchor="middle" x="100" y="200" fill="rgb(255,255,255)" dominant-baseline="central" >2</text>
+<circle cx="200" cy="200" r="20" fill="rgb(0,0,0)" />
+<text text-anchor="middle" x="200" y="200" fill="rgb(255,255,255)" dominant-baseline="central" >3</text>
+<line x1="0" y1="0" x2="300" y2="0" stroke="black" stroke-width="1" />
+<line x1="0" y1="0" x2="0" y2="300" stroke="black" stroke-width="1" />
+<line x1="300" y1="0" x2="300" y2="300" stroke="black" stroke-width="1" />
+<line x1="300" y1="300" x2="0" y2="300" stroke="black" stroke-width="1" />
+
+
+</svg>

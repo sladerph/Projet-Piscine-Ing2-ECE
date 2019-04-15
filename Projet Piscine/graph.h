@@ -8,6 +8,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <unordered_set>
 
 #define XOFFSET 50
 #define YOFFSET 50
@@ -18,12 +19,15 @@ class Graph
         Graph();
         ~Graph();
 
-        void show(std::string filename = "output.svg") const;
+        void show(std::string filename = "output.svg", std::vector<bool>* path = nullptr);
+        void showPrim(std::string filename = "output.svg", std::vector<bool>* path = nullptr);
 
         bool create(std::string topology, std::string costs);
 
         Node* getNode(int index);
         Connection* getConnection(int index);
+
+        std::vector<bool> getPrim(int weight, float* totalWeight);
 
     private:
         std::vector<Node*> m_nodes;
@@ -31,6 +35,14 @@ class Graph
 
         int m_ordre;
 
+        void showNodes(Svgfile* svg) const;
+        void showConnections(Svgfile* svg, std::vector<bool>* path = nullptr) const;
+        void showBounds(Svgfile* svg);
+        Svgfile* createSvgfile(std::string filename = "output.svg");
+
 };
+
+std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight);
+
 
 #endif // GRAPH_H

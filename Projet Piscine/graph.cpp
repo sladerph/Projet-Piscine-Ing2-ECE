@@ -5,11 +5,80 @@ Graph::Graph()
     //ctor
 }
 
-void Graph::show(std::string filename) const
+void Graph::show(std::string filename, std::vector<bool>* path)
+{
+    Svgfile* svg = createSvgfile(filename);
+
+    showConnections(svg, path);
+    showNodes(svg);
+    showBounds(svg);
+
+    delete svg;
+}
+
+void Graph::showBounds(Svgfile* svg)
+{
+    svg->addLine(0, 0, svg->getWidth(), 0, "black");
+    svg->addLine(0, 0, 0, svg->getHeight(), "black");
+    svg->addLine(svg->getWidth(), 0, svg->getWidth(), svg->getHeight(), "black");
+    svg->addLine(svg->getWidth(), svg->getHeight(), 0, svg->getHeight(), "black");
+}
+
+void Graph::showPrim(std::string filename, std::vector<bool>* path)
+{
+    if (!path) return;
+
+    char choice;
+    std::cout << "\n\nDo you want to draw Prim's result on top of the complete graph ? (y / n) : ";
+    std::cin  >> choice;
+
+    if (choice == 'n' || choice == 'N')
+    {
+        Svgfile* svg = createSvgfile(filename);
+
+        for (int i = 0; i < m_connections.size(); i++)
+        {
+            if (path->operator[](m_connections[i]->getIndex()))
+            {
+                Node* a = m_connections[i]->getNodeA();
+                Node* b = m_connections[i]->getNodeB();
+
+                float xa = a->getX();
+                float ya = a->getY();
+                float xb = b->getX();
+                float yb = b->getY();
+
+                float mx = (xa + xb) / 2;
+                float my = (ya + yb) / 2;
+
+                svg->addLine(xa, ya, xb, yb, "green", 3);
+
+                std::vector<float> weights = m_connections[i]->getWeights();
+
+                for (int j = 0; j < weights.size(); j++)
+                {
+                    svg->addText(mx + j * 20, my, weights[j], "red", "middle");
+
+                    if (j < weights.size() - 1)
+                    {
+                        svg->addText(mx + j * 10 + 10, my, ";", "red", "middle");
+                    }
+                }
+            }
+        }
+        showNodes(svg);
+        showBounds(svg);
+
+        delete svg;
+    }
+    else
+        show(filename, path);
+}
+
+Svgfile* Graph::createSvgfile(std::string filename)
 {
     float x_max  = 0;
     float y_max  = 0;
-    int   radius = 20;
 
     for (int i = 0; i < m_nodes.size(); i++)
     {
@@ -20,9 +89,12 @@ void Graph::show(std::string filename) const
             y_max = m_nodes[i]->getY();
     }
 
-    Svgfile* svg = new Svgfile(filename, x_max + 2 * XOFFSET, y_max + 2 * YOFFSET);
+    return new Svgfile(filename, x_max + 2 * XOFFSET, y_max + 2 * YOFFSET);
 
+}
 
+void Graph::showConnections(Svgfile* svg, std::vector<bool>* path) const
+{
     for (int i = 0; i < m_connections.size(); i++)
     {
         Node* a = m_connections[i]->getNodeA();
@@ -38,7 +110,13 @@ void Graph::show(std::string filename) const
 
         std::vector<float> weights = m_connections[i]->getWeights();
 
-        svg->addLine(xa, ya, xb, yb, Svgfile::makeRGB(0, 0, 0));
+        if (path)
+            if (path->operator[](m_connections[i]->getIndex()))
+                svg->addLine(xa, ya, xb, yb, "green", 3);
+            else
+                svg->addLine(xa, ya, xb, yb, "black");
+        else
+            svg->addLine(xa, ya, xb, yb, "black");
 
         for (int j = 0; j < weights.size(); j++)
         {
@@ -50,6 +128,11 @@ void Graph::show(std::string filename) const
             }
         }
     }
+}
+
+void Graph::showNodes(Svgfile* svg) const
+{
+    int radius = 20;
 
     for (int i = 0; i < m_nodes.size(); i++)
     {
@@ -60,13 +143,6 @@ void Graph::show(std::string filename) const
         svg->addDisk(x, y, radius, Svgfile::makeRGB(0, 0, 0));
         svg->addText(x, y, ind, Svgfile::makeRGB(255, 255, 255), "middle");
     }
-
-    svg->addLine(0, 0, svg->getWidth(), 0, "black");
-    svg->addLine(0, 0, 0, svg->getHeight(), "black");
-    svg->addLine(svg->getWidth(), 0, svg->getWidth(), svg->getHeight(), "black");
-    svg->addLine(svg->getWidth(), svg->getHeight(), 0, svg->getHeight(), "black");
-
-    delete svg;
 }
 
 bool Graph::create(std::string topology, std::string costs)
@@ -192,6 +268,70 @@ Graph::~Graph()
 {
     //dtor
 }
+
+std::vector<bool> Graph::getPrim(int weight, float* totalWeight)
+{
+    std::vector<bool> shortestPath (m_connections.size(),false);
+    std::unordered_set<int> usedIdList;
+    std::unordered_set<int> unusedIdList;
+    std::vector<Connection*> orderedConnections = sortConnections(m_connections, weight);
+    for(int i = 0; i < m_ordre; i++)
+        unusedIdList.insert(i);
+    unusedIdList.erase(m_nodes[0]->getIndex());
+    usedIdList.insert(m_nodes[0]->getIndex());
+    while(!unusedIdList.empty())
+    {
+        for(size_t i = 0; i < orderedConnections.size(); i++)
+        {
+            if((usedIdList.find(orderedConnections[i]->getNodeA()->getIndex())==usedIdList.end())
+               ^(usedIdList.find(orderedConnections[i]->getNodeB()->getIndex())==usedIdList.end()))
+            {
+                shortestPath[orderedConnections[i]->getIndex()] = true;
+                if(usedIdList.find(orderedConnections[i]->getNodeA()->getIndex())==usedIdList.end())
+                {
+                    unusedIdList.erase(orderedConnections[i]->getNodeA()->getIndex());
+                    usedIdList.insert(orderedConnections[i]->getNodeA()->getIndex());
+                }
+                else
+                {
+                    unusedIdList.erase(orderedConnections[i]->getNodeB()->getIndex());
+                    usedIdList.insert(orderedConnections[i]->getNodeB()->getIndex());
+                }
+                i=0;
+            }
+        }
+    }
+    for(size_t i=0; i < shortestPath.size(); i++)
+    {
+        if(shortestPath[i])
+        {
+            *totalWeight+=m_connections[i]->getWeights()[weight];
+        }
+    }
+    return shortestPath;
+}
+
+
+std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight)
+{
+    Connection* temp;
+    for(size_t i = 0; i < connections.size()-1; i++)
+    {
+        if(connections[i]->getWeights()[weight] > connections[i+1]->getWeights()[weight])
+        {
+            temp = connections[i];
+            connections[i]=connections[i+1];
+            connections[i+1]=temp;
+            i=0;
+        }
+    }
+    std::vector<Connection*> connectionVector;
+    for(size_t i = 0; i < connections.size(); i++)
+        connectionVector.push_back(connections[i]);
+    return connectionVector;
+}
+
+
 
 
 

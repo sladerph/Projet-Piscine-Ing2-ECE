@@ -20,7 +20,7 @@ class Svgfile
                           double thickness, std::string colorStroke);
         void addTriangle(double x1, double y1, double x2, double y2,
                          double x3, double y3, std::string colorFill=defcol);
-        void addLine(double x1, double y1, double x2, double y2, std::string color=defcol);
+        void addLine(double x1, double y1, double x2, double y2, std::string color=defcol, int strokeWidth = 1);
         void addCross(double x, double y, double span, std::string color=defcol);
 
         void addText(double x, double y, std::string text, std::string color=defcol, std::string align = "start");
