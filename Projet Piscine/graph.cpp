@@ -424,5 +424,35 @@ std::vector<std::pair<float,int>> Graph::getNeighbours(Node* origin,int weight)
     return neighboursId;
 }
 
-
+bool Graph::testCycle(std::vector<bool> connections)
+{
+    std::unordered_set<int> usedList;
+    int test=0;
+    for(int i = 0; i < connections.size(); i++)
+    {
+        test=0;
+        if(connections[i])
+        {
+            if(usedList.find(m_connections[i]->getNodeA()->getIndex())==usedList.end())
+            {
+                usedList.insert(m_connections[i]->getNodeA()->getIndex());
+            }
+            else
+            {
+                test++;
+            }
+            if(usedList.find(m_connections[i]->getNodeB()->getIndex())==usedList.end())
+            {
+                usedList.insert(m_connections[i]->getNodeB()->getIndex());
+            }
+            else
+            {
+                test++;
+            }
+            if(test==2)
+                return true;
+        }
+    }
+    return false;
+}
 

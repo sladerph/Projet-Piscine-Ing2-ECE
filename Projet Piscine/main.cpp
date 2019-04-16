@@ -9,6 +9,8 @@ int main()
 
     g.create("files/broadway.txt", "files/broadway_weights_0.txt");
 
+
+
     float total = g.getDijkstra(0);
     std::cout<<"poids total de tous les plus courts chemins : "<<total<<std::endl;
 
@@ -20,7 +22,7 @@ int main()
         std::cout << boolVector[i];
     }
     std::cout<<std::endl<<"total weight : "<<totalWeight<<std::endl;
-
+    std::cout<<"cycle ?   "<<g.testCycle(boolVector)<<std::endl;    /// true = cycle, false = pas de cycle (testé sur des graphes simples)
     //g.show("output.svg", &boolVector);
     g.showPrim("output.svg", &boolVector);
 

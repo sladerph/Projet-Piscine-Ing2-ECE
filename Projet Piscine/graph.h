@@ -30,6 +30,8 @@ class Graph
         std::vector<bool> getPrim(int weight, float* totalWeight);
         float getDijkstra(int weight);
 
+        bool testCycle(std::vector<bool> connections);
+
     private:
         std::vector<Node*> m_nodes;
         std::vector<Connection*> m_connections;
@@ -47,5 +49,6 @@ class Graph
 
 std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight);
 std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes, int weight);
+
 
 #endif // GRAPH_H
