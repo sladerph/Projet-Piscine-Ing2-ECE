@@ -274,28 +274,28 @@ std::vector<bool> Graph::getPrim(int weight, float* totalWeight)
     std::vector<bool> shortestPath (m_connections.size(),false);
     std::unordered_set<int> usedIdList;
     std::unordered_set<int> unusedIdList;
-    std::vector<Connection*> orderedConnections = sortConnections(m_connections, weight);
+    std::vector<Connection*> sortedConnections = sortConnections(m_connections, weight);
     for(int i = 0; i < m_ordre; i++)
         unusedIdList.insert(i);
     unusedIdList.erase(m_nodes[0]->getIndex());
     usedIdList.insert(m_nodes[0]->getIndex());
     while(!unusedIdList.empty())
     {
-        for(size_t i = 0; i < orderedConnections.size(); i++)
+        for(size_t i = 0; i < sortedConnections.size(); i++)
         {
-            if((usedIdList.find(orderedConnections[i]->getNodeA()->getIndex())==usedIdList.end())
-               ^(usedIdList.find(orderedConnections[i]->getNodeB()->getIndex())==usedIdList.end()))
+            if((usedIdList.find(sortedConnections[i]->getNodeA()->getIndex())==usedIdList.end())
+               ^(usedIdList.find(sortedConnections[i]->getNodeB()->getIndex())==usedIdList.end()))
             {
-                shortestPath[orderedConnections[i]->getIndex()] = true;
-                if(usedIdList.find(orderedConnections[i]->getNodeA()->getIndex())==usedIdList.end())
+                shortestPath[sortedConnections[i]->getIndex()] = true;
+                if(usedIdList.find(sortedConnections[i]->getNodeA()->getIndex())==usedIdList.end())
                 {
-                    unusedIdList.erase(orderedConnections[i]->getNodeA()->getIndex());
-                    usedIdList.insert(orderedConnections[i]->getNodeA()->getIndex());
+                    unusedIdList.erase(sortedConnections[i]->getNodeA()->getIndex());
+                    usedIdList.insert(sortedConnections[i]->getNodeA()->getIndex());
                 }
                 else
                 {
-                    unusedIdList.erase(orderedConnections[i]->getNodeB()->getIndex());
-                    usedIdList.insert(orderedConnections[i]->getNodeB()->getIndex());
+                    unusedIdList.erase(sortedConnections[i]->getNodeB()->getIndex());
+                    usedIdList.insert(sortedConnections[i]->getNodeB()->getIndex());
                 }
                 i=0;
             }
@@ -333,11 +333,96 @@ std::vector<Connection*> sortConnections(std::vector<Connection*> connections, i
 
 
 
+float Graph::getDijkstra(int weight)
+{
+    std::vector<std::pair<float,int>> successorsQueue;
+    std::vector<std::pair<float,int>> dijkstraResults;
+    std::unordered_set<int> unusedIdList;
+    Node* current;
+    float currentWeight = 0;
+    float totalWeight = 0;
+    int j = 0;
+    for(j = 0; j < m_ordre; j++)
+    {
+        for(int i = 0; i < m_ordre; i++)
+            unusedIdList.insert(i);
+        unusedIdList.erase(j);
+        successorsQueue.push_back(std::make_pair(0.0,j));
+        currentWeight = 0;
+        do
+        {
+            current=getNode(successorsQueue.begin()->second);
+            currentWeight=successorsQueue.begin()->first;
+            dijkstraResults.push_back(*successorsQueue.begin());
+            successorsQueue.erase(successorsQueue.begin());
+            for(auto it : getNeighbours(current,weight))
+            {
+                it.first+=currentWeight;
+                if(unusedIdList.find(it.second)!=unusedIdList.end())
+                {
+                    successorsQueue.push_back(it);
+                    successorsQueue=sortNodes(successorsQueue,weight);
+                    unusedIdList.erase(it.second);
+                }
+                else
+                {
+                    for(size_t k = 0; k < successorsQueue.size(); k++)
+                    {
+                        if(successorsQueue[k].second==it.second)
+                        {
+                            if(successorsQueue[k].first > it.first)
+                            {
+                                successorsQueue[k].first=it.first;
+                            }
+                        }
+                    }
+                }
+            }
+        }while(!successorsQueue.empty());
+
+        for(auto it : dijkstraResults)
+        {
+            totalWeight+=it.first;
+
+        }
+
+        dijkstraResults.clear();
+    }
+    return totalWeight;
+}
+
+std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes, int weight)
+{
+    std::pair<float,int> temp;
+    std::vector<std::pair<float,int>> retour;
+    for(size_t i = 0; i < Nodes.size()-1; i++)
+    {
+        if(Nodes[i].first > Nodes[i+1].first)
+        {
+            temp = Nodes[i];
+            Nodes[i] = Nodes[i+1];
+            Nodes[i+1]=temp;
+            i=0;
+        }
+    }
+    for(auto it : Nodes)
+        retour.push_back(it);
+    return retour;
+}
 
 
-
-
-
+std::vector<std::pair<float,int>> Graph::getNeighbours(Node* origin,int weight)
+{
+    std::vector<std::pair<float,int>> neighboursId;
+    for(auto it : m_connections)
+    {
+        if(it->getNodeA()->getIndex()==origin->getIndex())
+            neighboursId.push_back(std::make_pair(it->getWeights()[weight],it->getNodeB()->getIndex()));
+        else if (it->getNodeB()->getIndex()==origin->getIndex())
+            neighboursId.push_back(std::make_pair(it->getWeights()[weight],it->getNodeA()->getIndex()));
+    }
+    return neighboursId;
+}
 
 
 

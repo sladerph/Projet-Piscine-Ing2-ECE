@@ -28,6 +28,7 @@ class Graph
         Connection* getConnection(int index);
 
         std::vector<bool> getPrim(int weight, float* totalWeight);
+        float getDijkstra(int weight);
 
     private:
         std::vector<Node*> m_nodes;
@@ -40,9 +41,11 @@ class Graph
         void showBounds(Svgfile* svg);
         Svgfile* createSvgfile(std::string filename = "output.svg");
 
+        std::vector<std::pair<float,int>> getNeighbours(Node* origin,int weight);
+
 };
 
 std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight);
-
+std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes, int weight);
 
 #endif // GRAPH_H

@@ -9,6 +9,9 @@ int main()
 
     g.create("files/broadway.txt", "files/broadway_weights_0.txt");
 
+    float total = g.getDijkstra(0);
+    std::cout<<"poids total de tous les plus courts chemins : "<<total<<std::endl;
+
     float totalWeight=0.0;
     std::vector<bool> boolVector = g.getPrim(0,&totalWeight);
 
