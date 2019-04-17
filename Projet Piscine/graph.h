@@ -9,6 +9,9 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_set>
+#include <queue>
+#include <bits/stdc++.h>    ///ajoutée pour le sort(vecteur.begin(),vecteur.end());
+///https://www.geeksforgeeks.org/sorting-vector-of-pairs-in-c-set-1-sort-by-first-and-second/
 
 #define XOFFSET 50
 #define YOFFSET 50
@@ -30,6 +33,10 @@ class Graph
         int getOrdre() const {return m_ordre;};
 
         std::vector<bool> getPrim(int weight, float* totalWeight);
+        float getDijkstra(int weight);
+
+        bool testCycle(std::vector<bool> connections);
+        bool connectivityTest(std::vector<bool>connections);
 
     private:
         std::vector<Node*> m_nodes;
@@ -42,9 +49,13 @@ class Graph
         void showBounds(Svgfile* svg);
         Svgfile* createSvgfile(std::string filename = "output.svg");
 
+        std::vector<std::pair<float,int>> getNeighbours(Node* origin,int weight);
+
 };
 
 std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight);
+std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connections);
+std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes);
 
 
 #endif // GRAPH_H

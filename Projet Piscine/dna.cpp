@@ -52,6 +52,17 @@ DNA* DNA::crossover(DNA* parent_b, Graph* structure)
     return dna;
 }
 
+bool DNA::operator==(const DNA* b)
+{
+    std::vector<bool> bdna = b->getDNA();
+
+    for (int i = 0; i < m_dna.size(); i++)
+        if (m_dna[i] != bdna[i])
+            return false;
+
+    return true;
+}
+
 DNA::~DNA()
 {
     //dtor

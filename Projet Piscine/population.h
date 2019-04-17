@@ -22,6 +22,7 @@ class Population
         void checkDominated();
         void showNonDominated();
         void mutate();
+        void checkClones();
 
         void solve();
 

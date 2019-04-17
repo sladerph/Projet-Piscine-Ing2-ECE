@@ -21,23 +21,43 @@ void Population::solve()
         int nb = 0;
         bool forced = false;
 
-        while (nb <= 10)
+        while (nb < 10)
         {
             std::cout << "Starting generation " << m_generation << " !" << std::endl;
 
             evaluateFitness();
+
+            checkClones();
             purify();
-            checkDominated();
+
+            if (m_pop.size() > 0)
+                checkDominated();
+
             showNonDominated();
 
-            if (!reproduce())
+            if (m_pop.size() > 1)
             {
-                nb = 10 + 1;
-                forced = true;
+                if (!reproduce())
+                {
+                    nb = 10 + 1;
+                    forced = true;
+                }
+                 else
+                {
+                    mutate();
+                }
             }
-             else
+            else
             {
-                mutate();
+                for (int i = 0; i < m_pop.size(); i++)
+                {
+                    delete m_pop[i];
+                    m_pop.erase(m_pop.begin() + i);
+                    i--;
+                }
+                for (int i = 0; i < m_pop_size; i++)
+                    m_pop.push_back(new DNA(m_structure));
+                std::cout << "No correct individual found, re-starting at random." << std::endl;
             }
 
             std::cout << "End of generation " << m_generation << " !" << std::endl;
@@ -55,6 +75,34 @@ void Population::solve()
         {
             std::cout << "Do you want to continue the evolution ? (y/n) : ";
             std::cin  >> choice;
+        }
+    }
+}
+
+void Population::checkClones()
+{
+    for (int i = 0; i < m_pop.size(); i++)
+    {
+        DNA* me = m_pop[i];
+
+        if (me->getDominated() == false)
+        {
+            for (int j = 0; j < m_pop.size(); j++)
+            {
+                DNA* you = m_pop[j];
+
+                if (me != you && me->operator==(you))
+                {
+                    /*
+                    delete you;
+                    you = nullptr;
+                    m_pop.erase(m_pop.begin() + j);
+                    j--;
+                    */
+                    you->setDominated(true);
+                    //std::cout << "Eliminate clone" << std::endl;
+                }
+            }
         }
     }
 }
@@ -80,14 +128,22 @@ void Population::showNonDominated()
 
     for (int i = 0; i < m_pop.size(); i++)
     {
-        if (m_pop[i]->getDominated() == true)
+        if (m_pop[i]->getDominated() == false)
         {
             std::stringstream nb;
             nb << i;
 
             std::vector<bool> cons = m_pop[i]->getDNA();
 
-            m_structure->showPrim(path + nb.str() + ".svg", &cons, false);
+            std::stringstream f, a, b;
+            f << m_pop[i]->getFitness();
+            a << m_pop[i]->getSumA();
+            b << m_pop[i]->getSumB();
+
+            std::string name = path + nb.str() + "__" + f.str() + "__" + a.str() + "__" + b.str() + ").svg";
+
+//            m_structure->showPrim(path + nb.str() + ".svg", &cons, false);
+            m_structure->showPrim(name, &cons, false);
         }
     }
     std::cout << std::endl;
@@ -147,6 +203,8 @@ bool Population::reproduce()
     {
         int nb = mapLine(m_pop[i]->getFitness(), mini, 100, maxi, 1);
 
+        if (m_pop[i]->getDominated() == false) nb *= 2;
+
         for (int j = 0; j < nb; j++)
             mating_pool.push_back(m_pop[i]);
     }
@@ -163,8 +221,12 @@ bool Population::reproduce()
         new_ones.push_back(mating_pool[inda]->crossover(mating_pool[indb], m_structure));
     }
 
+    delete new_ones[0];
+    new_ones[0] = min_dna;
+
     for (int i = 0; i < m_pop.size(); i++)
-        delete m_pop[i];
+        if (m_pop[i] != min_dna)
+            delete m_pop[i];
 
     m_pop = new_ones;
 
@@ -182,11 +244,15 @@ void Population::purify()
         for (int j = 0; j < choices.size(); j++)
             if (choices[j]) nb++;
 
-        if (nb != m_structure->getOrdre() - 1)
+        if (nb != m_structure->getOrdre() - 1 || !m_structure->connectivityTest(choices))
         {
             delete m_pop[i];
             m_pop.erase(m_pop.begin() + i);
             i--;
+        }
+        else if (m_structure->testCycle(choices))
+        {
+            //m_pop[i]->setDominated(true);
         }
     }
 }

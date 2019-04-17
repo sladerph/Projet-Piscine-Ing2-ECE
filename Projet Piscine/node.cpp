@@ -1,4 +1,5 @@
 #include "node.h"
+#include <iostream>
 
 Node::Node(int index, float x, float y)
 {

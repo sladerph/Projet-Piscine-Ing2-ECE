@@ -27,6 +27,8 @@ class DNA
         float getSumB() const {return m_sum_cost_b;};
         bool  getDominated() const {return m_dominated;};
 
+        bool operator==(const DNA* b);
+
     private:
         std::vector<bool> m_dna;
         int m_size;

@@ -2,6 +2,7 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
+<<<<<<< HEAD
 	<File name="svgfile.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1698" topLine="24" />
@@ -45,6 +46,16 @@
 	<File name="couleur.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="42" topLine="0" />
+=======
+	<File name="main.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="427" topLine="2" />
+		</Cursor>
+	</File>
+	<File name="connection.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="260" topLine="5" />
+>>>>>>> daf5a74b5cf100535eb8f7e8e92ffcf36bbd7f65
 		</Cursor>
 	</File>
 	<File name="graph.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -52,6 +63,7 @@
 			<Cursor1 position="708" topLine="0" />
 		</Cursor>
 	</File>
+<<<<<<< HEAD
 	<File name="connection.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="0" topLine="0" />
@@ -70,11 +82,30 @@
 	<File name="couleur.h" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="285" topLine="0" />
+=======
+	<File name="graph.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="12630" topLine="228" />
+		</Cursor>
+	</File>
+	<File name="graph.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="803" topLine="26" />
+		</Cursor>
+	</File>
+	<File name="node.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="188" topLine="0" />
+>>>>>>> daf5a74b5cf100535eb8f7e8e92ffcf36bbd7f65
 		</Cursor>
 	</File>
 	<File name="node.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
+<<<<<<< HEAD
 			<Cursor1 position="348" topLine="0" />
+=======
+			<Cursor1 position="346" topLine="2" />
+>>>>>>> daf5a74b5cf100535eb8f7e8e92ffcf36bbd7f65
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
