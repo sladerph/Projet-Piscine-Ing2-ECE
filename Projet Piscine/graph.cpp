@@ -361,7 +361,8 @@ float Graph::getDijkstra(int weight)
                 if(unusedIdList.find(it.second)!=unusedIdList.end())
                 {
                     successorsQueue.push_back(it);
-                    successorsQueue=sortNodes(successorsQueue,weight);
+                    //successorsQueue=sortNodes(successorsQueue);
+                    std::sort(successorsQueue.begin(),successorsQueue.end());   ///le sort est peut-être légèrement plus rapide
                     unusedIdList.erase(it.second);
                 }
                 else
@@ -391,7 +392,7 @@ float Graph::getDijkstra(int weight)
     return totalWeight;
 }
 
-std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes, int weight)
+std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes)
 {
     std::pair<float,int> temp;
     std::vector<std::pair<float,int>> retour;
@@ -422,6 +423,43 @@ std::vector<std::pair<float,int>> Graph::getNeighbours(Node* origin,int weight)
             neighboursId.push_back(std::make_pair(it->getWeights()[weight],it->getNodeA()->getIndex()));
     }
     return neighboursId;
+}
+
+bool Graph::connectivityTest(std::vector<bool>connections)
+{
+    std::unordered_set<int> discoveredList;
+    Node* current;
+    std::queue<int> nodeQueue;
+    nodeQueue.push(m_nodes[0]->getIndex());
+    discoveredList.insert(m_nodes[0]->getIndex());
+    do
+    {
+        current=m_nodes[nodeQueue.front()];
+        nodeQueue.pop();
+        for(auto it : m_connections)
+        {
+            if(connections[it->getIndex()])
+            {
+                if((it->getNodeA()->getIndex()==current->getIndex())
+                   &&(discoveredList.find(it->getNodeB()->getIndex())==discoveredList.end()))
+                {
+                    discoveredList.insert(it->getNodeB()->getIndex());
+                    nodeQueue.push(it->getNodeB()->getIndex());
+                }
+                else if(it->getNodeB()->getIndex()==current->getIndex()
+                        &&(discoveredList.find(it->getNodeA()->getIndex())==discoveredList.end()))
+                {
+                    discoveredList.insert(it->getNodeA()->getIndex());
+                    nodeQueue.push(it->getNodeA()->getIndex());
+                }
+            }
+        }
+    }while(!nodeQueue.empty());
+
+    if(discoveredList.size()<m_ordre)
+        return false;
+    std::cout<<"connexe :"<<std::endl;
+    return true;
 }
 
 bool Graph::testCycle(std::vector<bool> connections)

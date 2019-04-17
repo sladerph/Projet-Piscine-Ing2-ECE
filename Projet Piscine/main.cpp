@@ -22,7 +22,8 @@ int main()
         std::cout << boolVector[i];
     }
     std::cout<<std::endl<<"total weight : "<<totalWeight<<std::endl;
-    std::cout<<"cycle ?   "<<g.testCycle(boolVector)<<std::endl;    /// true = cycle, false = pas de cycle (testé sur des graphes simples)
+    std::cout<<"connexe ? "<<g.connectivityTest(boolVector)<<std::endl;
+    std::cout<<"cycle ?   "<<g.testCycle(boolVector)<<std::endl;    /// true = cycle, false = pas de cycle (en partant de 0, donc tester avant si connexe)
     //g.show("output.svg", &boolVector);
     g.showPrim("output.svg", &boolVector);
 

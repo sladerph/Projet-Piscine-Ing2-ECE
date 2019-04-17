@@ -80,11 +80,11 @@
 	<iostream>
 	<sstream>
 
-1555434558 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\main.cpp
+1555497356 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\main.cpp
 	<iostream>
 	"graph.h"
 
-1555439250 c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\graph.h
+1555497330 c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\graph.h
 	"node.h"
 	"connection.h"
 	"svgfile.h"
@@ -92,7 +92,9 @@
 	<iostream>
 	<fstream>
 	<unordered_set>
+	<queue>
+	<bits/stdc++.h>
 
-1555439989 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\graph.cpp
+1555497282 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\graph.cpp
 	"graph.h"
 
