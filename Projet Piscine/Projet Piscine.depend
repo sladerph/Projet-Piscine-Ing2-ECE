@@ -10,11 +10,13 @@
 	"connection.h"
 	<vector>
 
-1555373815 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\main.cpp
+1555435756 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\main.cpp
 	<iostream>
+	<cstdlib>
 	"graph.h"
+	"population.h"
 
-1555373978 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\graph.h
+1555428544 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\graph.h
 	"node.h"
 	"connection.h"
 	"svgfile.h"
@@ -26,10 +28,10 @@
 1555351033 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\node.cpp
 	"node.h"
 
-1555373915 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\graph.cpp
+1555428577 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\graph.cpp
 	"graph.h"
 
-1555372401 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\svgfile.h
+1555374090 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\svgfile.h
 	<string>
 	<fstream>
 	<set>
@@ -43,7 +45,7 @@
 	<string>
 	<cstdint>
 
-1555372448 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\svgfile.cpp
+1555374090 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\svgfile.cpp
 	<iostream>
 	<sstream>
 
@@ -94,4 +96,20 @@
 
 1555363154 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\graph.cpp
 	"graph.h"
+
+1555435804 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\population.h
+	"dna.h"
+	<windows.h>
+	<sstream>
+
+1555435790 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\dna.h
+	"graph.h"
+	"population.h"
+	<vector>
+
+1555435679 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\dna.cpp
+	"dna.h"
+
+1555435746 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\population.cpp
+	"population.h"
 

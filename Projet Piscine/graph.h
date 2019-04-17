@@ -20,12 +20,14 @@ class Graph
         ~Graph();
 
         void show(std::string filename = "output.svg", std::vector<bool>* path = nullptr);
-        void showPrim(std::string filename = "output.svg", std::vector<bool>* path = nullptr);
+        void showPrim(std::string filename = "output.svg", std::vector<bool>* path = nullptr, bool onTopOfGraph = true);
 
         bool create(std::string topology, std::string costs);
 
         Node* getNode(int index);
         Connection* getConnection(int index);
+        std::vector<Connection*> getConnections() const {return m_connections;};
+        int getOrdre() const {return m_ordre;};
 
         std::vector<bool> getPrim(int weight, float* totalWeight);
 

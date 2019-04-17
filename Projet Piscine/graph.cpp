@@ -24,15 +24,11 @@ void Graph::showBounds(Svgfile* svg)
     svg->addLine(svg->getWidth(), svg->getHeight(), 0, svg->getHeight(), "black");
 }
 
-void Graph::showPrim(std::string filename, std::vector<bool>* path)
+void Graph::showPrim(std::string filename, std::vector<bool>* path, bool onTopOfGraph)
 {
     if (!path) return;
 
-    char choice;
-    std::cout << "\n\nDo you want to draw Prim's result on top of the complete graph ? (y / n) : ";
-    std::cin  >> choice;
-
-    if (choice == 'n' || choice == 'N')
+    if (!onTopOfGraph)
     {
         Svgfile* svg = createSvgfile(filename);
 
