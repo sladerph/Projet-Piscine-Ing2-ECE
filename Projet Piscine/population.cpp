@@ -16,14 +16,21 @@ void Population::solve()
 
     std::cout << std::endl << std::endl;
 
+    std::vector<DNA*> last_pareto;
+
+    int tot = 0;
+
     while (choice != 'n' && choice != 'N') // User interruption loop.
     {
         int nb = 0;
         bool forced = false;
+        bool pareto_changed;
 
-        while (nb < 10)
+        do
         {
             std::cout << "Starting generation " << m_generation << " !" << std::endl;
+
+            pareto_changed = false;
 
             evaluateFitness();
 
@@ -32,6 +39,33 @@ void Population::solve()
 
             if (m_pop.size() > 0)
                 checkDominated();
+
+            checkPareto();
+
+            if (last_pareto.size() > 0)
+            {
+                if (last_pareto.size() != m_pareto_bests.size())
+                    pareto_changed = true;
+                else
+                {
+                    int nb_ok = 0;
+                    for (int i = 0; i < last_pareto.size(); i++)
+                    {
+                        for (int j = 0; j < m_pareto_bests.size(); j++)
+                        {
+                            if (last_pareto[i]->operator==(m_pareto_bests[j]) == true)
+                            {
+                                nb_ok++;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (nb_ok != last_pareto.size()) pareto_changed = true;
+                }
+            }
+
+            last_pareto = m_pareto_bests;
 
             showNonDominated();
 
@@ -64,7 +98,8 @@ void Population::solve()
 
             m_generation++;
             nb++;
-        }
+            tot++;
+        } while (nb < 100 && (!pareto_changed || tot < 10));
 
         if (forced)
         {
@@ -75,6 +110,82 @@ void Population::solve()
         {
             std::cout << "Do you want to continue the evolution ? (y/n) : ";
             std::cin  >> choice;
+        }
+    }
+}
+
+void Population::evaluateDominatedFront()
+{
+    for (int i = 0; i < m_pop.size(); i++)
+    {
+        DNA* a = m_pop[i];
+        a->setFront(0);
+
+        if (!a->getDominated())
+        {
+            for (int j = 0; j < m_pop.size(); j++)
+            {
+                DNA* b = m_pop[j];
+
+                if (a != b)
+                    if (a->dominated(b))
+                        a->setFront(a->getFront() + 1);
+            }
+        }
+    }
+}
+
+bool Population::isDominated(DNA* dna, std::vector<DNA*> comp)
+{
+    bool dom = true;
+
+    for (int j = 0; j < comp.size(); j++)
+    {
+        if (dna != comp[j] && (oka || okb))
+        {
+            DNA* b = comp[j];
+
+            if (dna->dominated(b))
+            {
+                dom = true;
+                break;
+            }
+        }
+    }
+
+    if (dom) // Dominated.
+        return true;
+
+    return false;
+}
+
+void Population::checkPareto()
+{
+    for (int i = 0; i < m_pop.size(); i++)
+        if (m_pop[i]->getDominated() == false)
+            m_pareto_bests.push_back(m_pop[i]->clone());
+
+    for (int i = 0; i < m_pareto_bests.size(); i++)
+    {
+        DNA* a = m_pareto_bests[i];
+
+        for (int j = 0; j < m_pareto_bests.size(); j++)
+        {
+            DNA* b = m_pareto_bests[j];
+
+            if (a != b && a->operator==(b))
+            {
+                delete b;
+                m_pareto_bests.erase(m_pareto_bests.begin() + j);
+                j--;
+            }
+        }
+
+        if (isDominated(a, m_pareto_bests))
+        {
+            delete a;
+            m_pareto_bests.erase(m_pareto_bests.begin() + i);
+            i--;
         }
     }
 }
@@ -126,7 +237,15 @@ void Population::showNonDominated()
 
     std::string path = "Genetic outputs/" + ss.str() + "/";
 
+<<<<<<< HEAD
     for (size_t i = 0; i < m_pop.size(); i++)
+=======
+    str = str + "\\Pareto_bests";
+
+    system(str.c_str());
+
+    for (int i = 0; i < m_pop.size(); i++)
+>>>>>>> pierre
     {
         if (m_pop[i]->getDominated() == false)
         {
@@ -146,6 +265,24 @@ void Population::showNonDominated()
             m_structure->showPrim(name, &cons, false);
         }
     }
+    path = path + "Pareto_bests/";
+
+    for (int i = 0; i < m_pareto_bests.size(); i++)
+    {
+        std::vector<bool> cons = m_pareto_bests[i]->getDNA();
+
+        std::stringstream nb;
+        nb << i;
+
+        std::stringstream f, a, b;
+        f << m_pareto_bests[i]->getFitness();
+        a << m_pareto_bests[i]->getSumA();
+        b << m_pareto_bests[i]->getSumB();
+
+        std::string name = path + nb.str() + "__" + f.str() + "__" + a.str() + "__" + b.str() + ").svg";
+
+        m_structure->showPrim(name, &cons, false);
+    }
     std::cout << std::endl;
 }
 
@@ -154,6 +291,7 @@ void Population::checkDominated()
     for (size_t i = 0; i < m_pop.size(); i++)
     {
         DNA* a = m_pop[i];
+<<<<<<< HEAD
         bool oka = true;
         bool okb = true;
 
@@ -173,11 +311,11 @@ void Population::checkDominated()
                 }
             }
         }
+=======
+>>>>>>> pierre
 
-        if (!oka && !okb)
-        {
+        if (isDominated(a, m_pop))
             m_pop[i]->setDominated(true);
-        }
     }
 }
 

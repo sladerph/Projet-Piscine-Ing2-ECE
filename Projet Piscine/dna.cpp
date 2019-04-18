@@ -20,6 +20,40 @@ DNA::DNA(Graph* structure)
     m_sum_cost_b = 0;
 }
 
+DNA::DNA() {}
+
+DNA* DNA::clone()
+{
+    DNA* d = new DNA();
+
+    d->setDNA(m_dna);
+    d->setFitness(m_fitness);
+    d->setSumA(m_sum_cost_a);
+    d->setSumB(m_sum_cost_b);
+    d->setSize(m_size);
+    d->setDominated(m_dominated);
+    d->setFront(m_front);
+
+    return d;
+}
+
+bool DNA::dominated(DNA* b)
+{
+    bool oka = true;
+    bool okb = true;
+
+    if (b->getSumA() < m_sum_cost_a)
+        oka = false;
+    if (b->getSumB() < m_sum_cost_b)
+        okb = false;
+    if (!(m_sum_cost_a < b->getSumA() || m_sum_cost_b < b->getSumB()))
+        oka = false;
+
+    if (!oka && !okb)
+        return true;
+    return false;
+}
+
 void DNA::mutate()
 {
     for (int i = 0; i < m_size; i++)
