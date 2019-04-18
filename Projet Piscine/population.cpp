@@ -49,7 +49,7 @@ void Population::solve()
             }
             else
             {
-                for (int i = 0; i < m_pop.size(); i++)
+                for (size_t i = 0; i < m_pop.size(); i++)
                 {
                     delete m_pop[i];
                     m_pop.erase(m_pop.begin() + i);
@@ -81,13 +81,13 @@ void Population::solve()
 
 void Population::checkClones()
 {
-    for (int i = 0; i < m_pop.size(); i++)
+    for (size_t i = 0; i < m_pop.size(); i++)
     {
         DNA* me = m_pop[i];
 
         if (me->getDominated() == false)
         {
-            for (int j = 0; j < m_pop.size(); j++)
+            for (size_t j = 0; j < m_pop.size(); j++)
             {
                 DNA* you = m_pop[j];
 
@@ -109,7 +109,7 @@ void Population::checkClones()
 
 void Population::mutate()
 {
-    for (int i = 0; i < m_pop.size(); i++)
+    for (size_t i = 0; i < m_pop.size(); i++)
         m_pop[i]->mutate();
 }
 
@@ -126,7 +126,7 @@ void Population::showNonDominated()
 
     std::string path = "Genetic outputs/" + ss.str() + "/";
 
-    for (int i = 0; i < m_pop.size(); i++)
+    for (size_t i = 0; i < m_pop.size(); i++)
     {
         if (m_pop[i]->getDominated() == false)
         {
@@ -151,13 +151,13 @@ void Population::showNonDominated()
 
 void Population::checkDominated()
 {
-    for (int i = 0; i < m_pop.size(); i++)
+    for (size_t i = 0; i < m_pop.size(); i++)
     {
         DNA* a = m_pop[i];
         bool oka = true;
         bool okb = true;
 
-        for (int j = 0; j < m_pop.size(); j++)
+        for (size_t j = 0; j < m_pop.size(); j++)
         {
             if (a != m_pop[j] && (oka || okb))
             {
@@ -187,7 +187,7 @@ bool Population::reproduce()
     float maxi = 0;
     DNA* min_dna = nullptr;
 
-    for (int i = 0; i < m_pop.size(); i++)
+    for (size_t i = 0; i < m_pop.size(); i++)
     {
         if (m_pop[i]->getFitness() < mini)
         {
@@ -199,7 +199,7 @@ bool Population::reproduce()
 
     std::vector<DNA*> mating_pool;
 
-    for (int i = 0; i < m_pop.size(); i++)
+    for (size_t i = 0; i < m_pop.size(); i++)
     {
         int nb = mapLine(m_pop[i]->getFitness(), mini, 100, maxi, 1);
 
@@ -224,7 +224,7 @@ bool Population::reproduce()
     delete new_ones[0];
     new_ones[0] = min_dna;
 
-    for (int i = 0; i < m_pop.size(); i++)
+    for (size_t i = 0; i < m_pop.size(); i++)
         if (m_pop[i] != min_dna)
             delete m_pop[i];
 
@@ -235,13 +235,13 @@ bool Population::reproduce()
 
 void Population::purify()
 {
-    for (int i = 0; i < m_pop.size(); i++)
+    for (size_t i = 0; i < m_pop.size(); i++)
     {
         int nb = 0;
 
         std::vector<bool> choices = m_pop[i]->getDNA();
 
-        for (int j = 0; j < choices.size(); j++)
+        for (size_t j = 0; j < choices.size(); j++)
             if (choices[j]) nb++;
 
         if (nb != m_structure->getOrdre() - 1 || !m_structure->connectivityTest(choices))
@@ -259,7 +259,7 @@ void Population::purify()
 
 void Population::evaluateFitness()
 {
-    for (int i = 0; i < m_pop.size(); i++)
+    for (size_t i = 0; i < m_pop.size(); i++)
     {
         DNA* dna = m_pop[i];
 
@@ -269,7 +269,7 @@ void Population::evaluateFitness()
         float sum_a = 0;
         float sum_b = 0;
 
-        for (int j = 0; j < cons.size(); j++)
+        for (size_t j = 0; j < cons.size(); j++)
         {
             if (choices[cons[j]->getIndex()]) // Chosen.
             {

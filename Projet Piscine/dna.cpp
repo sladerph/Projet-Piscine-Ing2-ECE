@@ -33,13 +33,13 @@ void DNA::mutate()
 
 DNA* DNA::crossover(DNA* parent_b, Graph* structure)
 {
-    int n = std::rand() % m_dna.size();
+    size_t n = std::rand() % m_dna.size();
 
     DNA* dna = new DNA(structure);
 
     std::vector<bool> vec;
 
-    for (int i = 0; i < m_dna.size(); i++)
+    for (size_t i = 0; i < m_dna.size(); i++)
     {
         if (i < n)
             vec.push_back(m_dna[i]);
@@ -56,7 +56,7 @@ bool DNA::operator==(const DNA* b)
 {
     std::vector<bool> bdna = b->getDNA();
 
-    for (int i = 0; i < m_dna.size(); i++)
+    for (size_t i = 0; i < m_dna.size(); i++)
         if (m_dna[i] != bdna[i])
             return false;
 

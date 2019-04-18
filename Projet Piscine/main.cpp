@@ -10,15 +10,15 @@ int main()
     Graph g{};
 
     //g.create("files/triville.txt", "files/triville_weights_0.txt");
-    g.create("files/manhattan.txt", "files/manhattan_weights_0.txt");
+    //g.create("files/manhattan.txt", "files/manhattan_weights_0.txt");
+    g.create("files/broadway.txt","files/broadway_weights_0.txt");
 
-
-
-    float total = g.getDijkstra(0);
-    std::cout<<"poids total de tous les plus courts chemins : "<<total<<std::endl;
 
     float totalWeight=0.0;
     std::vector<bool> boolVector = g.getPrim(0,&totalWeight);
+
+    float total = g.getDijkstra(0, boolVector);
+    std::cout<<"poids total de tous les plus courts chemins : "<<total<<std::endl;
 
     for(size_t i = 0; i < boolVector.size(); i++)
     {
