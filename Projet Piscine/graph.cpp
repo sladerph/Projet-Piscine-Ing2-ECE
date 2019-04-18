@@ -685,11 +685,13 @@ void Graph ::  evaluation ()
             if(solAdmis[j][i]==true)
             {
                 ///on rajoute leur poids aux sommes
-                somme1[j]=somme1[j]+m_connections[i]->getWeights()[0];
-                somme2[j]=somme2[j]+m_connections[i]->getWeights()[1];
+                somme1[j]=somme1[j]+m_connections[m_taille-1-i]->getWeights()[0];
+
+                somme2[j]=somme2[j]+m_connections[m_taille-1-i]->getWeights()[1];
 
             }
         }
+
     }
 
     ///Maintenant que nous avons nos sommes, nous allons regarder si les solutions sont dominées ou non :
@@ -730,11 +732,11 @@ void Graph ::  evaluation ()
     {
         if(dominee[l]==false)
         {
-          svgg->addDisk(somme1[l]*10,400-(somme2[l]*10),10,"green");
+          svgg->addDisk(somme1[l]*10,400-(somme2[l])*10,5,"green");
         }
         else
         {
-            svgg->addDisk(somme1[l]*10,400-(somme2[l]*10),10,"red");
+            svgg->addDisk(somme1[l]*10,400-(somme2[l])*10,5,"red");
         }
 
     }
