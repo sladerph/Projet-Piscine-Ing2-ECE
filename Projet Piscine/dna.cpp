@@ -32,8 +32,26 @@ DNA* DNA::clone()
     d->setSumB(m_sum_cost_b);
     d->setSize(m_size);
     d->setDominated(m_dominated);
+    d->setFront(m_front);
 
     return d;
+}
+
+bool DNA::dominated(DNA* b)
+{
+    bool oka = true;
+    bool okb = true;
+
+    if (b->getSumA() < m_sum_cost_a)
+        oka = false;
+    if (b->getSumB() < m_sum_cost_b)
+        okb = false;
+    if (!(m_sum_cost_a < b->getSumA() || m_sum_cost_b < b->getSumB()))
+        oka = false;
+
+    if (!oka && !okb)
+        return true;
+    return false;
 }
 
 void DNA::mutate()

@@ -114,10 +114,30 @@ void Population::solve()
     }
 }
 
+void Population::evaluateDominatedFront()
+{
+    for (int i = 0; i < m_pop.size(); i++)
+    {
+        DNA* a = m_pop[i];
+        a->setFront(0);
+
+        if (!a->getDominated())
+        {
+            for (int j = 0; j < m_pop.size(); j++)
+            {
+                DNA* b = m_pop[j];
+
+                if (a != b)
+                    if (a->dominated(b))
+                        a->setFront(a->getFront() + 1);
+            }
+        }
+    }
+}
+
 bool Population::isDominated(DNA* dna, std::vector<DNA*> comp)
 {
-    bool oka = true;
-    bool okb = true;
+    bool dom = true;
 
     for (int j = 0; j < comp.size(); j++)
     {
@@ -125,16 +145,15 @@ bool Population::isDominated(DNA* dna, std::vector<DNA*> comp)
         {
             DNA* b = comp[j];
 
-            if (b->getSumA() < dna->getSumA())
-                oka = false;
-            if (b->getSumB() < dna->getSumB())
-                okb = false;
-            if (!(dna->getSumA() < b->getSumA() || dna->getSumB() < b->getSumB()))
-                oka = false;
+            if (dna->dominated(b))
+            {
+                dom = true;
+                break;
+            }
         }
     }
 
-    if (!oka && !okb) // Dominated.
+    if (dom) // Dominated.
         return true;
 
     return false;

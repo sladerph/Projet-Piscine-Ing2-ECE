@@ -25,6 +25,8 @@ class Population
         void checkClones();
         void checkPareto();
 
+        void evaluateDominatedFront();
+
         bool isDominated(DNA* dna, std::vector<DNA*> comp);
 
         void solve();
