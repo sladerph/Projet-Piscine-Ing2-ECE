@@ -483,7 +483,7 @@ bool Graph::testCycle(std::vector<bool> connections)
 {
     int nbConnections=0;
     {
-        for (size_t i = 0; i < connections.size())<; i++)
+        for (size_t i = 0; i < connections.size(); i++)
         {
             if(connections[i])
                 nbConnections++;
