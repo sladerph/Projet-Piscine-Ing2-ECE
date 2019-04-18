@@ -490,7 +490,7 @@ bool Graph::testCycle(std::vector<bool> connections)
         }
     }
     if(connectivityTest(connections)&&(nbConnections==(m_ordre-1)))
-        return true;
-    return false;
+        return false;
+    return true;
 }
 
