@@ -50,6 +50,9 @@ class Graph
         ///fonction qui trie les solutions dominées et non dominées selon les 2 objectifs et les affiche :
         void evaluation ();
 
+        ///semblable à evaluation(), mais pour 2 objectifs de natures différentes
+        void secondEvaluation();
+        std::vector<std ::vector<bool>> secondfiltrage ();
     private:
         std::vector<Node*> m_nodes;     //liste des sommets du graphe
         std::vector<Connection*> m_connections;     //liste des arêtes du graphe

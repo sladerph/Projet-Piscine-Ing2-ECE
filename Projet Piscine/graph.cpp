@@ -346,7 +346,7 @@ std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connect
     return connectionVector;
 }
 
-float Graph::getDijkstra(int weight, std::vector<bool> activeConnections)
+float Graph::getDijkstra(int weight, std::vector<bool> activeConnections)   ///le vecteur de bool est reçu à l'envers
 {
     std::vector<std::pair<float,int>> successorsVector;     //paires de <poids,id> des sommets découverts mais pas marqués
     std::vector<std::pair<float,int>> dijkstraResults;
@@ -427,12 +427,12 @@ std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> No
 }
 
 
-std::vector<std::pair<float,int>> Graph::getNeighbours(Node* origin,int weight,std::vector<bool> activeConnections)
+std::vector<std::pair<float,int>> Graph::getNeighbours(Node* origin,int weight,std::vector<bool> activeConnections)/// le vecteur reçu est à l'envers
 {
     std::vector<std::pair<float,int>> neighboursId;
     for(auto it : m_connections)
     {
-        if(activeConnections[it->getIndex()])
+        if(activeConnections[(int)m_taille-1-(it->getIndex())])
         {
             if(it->getNodeA()->getIndex()==origin->getIndex())
                 neighboursId.push_back(std::make_pair(it->getWeights()[weight],it->getNodeB()->getIndex()));
@@ -508,7 +508,7 @@ float Graph::weightsSum(std::vector<bool> connections, int weight)
 
 ///additionneur 1 bit :
 
-bool add_1bit(bool& r_sortie ,bool r_entree,bool a, bool b)
+bool add_1bit(bool& r_sortie ,bool r_entree,bool a, bool b)     ///peut être mettre des else if
 {
 
             bool sol;
@@ -617,6 +617,7 @@ std::vector < std:: vector<bool> >  Graph :: filtrage ()
     for (size_t i=0; i<solExist.size();i++) ///on parcours le vecteur des solutions existantes
     {
         int select=0;
+        arreteOk=false;
 
         for(size_t j=0;j<solExist[i].size();j++) ///on parcours la solution existante et on compte
         {
@@ -685,9 +686,9 @@ void Graph ::  evaluation ()
             if(solAdmis[j][i]==true)
             {
                 ///on rajoute leur poids aux sommes
-                somme1[j]=somme1[j]+m_connections[m_taille-1-i]->getWeights()[0];
+                somme1[j]+=m_connections[m_taille-1-i]->getWeights()[0];
 
-                somme2[j]=somme2[j]+m_connections[m_taille-1-i]->getWeights()[1];
+                somme2[j]+=m_connections[m_taille-1-i]->getWeights()[1];
 
             }
         }
@@ -710,9 +711,6 @@ void Graph ::  evaluation ()
                 }
             }
        }
-
-
-
     }
 
 
@@ -742,9 +740,88 @@ void Graph ::  evaluation ()
     }
 
     //rajouter les axes plus tard ?  poid1 en abscisse poids2 en ordonnée
+}
+
+void Graph::secondEvaluation()
+{
+    std::vector<std::vector<bool>> admissibles = secondfiltrage();
+    std :: vector <float> somme1 (admissibles.size(),0);
+    std :: vector <float> somme2(admissibles.size(),0);
+
+    ///vecteur de booleen qui indique pour chaque solution si elle est dominé ou non
+    std :: vector<bool> dominee (admissibles.size(),false);
+    std::cout<<"check"<<std::endl;
+    for (size_t j=0; j<admissibles.size();j++)
+    {
+        ///pour chaque solutions, on parcours ses arretes
+        for(int i =0; i<m_taille;i++)
+        {
+            ///si les arretes sont selectionées dans la solution
+            if(admissibles[j][i]==true)
+            {
+                ///on rajoute leur poids aux sommes
+                somme1[j]+=+m_connections[m_taille-1-i]->getWeights()[0];
+            }
+        }
+        somme2[j]=getDijkstra(1,admissibles[j]);
+    }
+
+    ///Maintenant que nous avons nos sommes, nous allons regarder si les solutions sont dominées ou non :
+
+    for (size_t l =0; l<admissibles.size();l++) ///on parcours toutes les solutions
+    {
+
+       for (size_t k =0; k<admissibles.size();k++) ///chacune d'elle est comparé au reste des solutions
+       {
+            if (l!=k) ///ne pas comparer une solution avec elle même
+            {
+                if(somme1[k]<=somme1[l] && somme2[k]<=somme2[l])
+                {
+                    dominee[l]=true; ///elle est dominee
+                    k=admissibles.size()-1; ///on arrete la boucle car on a deja prouvé qu'elle est dominee
+                }
+            }
+       }
+    }
 
 
+    ///On va maintenant pouvoir les afficher sur un diapgramme 2D :
+
+    ///On crée un autre svg :
+    Svgfile* svgg= new Svgfile ("outpuuut.svg", 1000,800);
 
 
+    ///On parcours toutes les solutions admises et on les dessine, soit en vert pour les solutions non dominées
+    ///soit en rouge pour les solutions dominées
+
+    ///Problèmes pour l'affichage des axes
+    //svgg->addLine(0,400,0,100,"black",10);
+    //svgg->addLine(0,400,300,400,"black",10);
+    for(size_t l=0; l<admissibles.size();l++)
+    {
+        if(dominee[l]==false)
+        {std::cout<<"non dominee  "<<somme1[l]<<"  "<<somme2[l]<<std::endl;
+          svgg->addDisk(somme1[l]*10,400-(somme2[l])*2,5,"green");
+        }
+        else
+        {std::cout<<"dominee  "<<somme1[l]<<"  "<<somme2[l]<<std::endl;
+            svgg->addDisk(somme1[l]*10,400-(somme2[l])*2,5,"red");
+        }
+
+    }
+
+    //rajouter les axes plus tard ?  poid1 en abscisse poids2 en ordonnée
+}
+
+std::vector<std ::vector<bool>> Graph::secondfiltrage ()
+{
+    std::vector < std:: vector<bool> > solExist= this->enumeration();
+    std::vector<std::vector<bool>> admissibles;
+    for(size_t i = 0; i < solExist.size(); i++)
+    {
+        if(connectivityTest(solExist[i]))
+            admissibles.push_back(solExist[i]);
+    }
+    return admissibles;
 }
 
