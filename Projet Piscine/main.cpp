@@ -28,13 +28,15 @@ int main()
     std::cout<<"connexe ? "<< g.connectivityTest(boolVector)<<std::endl;
     std::cout<<"cycle ?   "<< g.testCycle(boolVector)<<std::endl;    /// true = cycle, false = pas de cycle (en partant de 0, donc tester avant si connexe)
 
-    //g.show("output.svg", &boolVector);
-//    g.showPrim("output.svg", &boolVector, true);
+    g.evaluation();
 
-    Population p{1000, &g};
+    //g.show("output.svg", &boolVector);
+    //g.showPrim("output.svg", &boolVector, true);
+
+    ///Population p{1000, &g};
 
     //p.showNonDominated();
-    p.solve();
+    ///p.solve();
 
     return 0;
 }

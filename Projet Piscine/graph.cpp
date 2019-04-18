@@ -177,6 +177,7 @@ bool Graph::create(std::string topology, std::string costs)
     getline(file_topo, line);
 
     int nb_cons = std::stoi(line);
+    m_taille=nb_cons;
 
     for (int i = 0; i < nb_cons; i++)
     {
@@ -503,5 +504,245 @@ float Graph::weightsSum(std::vector<bool> connections, int weight)
             totalWeight+=m_connections[i]->getWeights()[weight];
     }
     return totalWeight;
+}
+
+///additionneur 1 bit :
+
+bool add_1bit(bool& r_sortie ,bool r_entree,bool a, bool b)
+{
+
+            bool sol;
+
+            if(a==false&&b==false&&r_entree==false)
+            {
+                sol=false;
+                r_sortie=false;
+            }
+             if(a==false&&b==false&&r_entree==true)
+            {
+                sol=true;
+                r_sortie=false;
+            }
+             if(a==false&&b==true&&r_entree==false)
+            {
+                sol=true;
+                r_sortie=false;
+            }
+             if(a==false&&b==true&&r_entree==true)
+            {
+                sol=false;
+                r_sortie=true;
+            }
+             if(a==true&&b==false&&r_entree==false)
+            {
+                sol=true;
+                r_sortie=false;
+            }
+             if(a==true&&b==false&&r_entree==true)
+            {
+                sol=false;
+                r_sortie=true;
+            }
+             if(a==true&&b==true&&r_entree==false)
+            {
+                sol=false;
+                r_sortie=true;
+            }
+             if(a==true&&b==true&&r_entree==true)
+            {
+                sol=true;
+                r_sortie=true;
+            }
+
+            return sol;
+}
+
+
+///fonction qui énumère toutes les solutions existantes :
+
+std::vector < std::vector<bool> > Graph ::  enumeration ()
+{
+    std::vector < std::vector<bool> >  sol_exist;
+    std :: vector<bool> zero;
+
+    ///on initialise toutes les solutions avec autant de zéro que d'arretes :
+    for(int k=0; k<m_taille; k++)
+    {
+        zero.push_back(false);
+    }
+    ///on crée 2^taille solutions
+
+    for (int l = 0; l< pow(2,m_taille);l++ )
+    {
+         sol_exist.push_back(zero);
+    }
+
+    ///on creer le nombre 1  :
+    std::vector <bool> one;
+    for(int k=0; k<m_taille; k++)
+    {
+        one.push_back(false);
+    }
+    one[m_taille-1]=true;
+
+    ///on parcours toute les solutions après la première(celle ci reste a 0)
+    for (int i = 1; i< pow(2,m_taille);i++ )
+    {
+       ///A l'aide d'un additionneur 1 bit, on crée un additionneur m_taille bits
+       ///Ainsi la solution d'après est la somme de la soluton d'avant et du nombre 1
+       bool r_entree=false;
+       bool r_sortie;
+       for (int j=(m_taille-1);j>=0;j--)
+       {
+           sol_exist[i][j]=add_1bit(r_sortie,r_entree,sol_exist[i-1][j],one[j]);
+           r_entree=r_sortie;
+       }
+
+    }
+
+       return sol_exist;
+}
+
+///fonction qui selectionne les solutions admissibles parmis les solutions existantes :
+
+std::vector < std:: vector<bool> >  Graph :: filtrage ()
+{
+    std::vector < std:: vector<bool> > solExist= this->enumeration();
+    std::vector < std::vector<bool> >  solAdmis;
+    bool arreteOk=false;
+    bool connexe;
+    std::vector <int> sommetSelect;
+
+
+    for (size_t i=0; i<solExist.size();i++) ///on parcours le vecteur des solutions existantes
+    {
+        int select=0;
+
+        for(size_t j=0;j<solExist[i].size();j++) ///on parcours la solution existante et on compte
+        {
+            if(solExist[i][j]) ///si une arrete est selectionee
+            {
+                select++; ///on augmente select
+            }
+
+        }
+        ///on a ainsi le nombre d'arretes selectionees
+
+        ///on regarde si la solution existante possède ordre-1 arretes :
+
+        if( select == (m_ordre-1))
+        {
+            arreteOk=true;  ///on a donc une condition verifié
+        }
+
+        ///On va maintenant regarder si la solution existante est connexe :
+        ///pour cela on fait appel a la fonction testconnectivity
+
+        connexe=connectivityTest(solExist[i]);
+
+       ///si les deux conditions sont vérifiées : connectivité + non cycle
+        if(connexe==true&&arreteOk==true)
+        {
+            ///alors la solution est admissible, on la rajoute donc dans le vecteur de solutions admissibles
+            solAdmis.push_back(solExist[i]);
+        }
+
+
+
+    }
+    return solAdmis;
+
+}
+
+
+///fonction qui trie les solutions dominées et non dominées selon les 2 objectifs et les affiche :
+
+void Graph ::  evaluation ()
+{
+    ///on récupère le vecteur de solutions admissibles :
+
+    std::vector < std::vector<bool> > solAdmis=this->filtrage();
+
+    ///vecteurs de float correspondants aux sommes des poids1 pour somme1 et poids2 pour somme2 :
+    ///pour chaque solutions correspondantes du vecteur solutions admissibles
+
+    std :: vector <float> somme1 (solAdmis.size(),0);
+    std :: vector <float> somme2(solAdmis.size(),0);
+
+    ///vecteur de booleen qui indique pour chaque solution si elle est dominé ou non
+    std :: vector<bool> dominee (solAdmis.size(),false);
+
+    ///on effectue la somme des poids des arretes pour chaque solution :
+
+    ///on parcours toutes les solutions :
+
+    for (size_t j=0; j<solAdmis.size();j++)
+    {
+        ///pour chaque solutions, on parcours ses arretes
+        for(int i =0; i<m_taille;i++)
+        {
+            ///si les arretes sont selectionées dans la solution
+            if(solAdmis[j][i]==true)
+            {
+                ///on rajoute leur poids aux sommes
+                somme1[j]=somme1[j]+m_connections[i]->getWeights()[0];
+                somme2[j]=somme2[j]+m_connections[i]->getWeights()[1];
+
+            }
+        }
+    }
+
+    ///Maintenant que nous avons nos sommes, nous allons regarder si les solutions sont dominées ou non :
+
+    for (size_t l =0; l<solAdmis.size();l++) ///on parcours toutes les solutions
+    {
+
+       for (size_t k =0; k<solAdmis.size();k++) ///chacune d'elle est comparé au reste des solutions
+       {
+            if (l!=k) ///ne pas comparer une solution avec elle même
+            {
+                if(somme1[k]<=somme1[l] && somme2[k]<=somme2[l])
+                {
+                    dominee[l]=true; ///elle est dominee
+                    k=solAdmis.size()-1; ///on arrete la boucle car on a deja prouvé qu'elle est dominee
+                }
+            }
+       }
+
+
+
+    }
+
+
+    ///On va maintenant pouvoir les afficher sur un diapgramme 2D :
+
+    ///On crée un autre svg :
+    Svgfile* svgg= new Svgfile ("outpuut.svg", 1000,800);
+
+
+    ///On parcours toutes les solutions admises et on les dessine, soit en vert pour les solutions non dominées
+    ///soit en rouge pour les solutions dominées
+
+    ///Problèmes pour l'affichage des axes
+    //svgg->addLine(0,400,0,100,"black",10);
+    //svgg->addLine(0,400,300,400,"black",10);
+    for(size_t l=0; l<solAdmis.size();l++)
+    {
+        if(dominee[l]==false)
+        {
+          svgg->addDisk(somme1[l]*10,400-(somme2[l]*10),10,"green");
+        }
+        else
+        {
+            svgg->addDisk(somme1[l]*10,400-(somme2[l]*10),10,"red");
+        }
+
+    }
+
+    //rajouter les axes plus tard ?  poid1 en abscisse poids2 en ordonnée
+
+
+
+
 }
 

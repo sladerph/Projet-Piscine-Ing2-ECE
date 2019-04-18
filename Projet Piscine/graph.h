@@ -43,11 +43,19 @@ class Graph
         bool testCycle(std::vector<bool> connections);      //renvoie true s'il y a un cycle, renvoie false sinon;
         bool connectivityTest(std::vector<bool>connections);        //renvoie true si le graphe est connexe, renvoie false sinon
 
+        ///fonction qui énumère toutes les solutions existantes :
+        std::vector<std::vector<bool>> enumeration ();
+        ///fonction qui selectionne les solutions admissibles parmis les solutions existantes :
+        std::vector<std ::vector<bool>> filtrage ();
+        ///fonction qui trie les solutions dominées et non dominées selon les 2 objectifs et les affiche :
+        void evaluation ();
+
     private:
         std::vector<Node*> m_nodes;     //liste des sommets du graphe
         std::vector<Connection*> m_connections;     //liste des arêtes du graphe
 
         int m_ordre;    //nombre de sommet du graphe
+        double m_taille;
 
         void showNodes(Svgfile* svg) const;
         void showConnections(Svgfile* svg, std::vector<bool>* path = nullptr) const;
@@ -71,5 +79,7 @@ std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connect
 std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes);
 //trie les paires <poids,id>, qui représentent des sommets, en fonction du paramètre poids et dans l'ordre croissant
 
+///additionneur 1 bit :
+bool add_1bit(bool& r_sortie ,bool r_entree,bool a, bool b);
 
 #endif // GRAPH_H
