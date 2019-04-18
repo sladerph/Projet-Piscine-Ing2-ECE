@@ -494,3 +494,14 @@ bool Graph::testCycle(std::vector<bool> connections)
     return true;
 }
 
+float Graph::weightsSum(std::vector<bool> connections, int weight)
+{
+    float totalWeight=0;
+    for(size_t i = 0; i < connections.size(); i++)
+    {
+        if(connections[i])
+            totalWeight+=m_connections[i]->getWeights()[weight];
+    }
+    return totalWeight;
+}
+

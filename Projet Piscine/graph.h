@@ -58,6 +58,8 @@ class Graph
         //utilisé pour dijkstra : renvoie la liste des pairs <poids,id> des sommets voisins du sommet "origin" (l'activité ou non des connections
         //est prise en compte pour déterminer les voisins
 
+        float weightsSum(std::vector<bool> connections, int weight);
+
 };
 
 std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight);

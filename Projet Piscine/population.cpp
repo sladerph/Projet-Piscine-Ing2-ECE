@@ -141,7 +141,7 @@ bool Population::isDominated(DNA* dna, std::vector<DNA*> comp)
 
     for (int j = 0; j < comp.size(); j++)
     {
-        if (dna != comp[j] && (oka || okb))
+        if (dna != comp[j])
         {
             DNA* b = comp[j];
 
