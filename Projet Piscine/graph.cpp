@@ -617,6 +617,7 @@ std::vector < std:: vector<bool> >  Graph :: filtrage ()
     for (size_t i=0; i<solExist.size();i++) ///on parcours le vecteur des solutions existantes
     {
         int select=0;
+        arreteOk=false;
 
         for(size_t j=0;j<solExist[i].size();j++) ///on parcours la solution existante et on compte
         {
@@ -667,13 +668,12 @@ void Graph ::  evaluation ()
     ///pour chaque solutions correspondantes du vecteur solutions admissibles
 
     std :: vector <float> somme1 (solAdmis.size(),0);
-    std :: vector <float> somme2(solAdmis.size(),0);
+    std :: vector <float> somme2 (solAdmis.size(),0);
 
-    ///vecteur de booleen qui indique pour chaque solution si elle est dominé ou non
+    ///vecteur de booleen qui indique pour chaque solution si elle est dominée ou non
     std :: vector<bool> dominee (solAdmis.size(),false);
 
     ///on effectue la somme des poids des arretes pour chaque solution :
-
     ///on parcours toutes les solutions :
 
     for (size_t j=0; j<solAdmis.size();j++)
@@ -689,9 +689,13 @@ void Graph ::  evaluation ()
 
                 somme2[j]=somme2[j]+m_connections[m_taille-1-i]->getWeights()[1];
 
+
             }
         }
-
+        std::cout<<"sommet : ";
+        for(auto it : solAdmis[j])
+            std::cout<<it;
+        std::cout<<"   "<<somme2[j]<<std::endl;
     }
 
     ///Maintenant que nous avons nos sommes, nous allons regarder si les solutions sont dominées ou non :
@@ -710,9 +714,6 @@ void Graph ::  evaluation ()
                 }
             }
        }
-
-
-
     }
 
 
@@ -728,14 +729,15 @@ void Graph ::  evaluation ()
     ///Problèmes pour l'affichage des axes
     //svgg->addLine(0,400,0,100,"black",10);
     //svgg->addLine(0,400,300,400,"black",10);
+    //svgg->addGrid(100,1,"black");
     for(size_t l=0; l<solAdmis.size();l++)
     {
         if(dominee[l]==false)
-        {
+        {std::cout<<somme1[l]<<"  "<<somme2[l]<<std::endl;
           svgg->addDisk(somme1[l]*10,400-(somme2[l])*10,5,"green");
         }
         else
-        {
+        {std::cout<<somme1[l]<<"  "<<somme2[l]<<std::endl;
             svgg->addDisk(somme1[l]*10,400-(somme2[l])*10,5,"red");
         }
 
