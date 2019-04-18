@@ -481,34 +481,16 @@ bool Graph::connectivityTest(std::vector<bool>connections)
 
 bool Graph::testCycle(std::vector<bool> connections)
 {
-    m_connections = sortConnectionsByIndex(m_connections);
-    std::unordered_set<int> usedList;
-    int test=0;
-    for(size_t i = 0; i < connections.size(); i++)
+    int nbConnections=0;
     {
-        test=0;
-        if(connections[i])
+        for (size_t i = 0; i < connections.size())<; i++)
         {
-            if(usedList.find(m_connections[i]->getNodeA()->getIndex())==usedList.end())
-            {
-                usedList.insert(m_connections[i]->getNodeA()->getIndex());
-            }
-            else
-            {
-                test++;
-            }
-            if(usedList.find(m_connections[i]->getNodeB()->getIndex())==usedList.end())
-            {
-                usedList.insert(m_connections[i]->getNodeB()->getIndex());
-            }
-            else
-            {
-                test++;
-            }
-            if(test==2)
-                return true;
+            if(connections[i])
+                nbConnections++;
         }
     }
+    if(connectivityTest(connections)&&(nbConnections==(m_ordre-1)))
+        return true;
     return false;
 }
 
