@@ -237,15 +237,11 @@ void Population::showNonDominated()
 
     std::string path = "Genetic outputs/" + ss.str() + "/";
 
-<<<<<<< HEAD
-    for (size_t i = 0; i < m_pop.size(); i++)
-=======
     str = str + "\\Pareto_bests";
 
     system(str.c_str());
 
     for (int i = 0; i < m_pop.size(); i++)
->>>>>>> pierre
     {
         if (m_pop[i]->getDominated() == false)
         {
@@ -291,7 +287,6 @@ void Population::checkDominated()
     for (size_t i = 0; i < m_pop.size(); i++)
     {
         DNA* a = m_pop[i];
-<<<<<<< HEAD
         bool oka = true;
         bool okb = true;
 
@@ -311,8 +306,6 @@ void Population::checkDominated()
                 }
             }
         }
-=======
->>>>>>> pierre
 
         if (isDominated(a, m_pop))
             m_pop[i]->setDominated(true);
