@@ -10,6 +10,7 @@ class DNA
 {
     public:
         DNA(Graph* structure);
+        DNA();
         ~DNA();
 
         DNA* crossover(DNA* parent_b, Graph* structure);
@@ -20,6 +21,7 @@ class DNA
         void setSumB(float s) {m_sum_cost_b = s;};
         void setDNA(std::vector<bool> vec) {m_dna = vec;};
         void setDominated(bool dom)  {m_dominated = dom;};
+        void setSize(int s) {m_size = s;};
 
         std::vector<bool> getDNA() const {return m_dna;};
         float getFitness() const {return m_fitness;};
@@ -28,6 +30,8 @@ class DNA
         bool  getDominated() const {return m_dominated;};
 
         bool operator==(const DNA* b);
+
+        DNA* clone();
 
     private:
         std::vector<bool> m_dna;

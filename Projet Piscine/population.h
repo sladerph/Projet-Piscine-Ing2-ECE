@@ -23,11 +23,15 @@ class Population
         void showNonDominated();
         void mutate();
         void checkClones();
+        void checkPareto();
+
+        bool isDominated(DNA* dna, std::vector<DNA*> comp);
 
         void solve();
 
     private:
         std::vector<DNA*> m_pop;
+        std::vector<DNA*> m_pareto_bests;
         int m_pop_size;
         int m_generation;
         Graph* m_structure;

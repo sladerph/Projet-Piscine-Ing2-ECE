@@ -20,6 +20,22 @@ DNA::DNA(Graph* structure)
     m_sum_cost_b = 0;
 }
 
+DNA::DNA() {}
+
+DNA* DNA::clone()
+{
+    DNA* d = new DNA();
+
+    d->setDNA(m_dna);
+    d->setFitness(m_fitness);
+    d->setSumA(m_sum_cost_a);
+    d->setSumB(m_sum_cost_b);
+    d->setSize(m_size);
+    d->setDominated(m_dominated);
+
+    return d;
+}
+
 void DNA::mutate()
 {
     for (int i = 0; i < m_size; i++)
