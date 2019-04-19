@@ -11,6 +11,7 @@
 
 #include <windows.h>
 #include <sstream>
+#include <cmath>
 
 class DNA;
 
@@ -29,6 +30,8 @@ class Population
         void checkClones();
         void checkPareto();
 
+        std::vector<DNA*> getClosest(DNA* dna);
+
         void evaluateDominatedFront();
 
         bool isDominated(DNA* dna, std::vector<DNA*> comp);
@@ -41,8 +44,13 @@ class Population
         int m_pop_size;
         int m_generation;
         Graph* m_structure;
+
+        void sortByFront();
+        void updateFitness(int dom_front);
+        void manageFrontCut(int n);
 };
 
 float mapLine(float val, float xa, float ya, float xb, float yb);
+float dist(float xa, float ya, float xb, float yb);
 
 #endif // POPULATION_H
