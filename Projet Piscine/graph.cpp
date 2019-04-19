@@ -542,37 +542,37 @@ bool add_1bit(bool& r_sortie ,bool r_entree,bool a, bool b)     ///peut être met
                 sol=false;
                 r_sortie=false;
             }
-             if(a==false&&b==false&&r_entree==true)
+             else if(a==false&&b==false&&r_entree==true)
             {
                 sol=true;
                 r_sortie=false;
             }
-             if(a==false&&b==true&&r_entree==false)
+             else if(a==false&&b==true&&r_entree==false)
             {
                 sol=true;
                 r_sortie=false;
             }
-             if(a==false&&b==true&&r_entree==true)
+             else if(a==false&&b==true&&r_entree==true)
             {
                 sol=false;
                 r_sortie=true;
             }
-             if(a==true&&b==false&&r_entree==false)
+             else if(a==true&&b==false&&r_entree==false)
             {
                 sol=true;
                 r_sortie=false;
             }
-             if(a==true&&b==false&&r_entree==true)
+             else if(a==true&&b==false&&r_entree==true)
             {
                 sol=false;
                 r_sortie=true;
             }
-             if(a==true&&b==true&&r_entree==false)
+             else if(a==true&&b==true&&r_entree==false)
             {
                 sol=false;
                 r_sortie=true;
             }
-             if(a==true&&b==true&&r_entree==true)
+             else if(a==true&&b==true&&r_entree==true)
             {
                 sol=true;
                 r_sortie=true;
@@ -774,7 +774,6 @@ void Graph::secondEvaluation()
 
     ///vecteur de booleen qui indique pour chaque solution si elle est dominé ou non
     std :: vector<bool> dominee (admissibles.size(),false);
-    std::cout<<"check"<<std::endl;
     for (size_t j=0; j<admissibles.size();j++)
     {
         ///pour chaque solutions, on parcours ses arretes
@@ -824,11 +823,11 @@ void Graph::secondEvaluation()
     for(size_t l=0; l<admissibles.size();l++)
     {
         if(dominee[l]==false)
-        {std::cout<<"non dominee  "<<somme1[l]<<"  "<<somme2[l]<<std::endl;
+        {///std::cout<<"non dominee  "<<somme1[l]<<"  "<<somme2[l]<<std::endl;
           svgg->addDisk(somme1[l]*10,400-(somme2[l])*2,5,"green");
         }
         else
-        {std::cout<<"dominee  "<<somme1[l]<<"  "<<somme2[l]<<std::endl;
+        {///std::cout<<"dominee  "<<somme1[l]<<"  "<<somme2[l]<<std::endl;
             svgg->addDisk(somme1[l]*10,400-(somme2[l])*2,5,"red");
         }
 
