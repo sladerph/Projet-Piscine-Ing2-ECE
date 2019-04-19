@@ -534,47 +534,6 @@ bool Graph::testCycle(std::vector<bool> connections)
 
 bool add_1bit(bool& r_sortie ,bool r_entree,bool a, bool b)     ///peut être mettre des else if
 {
-
-            /*if(a==false&&b==false&&r_entree==false)
-            {
-                r_sortie=false;
-                return false;
-            }
-             else if(a==false&&b==false&&r_entree==true)
-            {
-                r_sortie=false;
-                return true;
-            }
-             else if(a==false&&b==true&&r_entree==false)
-            {
-                r_sortie=false;
-                return true;
-            }
-             else if(a==false&&b==true&&r_entree==true)
-            {
-                r_sortie=true;
-                return false;
-            }
-             else if(a==true&&b==false&&r_entree==false)
-            {
-                r_sortie=false;
-                return true;
-            }
-             else if(a==true&&b==false&&r_entree==true)
-            {
-                r_sortie=true;
-                return false;
-            }
-             else if(a==true&&b==true&&r_entree==false)
-            {
-                r_sortie=true;
-                return false;
-            }
-             else if(a==true&&b==true&&r_entree==true)
-            {
-                r_sortie=true;
-                return true;
-            }*/
             if(a)
             {
                 if(b)
@@ -662,11 +621,9 @@ std::vector < std::vector<bool> > Graph ::  enumeration ()
            sol_exist[i][j]=add_1bit(r_sortie,r_entree,sol_exist[i-1][j],one[j]);
            r_entree=r_sortie;
        }
-       if(howManyTrue(sol_exist[i])==(m_ordre-1))
+       if(howManyTrue(sol_exist[i])==(m_ordre-1))   ///on ne retourne que les solutions qui ont le nombre d'arêtes suffisant pour être connexe et sans cycle
             retour.push_back(sol_exist[i]);
-
     }
-
        return retour;
 }
 
@@ -887,6 +844,7 @@ std::vector < std::vector<bool> > Graph ::  secondEnumeration ()
 {
     std :: vector<bool> zero (m_taille,false);  ///on initialise toutes les solutions avec autant de zéro que d'arretes :
     std::vector < std::vector<bool> >  sol_exist (pow(2,m_taille),zero);    ///on crée 2^taille solutions
+    std::vector < std::vector<bool> > retour;
     ///on creer le nombre 1  :
     std::vector <bool> one (m_taille-1,false);
     one.push_back(true);
@@ -903,8 +861,10 @@ std::vector < std::vector<bool> > Graph ::  secondEnumeration ()
            sol_exist[i][j]=add_1bit(r_sortie,r_entree,sol_exist[i-1][j],one[j]);
            r_entree=r_sortie;
        }
-       return sol_exist;
+       if(howManyTrue(sol_exist[i])>=(m_ordre-1))   ///on ne retourne que les solutions qui ont le nombre d'arêtes suffisant pour être connexe
+            retour.push_back(sol_exist[i]);
     }
+       return retour;
 }
 
 int howManyTrue(std::vector<bool> subject)
