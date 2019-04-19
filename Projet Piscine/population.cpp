@@ -37,8 +37,7 @@ void Population::solve()
             checkClones();
             purify();
 
-            if (m_pop.size() > 0)
-                checkDominated();
+            checkDominated();
 
             checkPareto();
 
@@ -77,9 +76,7 @@ void Population::solve()
                     forced = true;
                 }
                  else
-                {
                     mutate();
-                }
             }
             else
             {
@@ -114,6 +111,23 @@ void Population::solve()
     }
 }
 
+void Population::sortByFront()
+{
+    for (int i = 0; i < m_pop.size() - 1; i++)
+    {
+        DNA* a = m_pop[i];
+        DNA* b = m_pop[i + 1];
+
+        if (a->getFront() > b->getFront())
+        {
+            DNA* tmp = a;
+            a = b;
+            b = tmp;
+            i = 0;
+        }
+    }
+}
+
 void Population::evaluateDominatedFront()
 {
     for (int i = 0; i < m_pop.size(); i++)
@@ -137,7 +151,7 @@ void Population::evaluateDominatedFront()
 
 bool Population::isDominated(DNA* dna, std::vector<DNA*> comp)
 {
-    bool dom = true;
+    bool dom = false;
 
     for (int j = 0; j < comp.size(); j++)
     {
@@ -153,10 +167,7 @@ bool Population::isDominated(DNA* dna, std::vector<DNA*> comp)
         }
     }
 
-    if (dom) // Dominated.
-        return true;
-
-    return false;
+    return dom;
 }
 
 void Population::checkPareto()
@@ -287,62 +298,106 @@ void Population::checkDominated()
     for (size_t i = 0; i < m_pop.size(); i++)
     {
         DNA* a = m_pop[i];
-        bool oka = true;
-        bool okb = true;
-
-        for (size_t j = 0; j < m_pop.size(); j++)
-        {
-            if (a != m_pop[j] && (oka || okb))
-            {
-                DNA* b = m_pop[j];
-
-                if (b->getSumA() < a->getSumA())
-                {
-                    oka = false;
-                }
-                if (b->getSumB() < a->getSumB())
-                {
-                    okb = false;
-                }
-            }
-        }
 
         if (isDominated(a, m_pop))
             m_pop[i]->setDominated(true);
     }
 }
 
+void Population::manageFrontCut(int n)
+{
+    int curr_front = 0;
+    bool changed;
+
+    for (int i = 0; i < m_pop.size(); i++)
+    {
+        DNA* a = m_pop[i];
+        changed = false;
+
+        int j;
+        for (j = i; j < m_pop.size(); j++)
+        {
+            DNA* b = m_pop[j];
+
+            if (a->getFront() != b->getFront())
+            {
+                changed = true;
+                curr_front = b->getFront();
+                break;
+            }
+        }
+
+        if (changed)
+        {
+            int front_size = j - i;
+            if (n - i < front_size)
+            {
+                updateFitness(curr_front - 1);
+                std::vector<DNA*> vec;
+                for (int k = i; k <= j; k++) vec.push_back(m_pop[k]);
+
+                for (int k = 0; k < vec.size() - 1; k++)
+                {
+                    DNA* va = vec[k];
+                    DNA* vb = vec[k + 1];
+
+                    if (va->getFitness() > vb->getFitness())
+                    {
+                        DNA* tmp = m_pop[i + k];
+                        m_pop[i + k] = m_pop[i + k + 1];
+                        m_pop[i + k + 1] = tmp;
+
+                        tmp = vec[k];
+                        vec[k] = vb;
+                        vec[k + 1] = tmp;
+                        k = 0;
+                    }
+                }
+            }
+            else
+                i = j;
+        }
+    }
+}
+
 bool Population::reproduce()
 {
-    float mini = 1000000;
-    float maxi = 0;
-    DNA* min_dna = nullptr;
+    evaluateDominatedFront();
+    sortByFront(); // Sorting the population by ascending domination level.
 
-    for (size_t i = 0; i < m_pop.size(); i++)
-    {
-        if (m_pop[i]->getFitness() < mini)
-        {
-            mini = m_pop[i]->getFitness();
-            min_dna = m_pop[i];
-        }
-        if (m_pop[i]->getFitness() > maxi) maxi = m_pop[i]->getFitness();
-    }
-
+    int n_cut  = m_pop.size() / 2; // Slice in the middle.
+    std::vector<DNA*> parents ;
+    std::vector<DNA*> new_ones;
     std::vector<DNA*> mating_pool;
 
-    for (size_t i = 0; i < m_pop.size(); i++)
+    manageFrontCut(n_cut);
+
+    for (int i = 0; i < n_cut; i++)
+        parents.push_back(m_pop[i]);
+
+
+    float mini = 1000;
+    float maxi = 0   ;
+
+    for (int i = 0; i < parents.size(); i++)
     {
-        int nb = mapLine(m_pop[i]->getFitness(), mini, 100, maxi, 1);
-
-        if (m_pop[i]->getDominated() == false) nb *= 2;
-
-        for (int j = 0; j < nb; j++)
-            mating_pool.push_back(m_pop[i]);
+        if (parents[i]->getFitness() < mini)
+            mini = parents[i]->getFitness();
+        if (parents[i]->getFitness() > maxi)
+            maxi = parents[i]->getFitness();
     }
 
-    if (mating_pool.size() == 0) return false;
+    for (int i = 0; i < parents.size(); i++)
+    {
+        DNA* a = parents[i];
 
-    std::vector<DNA*> new_ones;
+        int n = (int) mapLine(a->getFitness(), mini, 100, maxi, 10);
+
+        if (a->getDominated() == false) n += 20;
+
+        for (int j = 0; j < n; j++)
+            mating_pool.push_back(a);
+    }
 
     for (int i = 0; i < m_pop_size; i++)
     {
@@ -352,14 +407,13 @@ bool Population::reproduce()
         new_ones.push_back(mating_pool[inda]->crossover(mating_pool[indb], m_structure));
     }
 
-    delete new_ones[0];
-    new_ones[0] = min_dna;
-
     for (size_t i = 0; i < m_pop.size(); i++)
-        if (m_pop[i] != min_dna)
-            delete m_pop[i];
+        delete m_pop[i];
 
     m_pop = new_ones;
+
+    for (int i = 0; i < m_pareto_bests.size(); i++)
+        m_pop.push_back(m_pareto_bests[i]->clone());
 
     return true;
 }
@@ -385,6 +439,106 @@ void Population::purify()
         {
             //m_pop[i]->setDominated(true);
         }
+    }
+}
+
+std::vector<DNA*> Population::getClosest(DNA* dna)
+{
+    std::vector<DNA*> sol;
+
+    DNA* good_a = dna;
+    DNA* good_b = dna;
+
+    float da = 100;
+    float db = 100;
+
+    for (int i = 0; i < m_pop.size(); i++)
+    {
+        DNA* a = m_pop[i];
+
+        if (a != dna)
+        {
+            if (dna->getFront() > a->getFront()) continue;
+            if (dna->getFront() < a->getFront()) break;
+
+            float tda = a->getSumA() - dna->getSumA();
+            float tdb = a->getSumB() - dna->getSumB();
+
+            if (tda < da && tda > 0)
+            {
+                da = tda;
+                good_a = a;
+            }
+            if (tdb < db && tdb > 0)
+            {
+                db = tdb;
+                good_b = a;
+            }
+        }
+    }
+
+    if (good_a != dna) sol.push_back(good_a);
+    else sol.push_back(nullptr);
+    if (good_b != dna) sol.push_back(good_b);
+    else sol.push_back(nullptr);
+
+    return sol;
+}
+
+void Population::updateFitness(int dom_front)
+{
+    for (int i = 0; i < m_pop.size(); i++)
+    {
+        DNA* a = m_pop[i];
+
+        //if (a->getDominated()) return;
+
+        if (a->getFront() < dom_front) continue;
+        if (a->getFront() > dom_front) break;
+
+        std::vector<DNA*> closest = getClosest(a);
+        DNA* b = closest[0];
+        DNA* c = closest[1];
+
+        if (b && c)
+        {
+            float xa = b->getSumA();
+            float ya = b->getSumB();
+            float xb = c->getSumA();
+            float yb = c->getSumB();
+            float w  = std::abs(xb - xa);
+            float h  = std::abs(yb - ya);
+
+//            float d  = dist(xa, ya, xb, yb);
+            float d  = w + h;
+            float n  = mapLine(d, 2, 0, 10, a->getFitness() / 2);
+            a->setFitness(a->getFitness() - n);
+        }
+        else if (b == nullptr && c == nullptr)
+        {
+            continue;
+        }
+        else if (b == nullptr)
+        {
+            float xa = a->getSumA();
+            float ya = a->getSumB();
+            float xb = c->getSumA();
+            float yb = c->getSumB();
+            float d  = dist(xa, ya, xb, yb);
+            float n  = mapLine(d, 1, 0, 10, a->getFitness() / 2);
+            a->setFitness(a->getFitness() - n);
+        }
+        else if (c == nullptr)
+        {
+            float xa = a->getSumA();
+            float ya = a->getSumB();
+            float xb = b->getSumA();
+            float yb = b->getSumB();
+            float d  = dist(xa, ya, xb, yb);
+            float n  = mapLine(d, 1, 0, 10, a->getFitness() / 2);
+            a->setFitness(a->getFitness() - n);
+        }
+
     }
 }
 
@@ -427,6 +581,15 @@ float mapLine(float val, float xa, float ya, float xb, float yb)
 
     return m * val + p;
 }
+
+float dist(float xa, float ya, float xb, float yb)
+{
+    return std::sqrt(std::pow(xb - xa, 2) + std::pow(yb - ya, 2));
+}
+
+
+
+
 
 
 
