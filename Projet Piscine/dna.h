@@ -1,6 +1,10 @@
 #ifndef DNA_H
 #define DNA_H
 
+/// \file
+/// \brief
+/// \author
+
 #include "graph.h"
 #include "population.h"
 

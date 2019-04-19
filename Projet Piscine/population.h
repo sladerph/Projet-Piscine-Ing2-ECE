@@ -1,6 +1,10 @@
 #ifndef POPULATION_H
 #define POPULATION_H
 
+/// \file
+/// \brief
+/// \author
+
 #define MUTATION_RATE 5
 
 #include "dna.h"

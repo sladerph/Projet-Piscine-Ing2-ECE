@@ -1,4 +1,9 @@
+/// \file graph.cpp
+/// \brief regroupe les différentes fonction agissant sur le graphe et permettant de l'afficher ainsi que les fonctions accessoires qu'elles utilisent
+/// \author Pierre Herduin, Mélodie Damas, Simon jolly
+
 #include "graph.h"
+
 
 Graph::Graph()
 {
@@ -348,7 +353,7 @@ std::vector<Connection*> sortConnections(std::vector<Connection*> connections, i
 bool connectionsComparator(const Connection* lhs, const Connection* rhs)
    {return lhs->getIndex() < rhs->getIndex();}
 
-/*std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connections)
+std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connections)
 {
     Connection* temp;
     for(size_t i = 0; i < connections.size()-1; i++)
@@ -365,15 +370,14 @@ bool connectionsComparator(const Connection* lhs, const Connection* rhs)
     for(size_t i = 0; i < connections.size(); i++)
         connectionVector.push_back(connections[i]);
     return connectionVector;
-}*/
+}
 
 float Graph::getDijkstra(int weight, std::vector<bool> activeConnections)   ///le vecteur de bool est reçu à l'envers
 {
-    std::vector<std::pair<float,int>> successorsVector;     //paires de <poids,id> des sommets découverts mais pas marqués
-    std::vector<std::pair<float,int>> dijkstraResults;
-    //paires de <poids,id> représentant les sommets et le poids du cplus court chemin depuis le sommet de base étudié et le sommet d'index "id"
+    std::vector<std::pair<float,int>> successorsVector;     ///<paires de <poids,id> des sommets découverts mais pas marqués
+    std::vector<std::pair<float,int>> dijkstraResults;      ///<paires de <poids,id> représentant les sommets et le poids du cplus court chemin depuis le sommet de base étudié et le sommet d'index "id"
 
-    std::unordered_set<int> unusedIdList;   //liste des id des sommets non-découverts
+    std::unordered_set<int> unusedIdList;   ///<liste des id des sommets non-découverts
     Node* current;
     float currentWeight = 0;
     float totalWeight = 0;
@@ -468,7 +472,6 @@ std::vector<std::pair<float,int>> Graph::getNeighbours(Node* origin,int weight,s
 
 bool Graph::connectivityTest(std::vector<bool>connections)
 {
-    //m_connections = sortConnectionsByIndex(m_connections);
     std::sort(m_connections.begin(),m_connections.end(),&connectionsComparator);
     std::unordered_set<int> discoveredList;
     Node* current;
@@ -489,19 +492,19 @@ bool Graph::connectivityTest(std::vector<bool>connections)
                     discoveredList.insert(it->getNodeB()->getIndex());
                     nodeQueue.push(it->getNodeB()->getIndex());
                 }
-                else if(it->getNodeB()->getIndex()==current->getIndex()
+                else if((it->getNodeB()->getIndex()==current->getIndex())
                         &&(discoveredList.find(it->getNodeA()->getIndex())==discoveredList.end()))
                 {
                     discoveredList.insert(it->getNodeA()->getIndex());
                     nodeQueue.push(it->getNodeA()->getIndex());
                 }
+                if(discoveredList.size()==(size_t)m_ordre) ///tester si tous les sommets ont été découverts (cast de m_ordre en size_t pour l'homogénéité)
+                    return true;
             }
         }
     }while(!nodeQueue.empty());
 
-    if(discoveredList.size()<(size_t)m_ordre)   //tester si tous les sommets ont été découverts (cast de m_ordre en size_t pour l'homogénéité)
-        return false;
-    return true;
+    return false;
 }
 
 bool Graph::testCycle(std::vector<bool> connections)
@@ -519,7 +522,7 @@ bool Graph::testCycle(std::vector<bool> connections)
     return true;
 }
 
-/*float Graph::weightsSum(std::vector<bool> connections, int weight)
+float Graph::weightsSum(std::vector<bool> connections, int weight)
 {
     float totalWeight=0;
     for(size_t i = 0; i < connections.size(); i++)
@@ -528,7 +531,7 @@ bool Graph::testCycle(std::vector<bool> connections)
             totalWeight+=m_connections[i]->getWeights()[weight];
     }
     return totalWeight;
-}*/
+}
 
 ///additionneur 1 bit :
 
@@ -634,12 +637,11 @@ std::vector < std:: vector<bool> >  Graph :: filtrage ()
     std::vector < std:: vector<bool> > solExist= this->enumeration();std::cout<<"fin d'enumeration : time : "<<clock()<<"ms"<<std::endl;
     std::vector < std::vector<bool> >  solAdmis;
     std::vector <int> sommetSelect;
-    int select=0;
-    bool arreteOk=false;
-    bool connexe;
+    //int select=0;
+    //bool arreteOk=false;
     for (size_t i=0; i<solExist.size();++i) ///on parcours le vecteur des solutions existantes
     {
-        select=0;
+        /*select=0;
         arreteOk=false;
         for(size_t j=0;j<solExist[i].size();++j) ///on parcours la solution existante et on compte
         {
@@ -647,22 +649,21 @@ std::vector < std:: vector<bool> >  Graph :: filtrage ()
             {
                 ++select; ///on augmente select
             }
-        }
-        ///on a ainsi le nombre d'arretes selectionees
+        }*/
+        // ///on a ainsi le nombre d'arretes selectionees
 
-        ///on regarde si la solution existante possède ordre-1 arretes :
+        // ///on regarde si la solution existante possède ordre-1 arretes :
 
-        if( select == (m_ordre-1))
+        /*if( select == (m_ordre-1))
         {
             arreteOk=true;  ///on a donc une condition verifié
-        }
+        }*/
 
         ///On va maintenant regarder si la solution existante est connexe :
         ///pour cela on fait appel a la fonction testconnectivity
-        connexe=connectivityTest(solExist[i]);
 
-       ///si les deux conditions sont vérifiées : connectivité + non cycle
-        if(connexe==true&&arreteOk==true)
+       ///si la condition est vérifiée : connectivité
+        if(connectivityTest(solExist[i])/*&&arreteOk==true*/)
         {
             ///alors la solution est admissible, on la rajoute donc dans le vecteur de solutions admissibles
             solAdmis.push_back(solExist[i]);
@@ -708,17 +709,15 @@ void Graph ::  evaluation ()
 
             }
         }
-
     }
 
     ///Maintenant que nous avons nos sommes, nous allons regarder si les solutions sont dominées ou non :
-
     for (size_t l =0; l<solAdmis.size();++l) ///on parcours toutes les solutions
     {
 
        for (size_t k =0; k<solAdmis.size();++k) ///chacune d'elle est comparé au reste des solutions
        {
-            if (l!=k) ///ne pas comparer une solution avec elle même
+            if (l!=k) /// ne pas comparer une solution avec elle même ni avec une solution dominée
             {
                 if(somme1[k]<=somme1[l] && somme2[k]<=somme2[l])
                 {
@@ -745,11 +744,11 @@ void Graph ::  evaluation ()
     for(size_t l=0; l<solAdmis.size();l++)
     {
         if(dominee[l]==false)
-        {///std::cout<<"non dominee  "<<somme1[l]<<"  "<<somme2[l]<<std::endl;
+        {//std::cout<<"non dominee  "<<somme1[l]<<"  "<<somme2[l]<<std::endl;
           svgg->addDisk(somme1[l]*10,400-(somme2[l])*10,5,"green");
         }
         else
-        {///std::cout<<"dominee  "<<somme1[l]<<"  "<<somme2[l]<<std::endl;
+        {//std::cout<<"dominee  "<<somme1[l]<<"  "<<somme2[l]<<std::endl;
             svgg->addDisk(somme1[l]*10,400-(somme2[l])*10,5,"red");
         }
 

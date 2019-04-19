@@ -1,3 +1,7 @@
+/// \file node.cpp
+/// \brief regroupe la classe Node et les différentes fonction agissant sur les sommets du graphe
+/// \author Pierre Herduin, Simon jolly
+
 #include "node.h"
 #include <iostream>
 
