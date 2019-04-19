@@ -12,6 +12,7 @@ Population::Population(int pop_size, Graph* structure)
 
 void Population::solve()
 {
+    srand(time(NULL));
     char choice = 'y';
 
     std::cout << std::endl << std::endl;
@@ -66,7 +67,8 @@ void Population::solve()
 
             last_pareto = m_pareto_bests;
 
-            showNonDominated();
+            if (pareto_changed)
+                showNonDominated();
 
             if (m_pop.size() > 1)
             {

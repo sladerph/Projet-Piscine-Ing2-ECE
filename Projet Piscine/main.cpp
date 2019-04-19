@@ -34,7 +34,7 @@ int main()
     Population p{1000, &g};
 
     //p.showNonDominated();
-    p.solve();
+    //p.solve();
 
     return 0;
 }

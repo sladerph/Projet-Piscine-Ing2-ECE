@@ -8,6 +8,7 @@
 #include <windows.h>
 #include <sstream>
 #include <cmath>
+#include <time.h>
 
 class DNA;
 

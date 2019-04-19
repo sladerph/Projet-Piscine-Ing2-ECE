@@ -41,7 +41,7 @@ bool DNA::dominated(DNA* b)
 {
     bool oka = true;
     bool okb = true;
-
+/*
     if (b->getSumA() < m_sum_cost_a)
         oka = false;
     if (b->getSumB() < m_sum_cost_b)
@@ -52,6 +52,11 @@ bool DNA::dominated(DNA* b)
     if (!oka && !okb)
         return true;
     return false;
+    */
+
+    if (m_sum_cost_a < b->getSumA() || m_sum_cost_b < b->getSumB())
+        return false;
+    return true;
 }
 
 void DNA::mutate()
