@@ -535,50 +535,107 @@ bool Graph::testCycle(std::vector<bool> connections)
 bool add_1bit(bool& r_sortie ,bool r_entree,bool a, bool b)     ///peut être mettre des else if
 {
 
-            bool sol;
-
-            if(a==false&&b==false&&r_entree==false)
+            /*if(a==false&&b==false&&r_entree==false)
             {
-                sol=false;
                 r_sortie=false;
+                return false;
             }
              else if(a==false&&b==false&&r_entree==true)
             {
-                sol=true;
                 r_sortie=false;
+                return true;
             }
              else if(a==false&&b==true&&r_entree==false)
             {
-                sol=true;
                 r_sortie=false;
+                return true;
             }
              else if(a==false&&b==true&&r_entree==true)
             {
-                sol=false;
                 r_sortie=true;
+                return false;
             }
              else if(a==true&&b==false&&r_entree==false)
             {
-                sol=true;
                 r_sortie=false;
+                return true;
             }
              else if(a==true&&b==false&&r_entree==true)
             {
-                sol=false;
                 r_sortie=true;
+                return false;
             }
              else if(a==true&&b==true&&r_entree==false)
             {
-                sol=false;
                 r_sortie=true;
+                return false;
             }
              else if(a==true&&b==true&&r_entree==true)
             {
-                sol=true;
                 r_sortie=true;
-            }
+                return true;
+            }*/
+            if(a)
+            {
+                if(b)
+                {
+                    if(r_entree)
+                    {
+                        r_sortie=true;
+                        return true;
+                    }
+                    else
+                    {
+                        r_sortie=true;
+                        return false;
+                    }
 
-            return sol;
+                }
+                else
+                {
+                    if(r_entree)
+                    {
+                        r_sortie=true;
+                        return false;
+                    }
+                    else
+                    {
+                        r_sortie=false;
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                if(b)
+                {
+                    if(r_entree)
+                    {
+                        r_sortie=true;
+                        return false;
+                    }
+                    else
+                    {
+                        r_sortie=false;
+                        return true;
+                    }
+
+                }
+                else
+                {
+                    if(r_entree)
+                    {
+                        r_sortie=false;
+                        return true;
+                    }
+                    else
+                    {
+                        r_sortie=false;
+                        return false;
+                    }
+                }
+            }
+    return false;
 }
 
 
