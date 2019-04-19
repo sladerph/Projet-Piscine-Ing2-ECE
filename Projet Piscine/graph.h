@@ -69,20 +69,28 @@ class Graph
         //utilisé pour dijkstra : renvoie la liste des pairs <poids,id> des sommets voisins du sommet "origin" (l'activité ou non des connections
         //est prise en compte pour déterminer les voisins
 
-        float weightsSum(std::vector<bool> connections, int weight);
+        ///float weightsSum(std::vector<bool> connections, int weight);     ///non utilisée
 
 };
 
-std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight);
+std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight);     ///optimisée par une fonction sort de la STL
 //trie les connexions passées en paramètre en fonctions de leur poids d'indice [weight], dans l'ordre croissant
 
-std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connections);
+///std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connections);  ///remplacée par une fonction sort de la STL
 //trie les connexions du vecteur en paramètre en fonction de leur id, dans l'ordre croissant
 
-std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes);
+///std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes);   ///remplacée par une fonction sort de la STL
 //trie les paires <poids,id>, qui représentent des sommets, en fonction du paramètre poids et dans l'ordre croissant
+
 
 ///additionneur 1 bit :
 bool add_1bit(bool& r_sortie ,bool r_entree,bool a, bool b);
+
+///comparateur pour trier les conenxions par index, dans l'ordre croissant  https://www.tutorialspoint.com/Sorting-a-vector-of-custom-objects-using-Cplusplus-STL
+bool connectionsComparator(const Connection* lhs, const Connection* rhs);
+
+///comparateur pour trier les connexions par
+bool connectionsComparatorWeight0(const Connection* lhs,const Connection* rhs);
+bool connectionsComparatorWeight1(const Connection* lhs,const Connection* rhs);
 
 #endif // GRAPH_H

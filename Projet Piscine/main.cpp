@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <time.h>
 
 #include "graph.h"
 #include "population.h"
@@ -9,10 +10,10 @@ int main()
 
     Graph g{};
 
+
     //g.create("files/triville.txt", "files/triville_weights_0.txt");
     g.create("files/broadway.txt","files/broadway_weights_0.txt");
     //g.create("files/manhattan.txt", "files/manhattan_weights_0.txt");
-
 
     float totalWeight=0.0;
     std::vector<bool> boolVector = g.getPrim(0,&totalWeight);
@@ -25,8 +26,8 @@ int main()
     std::cout<<"connexe ? "<< g.connectivityTest(boolVector)<<std::endl;
     std::cout<<"cycle ?   "<< g.testCycle(boolVector)<<std::endl;    /// true = cycle, false = pas de cycle (en partant de 0, donc tester avant si connexe)
 
-    g.evaluation();
-    g.secondEvaluation();
+    //g.evaluation();
+    //g.secondEvaluation();
 
     //g.show("output.svg", &boolVector);
     //g.showPrim("output.svg", &boolVector, true);

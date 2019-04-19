@@ -307,10 +307,19 @@ std::vector<bool> Graph::getPrim(int weight, float* totalWeight)
     return shortestPath;
 }
 
+bool connectionsComparatorWeight0(const Connection* lhs,const Connection* rhs)
+{
+    return lhs->getWeights()[0] < rhs->getWeights()[0];
+}
+
+bool connectionsComparatorWeight1(const Connection* lhs,const Connection* rhs)
+{
+    return lhs->getWeights()[1] < rhs->getWeights()[1];
+}
 
 std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight)
 {
-    Connection* temp;
+    /*Connection* temp;
     for(size_t i = 0; i < connections.size()-1; i++)
     {
         if(connections[i]->getWeights()[weight] > connections[i+1]->getWeights()[weight])
@@ -324,10 +333,22 @@ std::vector<Connection*> sortConnections(std::vector<Connection*> connections, i
     std::vector<Connection*> connectionVector;
     for(size_t i = 0; i < connections.size(); i++)
         connectionVector.push_back(connections[i]);
-    return connectionVector;
+    return connectionVector;*/
+    if(weight==0)
+    {
+        std::sort(connections.begin(),connections.end(),connectionsComparatorWeight0);
+    }
+    else if(weight==1)
+    {
+        std::sort(connections.begin(),connections.end(),connectionsComparatorWeight1);
+    }
+    return connections;
 }
 
-std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connections)
+bool connectionsComparator(const Connection* lhs, const Connection* rhs)
+   {return lhs->getIndex() < rhs->getIndex();}
+
+/*std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connections)
 {
     Connection* temp;
     for(size_t i = 0; i < connections.size()-1; i++)
@@ -344,7 +365,7 @@ std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connect
     for(size_t i = 0; i < connections.size(); i++)
         connectionVector.push_back(connections[i]);
     return connectionVector;
-}
+}*/
 
 float Graph::getDijkstra(int weight, std::vector<bool> activeConnections)   ///le vecteur de bool est reçu à l'envers
 {
@@ -407,6 +428,8 @@ float Graph::getDijkstra(int weight, std::vector<bool> activeConnections)   ///l
     return totalWeight;
 }
 
+
+
 std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes)
 {
     std::pair<float,int> temp;
@@ -445,7 +468,8 @@ std::vector<std::pair<float,int>> Graph::getNeighbours(Node* origin,int weight,s
 
 bool Graph::connectivityTest(std::vector<bool>connections)
 {
-    m_connections = sortConnectionsByIndex(m_connections);
+    //m_connections = sortConnectionsByIndex(m_connections);
+    std::sort(m_connections.begin(),m_connections.end(),&connectionsComparator);
     std::unordered_set<int> discoveredList;
     Node* current;
     std::queue<int> nodeQueue;
@@ -495,7 +519,7 @@ bool Graph::testCycle(std::vector<bool> connections)
     return true;
 }
 
-float Graph::weightsSum(std::vector<bool> connections, int weight)
+/*float Graph::weightsSum(std::vector<bool> connections, int weight)
 {
     float totalWeight=0;
     for(size_t i = 0; i < connections.size(); i++)
@@ -504,7 +528,7 @@ float Graph::weightsSum(std::vector<bool> connections, int weight)
             totalWeight+=m_connections[i]->getWeights()[weight];
     }
     return totalWeight;
-}
+}*/
 
 ///additionneur 1 bit :
 
