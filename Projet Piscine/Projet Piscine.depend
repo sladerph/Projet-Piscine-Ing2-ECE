@@ -16,7 +16,11 @@
 	"graph.h"
 	"population.h"
 
+<<<<<<< HEAD
 1555700289 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\graph.h
+=======
+1555700048 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\graph.h
+>>>>>>> 7f3303b90dd3171d1c6d0135f9491f60bf208d96
 	"node.h"
 	"connection.h"
 	"svgfile.h"
@@ -31,7 +35,11 @@
 	"node.h"
 	<iostream>
 
+<<<<<<< HEAD
 1555700289 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\graph.cpp
+=======
+1555700048 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\graph.cpp
+>>>>>>> 7f3303b90dd3171d1c6d0135f9491f60bf208d96
 	"graph.h"
 
 1555374090 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\svgfile.h
@@ -52,46 +60,47 @@
 	<iostream>
 	<sstream>
 
-1555374396 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\connection.cpp
+1555596933 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\connection.cpp
 	"connection.h"
 
-1555374396 c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\connection.h
+1555596933 c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\connection.h
 	"node.h"
 	<vector>
 
-1555425118 c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\node.h
+1555596933 c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\node.h
 	"connection.h"
 	<vector>
 
-1555374396 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\couleur.cpp
+1555596933 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\couleur.cpp
 	"couleur.h"
 	"svgfile.h"
 	<iostream>
 
-1555374396 c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\couleur.h
+1555596933 c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\couleur.h
 	<string>
 	<cstdint>
 
-1555374396 c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\svgfile.h
+1555596933 c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\svgfile.h
 	<string>
 	<fstream>
 	<set>
 
-1555425118 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\node.cpp
+1555596933 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\node.cpp
 	"node.h"
 	<iostream>
 
-1555374396 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\svgfile.cpp
+1555596933 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\svgfile.cpp
 	<iostream>
 	<sstream>
 
-1555582999 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\main.cpp
+1555682163 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\main.cpp
 	<iostream>
 	<cstdlib>
+	<time.h>
 	"graph.h"
 	"population.h"
 
-1555582606 c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\graph.h
+1555681665 c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\graph.h
 	"node.h"
 	"connection.h"
 	"svgfile.h"
@@ -102,10 +111,14 @@
 	<queue>
 	<bits/stdc++.h>
 
-1555595038 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\graph.cpp
+1555686081 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\graph.cpp
 	"graph.h"
 
+<<<<<<< HEAD
 1555705935 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\population.h
+=======
+1555700072 c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\population.h
+>>>>>>> 7f3303b90dd3171d1c6d0135f9491f60bf208d96
 	"dna.h"
 	<windows.h>
 	<sstream>
@@ -120,22 +133,26 @@
 1555700616 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\dna.cpp
 	"dna.h"
 
+<<<<<<< HEAD
 1555701442 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\population.cpp
+=======
+1555700072 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\population.cpp
+>>>>>>> 7f3303b90dd3171d1c6d0135f9491f60bf208d96
 	"population.h"
 
-1555580579 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\dna.cpp
+1555596933 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\dna.cpp
 	"dna.h"
 
-1555506450 c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\dna.h
+1555596933 c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\dna.h
 	"graph.h"
 	"population.h"
 	<vector>
 
-1555506450 c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\population.h
+1555596933 c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\population.h
 	"dna.h"
 	<windows.h>
 	<sstream>
 
-1555580703 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\population.cpp
+1555597155 source:c:\users\simon_1rtpndb\desktop\projet_piscine_1\projet-piscine-ing2-ece\projet piscine\population.cpp
 	"population.h"
 

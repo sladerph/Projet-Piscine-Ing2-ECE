@@ -43,11 +43,23 @@ class Graph
         bool testCycle(std::vector<bool> connections);      //renvoie true s'il y a un cycle, renvoie false sinon;
         bool connectivityTest(std::vector<bool>connections);        //renvoie true si le graphe est connexe, renvoie false sinon
 
+        ///fonction qui énumère toutes les solutions existantes :
+        std::vector<std::vector<bool>> enumeration ();
+        ///fonction qui selectionne les solutions admissibles parmis les solutions existantes :
+        std::vector<std ::vector<bool>> filtrage ();
+        ///fonction qui trie les solutions dominées et non dominées selon les 2 objectifs et les affiche :
+        void evaluation ();
+
+        ///semblable à evaluation(), mais pour 2 objectifs de natures différentes
+        void secondEvaluation();
+        std::vector<std ::vector<bool>> secondfiltrage ();
+        std::vector<std::vector<bool>> secondEnumeration ();
     private:
         std::vector<Node*> m_nodes;     //liste des sommets du graphe
         std::vector<Connection*> m_connections;     //liste des arêtes du graphe
 
         int m_ordre;    //nombre de sommet du graphe
+        double m_taille;
 
         void showNodes(Svgfile* svg) const;
         void showConnections(Svgfile* svg, std::vector<bool>* path = nullptr) const;
@@ -58,16 +70,29 @@ class Graph
         //utilisé pour dijkstra : renvoie la liste des pairs <poids,id> des sommets voisins du sommet "origin" (l'activité ou non des connections
         //est prise en compte pour déterminer les voisins
 
+        ///float weightsSum(std::vector<bool> connections, int weight);     ///non utilisée
+
 };
 
-std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight);
+std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight);     ///optimisée par une fonction sort de la STL
 //trie les connexions passées en paramètre en fonctions de leur poids d'indice [weight], dans l'ordre croissant
 
-std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connections);
+///std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connections);  ///remplacée par une fonction sort de la STL
 //trie les connexions du vecteur en paramètre en fonction de leur id, dans l'ordre croissant
 
-std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes);
+///std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes);   ///remplacée par une fonction sort de la STL
 //trie les paires <poids,id>, qui représentent des sommets, en fonction du paramètre poids et dans l'ordre croissant
 
+int howManyTrue(std::vector<bool> subject);
+
+///additionneur 1 bit :
+bool add_1bit(bool& r_sortie ,bool r_entree,bool a, bool b);
+
+///comparateur pour trier les conenxions par index, dans l'ordre croissant  https://www.tutorialspoint.com/Sorting-a-vector-of-custom-objects-using-Cplusplus-STL
+bool connectionsComparator(const Connection* lhs, const Connection* rhs);
+
+///comparateur pour trier les connexions par
+bool connectionsComparatorWeight0(const Connection* lhs,const Connection* rhs);
+bool connectionsComparatorWeight1(const Connection* lhs,const Connection* rhs);
 
 #endif // GRAPH_H
