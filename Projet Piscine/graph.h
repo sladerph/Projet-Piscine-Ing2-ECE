@@ -53,6 +53,7 @@ class Graph
         ///semblable à evaluation(), mais pour 2 objectifs de natures différentes
         void secondEvaluation();
         std::vector<std ::vector<bool>> secondfiltrage ();
+        std::vector<std::vector<bool>> secondEnumeration ();
     private:
         std::vector<Node*> m_nodes;     //liste des sommets du graphe
         std::vector<Connection*> m_connections;     //liste des arêtes du graphe
@@ -82,6 +83,7 @@ std::vector<Connection*> sortConnections(std::vector<Connection*> connections, i
 ///std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes);   ///remplacée par une fonction sort de la STL
 //trie les paires <poids,id>, qui représentent des sommets, en fonction du paramètre poids et dans l'ordre croissant
 
+int howManyTrue(std::vector<bool> subject);
 
 ///additionneur 1 bit :
 bool add_1bit(bool& r_sortie ,bool r_entree,bool a, bool b);
