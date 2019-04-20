@@ -472,33 +472,36 @@ std::vector<std::pair<float,int>> Graph::getNeighbours(Node* origin,int weight,s
 
 bool Graph::connectivityTest(std::vector<bool>connections)
 {
-    std::sort(m_connections.begin(),m_connections.end(),&connectionsComparator);
-    std::unordered_set<int> discoveredList;
+//    std::unordered_set<int> discoveredList;
+    std::vector<bool> discoveredList(m_ordre, false);
+    int nb = 1;
     Node* current;
     std::queue<int> nodeQueue;
     nodeQueue.push(m_nodes[0]->getIndex());
-    discoveredList.insert(m_nodes[0]->getIndex());
+    discoveredList[m_nodes[0]->getIndex()] = true;
     do
     {
         current = m_nodes[nodeQueue.front()];
         nodeQueue.pop();
         for(auto it : m_connections)
         {
-            if(connections[it->getIndex()])
+            if (connections[it->getIndex()])
             {
-                if((it->getNodeA()->getIndex()==current->getIndex())
-                   &&(discoveredList.find(it->getNodeB()->getIndex()) == discoveredList.end()))
+                if((it->getNodeA()->getIndex() == current->getIndex())
+                   && discoveredList[it->getNodeB()->getIndex()] == false)
                 {
-                    discoveredList.insert(it->getNodeB()->getIndex());
+                    discoveredList[it->getNodeB()->getIndex()] = true;
                     nodeQueue.push(it->getNodeB()->getIndex());
+                    nb++;
                 }
-                else if((it->getNodeB()->getIndex()==current->getIndex())
-                        &&(discoveredList.find(it->getNodeA()->getIndex())==discoveredList.end()))
+                else if((it->getNodeB()->getIndex() == current->getIndex())
+                        && discoveredList[it->getNodeA()->getIndex()] == false)
                 {
-                    discoveredList.insert(it->getNodeA()->getIndex());
+                    discoveredList[it->getNodeA()->getIndex()] = true;
                     nodeQueue.push(it->getNodeA()->getIndex());
+                    nb++;
                 }
-                if(discoveredList.size() == (size_t)m_ordre) ///tester si tous les sommets ont été découverts (cast de m_ordre en size_t pour l'homogénéité)
+                if (nb == m_ordre) ///tester si tous les sommets ont été découverts.
                     return true;
             }
         }
@@ -963,23 +966,24 @@ std::vector<bool> tradIntToBool(std::vector<int> vec, Graph* g)
 
 void Graph::bruteForcePareto()
 {
-    float t, dt;
+    float t, dt, start;
 
+    std::sort(m_connections.begin(), m_connections.end(), &connectionsComparator);
     std::vector<std::vector<bool>> poss = combinations(m_ordre - 1, m_taille, this);
 
      t = clock();
     dt = t;
+    start = t;
     std::cout << "All Possibilities : " << t / 1000 << "s" << std::endl;
 
     std::vector<Solution> sol;
-
+int n = 0;
     for (int i = 0; i < poss.size(); i++)
     {
         if (isCombinationValid(poss[i], this))
         {
             Solution s;
             s.vec = poss[i];
-
             std::vector<bool> tmp = s.vec;
 
             int nb = 0;
@@ -995,11 +999,12 @@ void Graph::bruteForcePareto()
                 }
             }
             sol.push_back(s);
+            n++;
         }
     }
 
     t = clock();
-    std::cout << "Trad to solution + calc costs : " << (t - dt) / 1000 << "s" << std::endl;
+    std::cout << n << " Trads to solution + calc costs : " << (t - dt) / 1000 << "s" << std::endl;
     dt = t;
 
     for (int i = 0; i < sol.size(); i++)
@@ -1018,7 +1023,8 @@ void Graph::bruteForcePareto()
     }
 
     t = clock();
-    std::cout << "Domination : " << (t - dt) / 1000 << "s" << std::endl;
+    std::cout << "Domination : " << (t - dt   ) / 1000 << "s" << std::endl;
+    std::cout << "Total : "      << (t - start) / 1000 << "s" << std::endl;
     dt = t;
 }
 
