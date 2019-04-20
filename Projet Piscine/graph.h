@@ -22,6 +22,13 @@
 #define XOFFSET 50  /// \def XOFFSET 50
 #define YOFFSET 50  /// \def YOFFSET 50
 
+struct Solution
+{
+    std::vector<bool> vec;
+    float cost_a = 0;
+    float cost_b = 0;
+    bool  dominated = false;
+};
 
 /// \class Graph
 /// \brief Classe représentant un graphe
@@ -81,7 +88,6 @@ class Graph
         /// \brief getter qui permet d'obtenir le nombre de sommmet du graphe
         /// \return le nombre de sommet du graphe
         int getOrdre() const {return m_ordre;}; //retourne le nombre de sommets du graphe
-        int getOrdre() const {return m_ordre ;}; //retourne le nombre de sommets du graphe
         int getSize () const {return m_taille;};
 
         /// \fn std::vector<bool> getPrim(int weight, float* totalWeight)
@@ -139,7 +145,9 @@ class Graph
         /// \brief semblable à enumeration(), mais ne filtre pas les cycles
         /// \return retourne la liste de tous les arrangements, sous forme de vecteur de booléens de même taille que la liste d'arêtes : le booléen d'indice n décrit si l'arête d'indice n est active ou non
         std::vector<std::vector<bool>> secondEnumeration ();
-        std::vector<std::vector<bool>> bruteForce();
+
+
+        void bruteForcePareto();
 
     private:
         std::vector<Node*> m_nodes;     ///< liste des sommets du graphe
@@ -209,11 +217,11 @@ std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connect
 /// \return liste des paires triés dans l'ordre des poids croissants
 std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes);
 
-/// \fn int howManyTrue(std::vector<bool> subject)
+/// \fn int howManyTrue(std::vector<bool>& subject)
 /// \brief retourne le nombre de booléens ayant comme valeur true dans un vecteur de booléens
-/// \param subject : vecteur de booléens de même taille que la liste d'arêtes : le booléen d'indice n décrit si l'arête d'indice n est active ou non
+/// \param subject : référence sur un vecteur de booléens de même taille que la liste d'arêtes : le booléen d'indice n décrit si l'arête d'indice n est active ou non
 /// \return nombre de booléens de valeur true dans le vecteur
-int howManyTrue(std::vector<bool> subject);
+int howManyTrue(std::vector<bool>& subject);
 
 /// \fn bool add_1bit(bool& r_sortie ,bool r_entree,bool a, bool b)
 /// \brief additionneur 1 bit
@@ -233,7 +241,6 @@ std::vector<Connection*> sortConnections(std::vector<Connection*> connections, i
 ///std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes);   ///remplacée par une fonction sort de la STL
 //trie les paires <poids,id>, qui représentent des sommets, en fonction du paramètre poids et dans l'ordre croissant
 
-int howManyTrue(std::vector<bool>& subject);
 
 ///additionneur 1 bit :
 bool add_1bit(bool a, bool b, bool& c);

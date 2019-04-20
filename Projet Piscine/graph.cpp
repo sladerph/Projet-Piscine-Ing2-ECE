@@ -473,8 +473,6 @@ std::vector<std::pair<float,int>> Graph::getNeighbours(Node* origin,int weight,s
 bool Graph::connectivityTest(std::vector<bool>connections)
 {
     std::sort(m_connections.begin(),m_connections.end(),&connectionsComparator);
-    //m_connections = sortConnectionsByIndex(m_connections);
-    std::sort(m_connections.begin(), m_connections.end(), &connectionsComparator);
     std::unordered_set<int> discoveredList;
     Node* current;
     std::queue<int> nodeQueue;
@@ -489,7 +487,7 @@ bool Graph::connectivityTest(std::vector<bool>connections)
             if(connections[it->getIndex()])
             {
                 if((it->getNodeA()->getIndex()==current->getIndex())
-                   &&(discoveredList.find(it->getNodeB()->getIndex())==discoveredList.end()))
+                   &&(discoveredList.find(it->getNodeB()->getIndex()) == discoveredList.end()))
                 {
                     discoveredList.insert(it->getNodeB()->getIndex());
                     nodeQueue.push(it->getNodeB()->getIndex());
@@ -500,11 +498,11 @@ bool Graph::connectivityTest(std::vector<bool>connections)
                     discoveredList.insert(it->getNodeA()->getIndex());
                     nodeQueue.push(it->getNodeA()->getIndex());
                 }
-                if(discoveredList.size()==(size_t)m_ordre) ///tester si tous les sommets ont été découverts (cast de m_ordre en size_t pour l'homogénéité)
+                if(discoveredList.size() == (size_t)m_ordre) ///tester si tous les sommets ont été découverts (cast de m_ordre en size_t pour l'homogénéité)
                     return true;
             }
         }
-    }while(!nodeQueue.empty());
+    } while (!nodeQueue.empty());
 
     return false;
 }
@@ -733,11 +731,12 @@ void Graph::evaluation()
     }
 
     ///Maintenant que nous avons nos sommes, nous allons regarder si les solutions sont dominées ou non :
-    for (size_t l =0; l<solAdmis.size();++l) ///on parcours toutes les solutions
-        if (somme1[j] < x_min) x_min = somme1[j];
-        if (somme1[j] > x_max) x_max = somme1[j];
-        if (somme2[j] < y_min) y_min = somme2[j];
-        if (somme2[j] > y_max) y_max = somme2[j];
+    for (int l =0; l<solAdmis.size();++l)
+    {   ///on parcours toutes les solutions
+        if (somme1[l] < x_min) x_min = somme1[l];
+        if (somme1[l] > x_max) x_max = somme1[l];
+        if (somme2[l] < y_min) y_min = somme2[l];
+        if (somme2[l] > y_max) y_max = somme2[l];
     }
 
     ///Maintenant que nous avons nos sommes, nous allons regarder si les solutions sont dominées ou non :
@@ -962,12 +961,66 @@ std::vector<bool> tradIntToBool(std::vector<int> vec, Graph* g)
     return cons;
 }
 
+void Graph::bruteForcePareto()
+{
+    float t, dt;
 
+    std::vector<std::vector<bool>> poss = combinations(m_ordre - 1, m_taille, this);
 
+     t = clock();
+    dt = t;
+    std::cout << "All Possibilities : " << t / 1000 << "s" << std::endl;
 
+    std::vector<Solution> sol;
 
+    for (int i = 0; i < poss.size(); i++)
+    {
+        if (isCombinationValid(poss[i], this))
+        {
+            Solution s;
+            s.vec = poss[i];
 
+            std::vector<bool> tmp = s.vec;
 
+            int nb = 0;
+            for (int j = 0; j < m_connections.size(); j++)
+            {
+                if (tmp[m_connections[j]->getIndex()])
+                {
+                    std::vector<float> w = m_connections[j]->getWeights();
+                    s.cost_a += w[0];
+                    s.cost_b += w[1];
+                    nb++;
+                    if (nb == m_ordre - 1) break;
+                }
+            }
+            sol.push_back(s);
+        }
+    }
+
+    t = clock();
+    std::cout << "Trad to solution + calc costs : " << (t - dt) / 1000 << "s" << std::endl;
+    dt = t;
+
+    for (int i = 0; i < sol.size(); i++)
+    {
+        for (int j = 0; j < sol.size(); j++)
+        {
+            if (i != j)
+            {
+                if (!(sol[i].cost_a < sol[j].cost_a || sol[i].cost_b < sol[j].cost_b))
+                {
+                    sol[i].dominated = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    t = clock();
+    std::cout << "Domination : " << (t - dt) / 1000 << "s" << std::endl;
+    dt = t;
+}
 
 
 
