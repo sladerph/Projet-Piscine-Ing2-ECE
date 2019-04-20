@@ -12,6 +12,7 @@ Population::Population(int pop_size, Graph* structure)
 
 void Population::solve()
 {
+    srand(time(NULL));
     char choice = 'y';
 
     std::cout << std::endl << std::endl;
@@ -66,7 +67,8 @@ void Population::solve()
 
             last_pareto = m_pareto_bests;
 
-            showNonDominated();
+            if (pareto_changed)
+                showNonDominated();
 
             if (m_pop.size() > 1)
             {
@@ -572,19 +574,6 @@ void Population::evaluateFitness()
 Population::~Population()
 {
     //dtor
-}
-
-float mapLine(float val, float xa, float ya, float xb, float yb)
-{
-    float m = (yb - ya) / (xb - xa);
-    float p = ya - m * xa;
-
-    return m * val + p;
-}
-
-float dist(float xa, float ya, float xb, float yb)
-{
-    return std::sqrt(std::pow(xb - xa, 2) + std::pow(yb - ya, 2));
 }
 
 

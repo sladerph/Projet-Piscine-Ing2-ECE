@@ -8,10 +8,11 @@
 #define MUTATION_RATE 5
 
 #include "dna.h"
+#include "utils.h"
 
 #include <windows.h>
 #include <sstream>
-#include <cmath>
+#include <time.h>
 
 class DNA;
 
@@ -50,7 +51,6 @@ class Population
         void manageFrontCut(int n);
 };
 
-float mapLine(float val, float xa, float ya, float xb, float yb);
-float dist(float xa, float ya, float xb, float yb);
+
 
 #endif // POPULATION_H

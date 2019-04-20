@@ -9,6 +9,7 @@
 #include "node.h"
 #include "connection.h"
 #include "svgfile.h"
+#include "utils.h"
 
 #include <string>
 #include <iostream>
@@ -80,6 +81,8 @@ class Graph
         /// \brief getter qui permet d'obtenir le nombre de sommmet du graphe
         /// \return le nombre de sommet du graphe
         int getOrdre() const {return m_ordre;}; //retourne le nombre de sommets du graphe
+        int getOrdre() const {return m_ordre ;}; //retourne le nombre de sommets du graphe
+        int getSize () const {return m_taille;};
 
         /// \fn std::vector<bool> getPrim(int weight, float* totalWeight)
         /// \brief retourne un vecteur de booléens décrivant le graphe couvrant de poids minimum. Weight permet de choisir entre
@@ -136,6 +139,7 @@ class Graph
         /// \brief semblable à enumeration(), mais ne filtre pas les cycles
         /// \return retourne la liste de tous les arrangements, sous forme de vecteur de booléens de même taille que la liste d'arêtes : le booléen d'indice n décrit si l'arête d'indice n est active ou non
         std::vector<std::vector<bool>> secondEnumeration ();
+        std::vector<std::vector<bool>> bruteForce();
 
     private:
         std::vector<Node*> m_nodes;     ///< liste des sommets du graphe
@@ -220,6 +224,20 @@ int howManyTrue(std::vector<bool> subject);
 /// \return retourne le résultat de l'addition
 bool add_1bit(bool& r_sortie ,bool r_entree,bool a, bool b);
 
+std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight);     ///optimisée par une fonction sort de la STL
+//trie les connexions passées en paramètre en fonctions de leur poids d'indice [weight], dans l'ordre croissant
+
+///std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connections);  ///remplacée par une fonction sort de la STL
+//trie les connexions du vecteur en paramètre en fonction de leur id, dans l'ordre croissant
+
+///std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes);   ///remplacée par une fonction sort de la STL
+//trie les paires <poids,id>, qui représentent des sommets, en fonction du paramètre poids et dans l'ordre croissant
+
+int howManyTrue(std::vector<bool>& subject);
+
+///additionneur 1 bit :
+bool add_1bit(bool a, bool b, bool& c);
+
 /// \fnbool connectionsComparator(const Connection* lhs, const Connection* rhs)
 /// \brief comparateur pour trier les connexions par index, dans l'ordre croissant
 /// https://www.tutorialspoint.com/Sorting-a-vector-of-custom-objects-using-Cplusplus-STL
@@ -243,5 +261,9 @@ bool connectionsComparatorWeight0(const Connection* lhs,const Connection* rhs);
 /// \param rhs : élément 2 à comparer
 /// \return true si le paramètre 1 a un poids d'indice 1 plus petit que le paramètre 2, false sinon
 bool connectionsComparatorWeight1(const Connection* lhs,const Connection* rhs);
+
+std::vector<std::vector<bool>> combinations(int k, int n, Graph* g);
+bool isCombinationValid(std::vector<bool> vec, Graph* g);
+std::vector<bool> tradIntToBool(std::vector<int> vec, Graph* g);
 
 #endif // GRAPH_H
