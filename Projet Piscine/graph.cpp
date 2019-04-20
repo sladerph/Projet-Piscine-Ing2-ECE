@@ -487,18 +487,20 @@ bool Graph::connectivityTest(std::vector<bool>connections)
         {
             if (connections[it->getIndex()])
             {
-                if((it->getNodeA()->getIndex() == current->getIndex())
-                   && discoveredList[it->getNodeB()->getIndex()] == false)
+                Node* a = it->getNodeA();
+                Node* b = it->getNodeB();
+                int inda = a->getIndex();
+                int indb = b->getIndex();
+                if(a == current && !discoveredList[indb])
                 {
-                    discoveredList[it->getNodeB()->getIndex()] = true;
-                    nodeQueue.push(it->getNodeB()->getIndex());
+                    discoveredList[indb] = true;
+                    nodeQueue.push(indb);
                     nb++;
                 }
-                else if((it->getNodeB()->getIndex() == current->getIndex())
-                        && discoveredList[it->getNodeA()->getIndex()] == false)
+                else if (b == current && !discoveredList[inda])
                 {
-                    discoveredList[it->getNodeA()->getIndex()] = true;
-                    nodeQueue.push(it->getNodeA()->getIndex());
+                    discoveredList[inda] = true;
+                    nodeQueue.push(inda);
                     nb++;
                 }
                 if (nb == m_ordre) ///tester si tous les sommets ont été découverts.
@@ -948,13 +950,6 @@ std::vector<std::vector<bool>> combinations(int k, int n, Graph* g)
     return sol;
 }
 
-bool isCombinationValid(std::vector<bool> vec, Graph* g)
-{
-    if (g->connectivityTest(vec))
-        return true;
-    return false;
-}
-
 std::vector<bool> tradIntToBool(std::vector<int> vec, Graph* g)
 {
     std::vector<bool> cons(g->getSize(), false);
@@ -977,19 +972,18 @@ void Graph::bruteForcePareto()
     std::cout << "All Possibilities : " << t / 1000 << "s" << std::endl;
 
     std::vector<Solution> sol;
-int n = 0;
+    int n = 0;
     for (int i = 0; i < poss.size(); i++)
     {
-        if (isCombinationValid(poss[i], this))
+        if (connectivityTest(poss[i]))
         {
             Solution s;
             s.vec = poss[i];
-            std::vector<bool> tmp = s.vec;
 
             int nb = 0;
             for (int j = 0; j < m_connections.size(); j++)
             {
-                if (tmp[m_connections[j]->getIndex()])
+                if (s.vec[j]) //m_connections[j]->getIndex()])
                 {
                     std::vector<float> w = m_connections[j]->getWeights();
                     s.cost_a += w[0];

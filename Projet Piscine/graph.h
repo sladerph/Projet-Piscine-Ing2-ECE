@@ -270,7 +270,6 @@ bool connectionsComparatorWeight0(const Connection* lhs,const Connection* rhs);
 bool connectionsComparatorWeight1(const Connection* lhs,const Connection* rhs);
 
 std::vector<std::vector<bool>> combinations(int k, int n, Graph* g);
-bool isCombinationValid(std::vector<bool> vec, Graph* g);
 std::vector<bool> tradIntToBool(std::vector<int> vec, Graph* g);
 
 #endif // GRAPH_H
