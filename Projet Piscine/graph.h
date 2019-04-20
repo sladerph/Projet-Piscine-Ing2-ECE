@@ -4,6 +4,7 @@
 #include "node.h"
 #include "connection.h"
 #include "svgfile.h"
+#include "utils.h"
 
 #include <string>
 #include <iostream>
@@ -30,7 +31,8 @@ class Graph
         Node* getNode(int index);       //retourne le sommet d'indice [index]
         Connection* getConnection(int index);       //retourne l'arête d'indice [index]
         std::vector<Connection*> getConnections() const {return m_connections;};       //retourne la liste des arêtes du graphe
-        int getOrdre() const {return m_ordre;}; //retourne le nombre de sommets du graphe
+        int getOrdre() const {return m_ordre ;}; //retourne le nombre de sommets du graphe
+        int getSize () const {return m_taille;};
 
         std::vector<bool> getPrim(int weight, float* totalWeight);
         //retourne un vecteur de booléens décrivant le graphe couvrant de poids minimum. Weight permet de choisir entre les différents poids des arêtes
@@ -54,6 +56,8 @@ class Graph
         void secondEvaluation();
         std::vector<std ::vector<bool>> secondfiltrage ();
         std::vector<std::vector<bool>> secondEnumeration ();
+
+        std::vector<std::vector<bool>> bruteForce();
     private:
         std::vector<Node*> m_nodes;     //liste des sommets du graphe
         std::vector<Connection*> m_connections;     //liste des arêtes du graphe
@@ -83,10 +87,10 @@ std::vector<Connection*> sortConnections(std::vector<Connection*> connections, i
 ///std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes);   ///remplacée par une fonction sort de la STL
 //trie les paires <poids,id>, qui représentent des sommets, en fonction du paramètre poids et dans l'ordre croissant
 
-int howManyTrue(std::vector<bool> subject);
+int howManyTrue(std::vector<bool>& subject);
 
 ///additionneur 1 bit :
-bool add_1bit(bool& r_sortie ,bool r_entree,bool a, bool b);
+bool add_1bit(bool a, bool b, bool& c);
 
 ///comparateur pour trier les conenxions par index, dans l'ordre croissant  https://www.tutorialspoint.com/Sorting-a-vector-of-custom-objects-using-Cplusplus-STL
 bool connectionsComparator(const Connection* lhs, const Connection* rhs);
@@ -94,5 +98,9 @@ bool connectionsComparator(const Connection* lhs, const Connection* rhs);
 ///comparateur pour trier les connexions par
 bool connectionsComparatorWeight0(const Connection* lhs,const Connection* rhs);
 bool connectionsComparatorWeight1(const Connection* lhs,const Connection* rhs);
+
+std::vector<std::vector<bool>> combinations(int k, int n, Graph* g);
+bool isCombinationValid(std::vector<bool> vec, Graph* g);
+std::vector<bool> tradIntToBool(std::vector<int> vec, Graph* g);
 
 #endif // GRAPH_H
