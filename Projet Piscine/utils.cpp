@@ -16,12 +16,12 @@ float dist(float xa, float ya, float xb, float yb)
 
 float factorial(float nb)
 {
-    if (nb < 0) return 0;
-    if( nb ==0 ) return 1;
+    if (nb < 0) return 0;       /// on n'appliquera pas la fonction factorielle aux nombres négatifs
+    if( nb ==0 ) return 1;      /// cas particulier : 0! = 1
 
     float r = nb;
 
-    for (int i = nb - 1; i > 1; i--)
+    for (int i = nb - 1; i > 1; i--)    ///calcul de l'image du paramètre en entrée par la fonction factorielle
         r *= i;
     return r;
 }
@@ -38,23 +38,23 @@ void videCin()
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-void setConsoleColor(int text_color, int background_color)
+void setConsoleColor(int text_color, int background_color)      ///Règle les couleurs de police et d'arrière plan dans la console
 {
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(h, background_color * 16 + text_color);
 }
 
-void menu()
+void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différentes fonctionnalité implémentées
 {
     int choice;
     int w_index;
-    setConsoleColor(LIGHT_MAGENTA);
+    setConsoleColor(LIGHT_MAGENTA);     ///On règle la couleur de la police au fur et à mesure du programme
     std::cout << std::endl << "Welcome into the Graph analysis tool !" << std::endl << std::endl << std::endl;
 
-    std::vector<FileInfo> files = findGraphFiles();
+    std::vector<FileInfo> files = findGraphFiles(); ///On récupère tous les fichiers contenant les information des graphes à charger
 
     setConsoleColor(LIGHT_RED);
-    do
+    do  ///On fait choisir à l'utilisateur un fichier de graphe à charger parmi la liste
     {
         std::cout << "First of all, you have to open a graph among the followings : " << std::endl << std::endl;
         setConsoleColor(GREEN);
@@ -64,13 +64,13 @@ void menu()
         std::cout << std::endl << "Make your choice : ";
         std::cin  >> choice;
         std::cout << std::endl;
-        videCin();
-    } while (choice <= 0 || choice > files.size());
+        videCin();      ///On prend soin de vider le tampon clavier au fuir et à mesure du programme
+    } while (choice <= 0 || choice > files.size());     ///On blinde la saisie du numéro du graphe à charger
 
-    FileInfo selected_file = files[choice - 1];
+    FileInfo selected_file = files[choice - 1];     ///on déclare une structure FileInfo avec les fichiers dugraphe choisi
 
     setConsoleColor(LIGHT_RED);
-    do
+    do      ///On demande à l'utilisateur de choisir le fichier de poids qu'il souhaite appliquer au graphe chargé
     {
         std::cout << "Now, please chose the weights of the graph among the followings : " << std::endl << std::endl;
         setConsoleColor(GREEN);
@@ -81,18 +81,18 @@ void menu()
         std::cin  >> choice;
         std::cout << std::endl;
         videCin();
-    } while (choice <= 0 || choice > selected_file.weights.size());
+    } while (choice <= 0 || choice > selected_file.weights.size());     ///On blinde la saisie du numéro du fichier de poids à charger
 
     setConsoleColor(LIGHT_CYAN);
-    std::cout << "Opening the graph " << selected_file.name.substr(0, selected_file.name.find(".txt")) << " with ";
+    std::cout << "Opening the graph " << selected_file.name.substr(0, selected_file.name.find(".txt")) << " with ";     ///On récapitule pour l'utilisateur les choix de graphes et de poids qu'il a fait
     std::cout << selected_file.weights[choice - 1].substr(0, selected_file.weights[choice - 1].find(".txt"));
 
     std::cout << std::endl << std::endl << std::endl;
 
-    w_index = choice - 1;
+    w_index = choice - 1;       ///on détermine l'index du fichier de poids dans la structure précédemment créée
 
     Graph g;
-    if (!g.create("files/" + selected_file.name, "files/" + selected_file.weights[choice - 1]))
+    if (!g.create("files/" + selected_file.name, "files/" + selected_file.weights[choice - 1]))     ///On charge le graphe à partir des fichiers choisis et on vérifie que le chargement s'est déroulé correctement
     {
         setConsoleColor(LIGHT_RED);
         std::cout << "FATAL ERROR -- UNABLE TO OPEN THE FILE" << std::endl << std::endl;
@@ -103,7 +103,7 @@ void menu()
     while (true)
     {
         setConsoleColor(LIGHT_RED);
-        std::cout << "Please choose between the following options :" << std::endl << std::endl;
+        std::cout << "Please choose between the following options :" << std::endl << std::endl;     ///Affichage du menu des différentes options proposées par le programme pour travailler avec le graphe
         setConsoleColor(GREEN);
         std::cout << "  - 0 --> Quit." << std::endl << std::endl;
         std::cout << "  - 1 --> Show the graph." << std::endl << std::endl;
@@ -115,17 +115,17 @@ void menu()
         std::cout << "  - 7 --> Dual objective spanning tree optimization (genetic algorithm)." << std::endl << std::endl;
         std::cout << "  - 8 --> Create a graph manually." << std::endl << std::endl;
         setConsoleColor(LIGHT_RED);
-        std::cout << "Make your choice : ";
+        std::cout << "Make your choice : ";     ///on demande à l'utilisateur de choisir parmi les options proposées
         std::cin  >> choice;
         std::cout << std::endl << std::endl << std::endl;
         videCin();
 
-        switch (choice)
+        switch (choice)     ///On détaille ensuite l'action du programme dans chaque cas pouvant être choisi par l'utilisateur
         {
-            case 0:
+            case 0:         ///1er cas : on sort du menu
                 setConsoleColor(WHITE);
                 exit(0);
-            case 1:
+            case 1:         ///2e cas : On dessine le graphe sur un fichier svg
             {
                 std::string filename;
 
@@ -143,7 +143,7 @@ void menu()
             }
             case 2:
             {
-                files = findGraphFiles();
+                files = findGraphFiles();   ///3e cas : on charge un autre graphe parmi ceux proposés, par la même méthode que précédemment
 
                 setConsoleColor(LIGHT_RED);
                 do
@@ -197,7 +197,7 @@ void menu()
                 std::cout << std::endl;
                 break;
             }
-            case 3:
+            case 3:         ///4e cas : on applique l'algorithme de Prim au graphe chargé
             {
                 float total_weight = 0;
                 int w_choice;
@@ -205,7 +205,7 @@ void menu()
                 setConsoleColor(CYAN);
                 do
                 {
-                    std::cout << "Which weight should be evaluated ?" << std::endl << std::endl;
+                    std::cout << "Which weight should be evaluated ?" << std::endl << std::endl;    ///On demande à l'utilisateur selon quel poids doit on appliquer Prim
                     for (int i = 0; i < g.getConnections()[0]->getWeights().size(); i++)
                         std::cout << "  - " << i + 1 << std::endl << std::endl;
                     std::cout << "Enter your choice : ";
@@ -224,7 +224,7 @@ void menu()
 
                 char c;
                 bool top = true;
-                std::cout << std::endl << "Do you want to draw the spanning tree on top of the graph ? (y / n) : ";
+                std::cout << std::endl << "Do you want to draw the spanning tree on top of the graph ? (y / n) : ";     ///on propose à l'utilisateur d'afficher le graphe produit par l'algorithme de Prim
                 std::cin  >> c;
 
                 if (c == 'n' || c == 'N') top = false;
@@ -238,7 +238,7 @@ void menu()
                 std::cout << std::endl;
                 break;
             }
-            case 4:
+            case 4:         ///5e cas : on teste la connectivité du graphe
             {
                 if (g.connectivityTest(std::vector<bool>(g.getSize(), true)))
                 {
@@ -256,7 +256,7 @@ void menu()
                 std::cout << std::endl;
                 break;
             }
-            case 5:
+            case 5:     ///6e cas : optimisation de l'arbre couvrant bi-objectif (Partie 2 du projet)
             {
                 std::stringstream sw;
                 sw << w_index;
@@ -271,7 +271,7 @@ void menu()
                 std::cout << std::endl;
                 break;
             }
-            case 6:
+            case 6:     ///7e cas : Optimistion bi-objectif cout/distance (Partie 3 du projet)
             {
                 std::stringstream sw;
                 sw << w_index;
@@ -286,7 +286,7 @@ void menu()
                 std::cout << std::endl;
                 break;
             }
-            case 7:
+            case 7:     ///8e cas
             {
                 setConsoleColor(LIGHT_MAGENTA);
                 std::cout << "You are about to use a genetic algorithm in order to try to find the pareto optimal solutions." << std::endl;

@@ -6,6 +6,8 @@
 #include <cmath>
 #include <windows.h>
 
+
+///On attribue une valeur à chaque couleur, que l'on utilisera pour la coloration du texte en console
 #define BLACK			0
 #define BLUE			1
 #define GREEN			2
@@ -26,10 +28,13 @@
 #include "graph.h"
 #include "population.h"
 
+
+/// \struct FileInfo
+/// \brief Rassemble les informations relatives aux fichiers contenant les informations des graphes
 struct FileInfo
 {
-    std::string name;
-    std::vector<std::string> weights;
+    std::string name;       /// <nom du fichier contenant les sommets et les arêtes
+    std::vector<std::string> weights;       ///liste des fichiers décrivant les différents agencements de poids relatifs aux fichier contenant les sommets et arêtes
 };
 
 /// \fn float mapLine(float val, float xa, float ya, float xb, float yb)
@@ -68,10 +73,24 @@ float countCombinations(float k, float n);
 /// \brief Vide le tampon de saisie clavier. Fonction réalisée par un professeur de l'ECE.
 void videCin();
 
-void setConsoleColor(int text_color, int background_color = BLACK); /// https://openclassrooms.com/forum/sujet/tuto-couleur-console-windows
+/// \fn
+/// \brief Permet de changer la couleur de la police et d'arrière plan en console vers la couleur passée en paramètre
+/// https://openclassrooms.com/forum/sujet/tuto-couleur-console-windows
+/// \param text_color : couleur de la police qu'on souhaite avoir
+/// \param background_color : couleur de l'arrière plan de la console que l'on souhaite avoir (noir par défaut)
+void setConsoleColor(int text_color, int background_color = BLACK);
+
+/// \fn void menu()
+/// \brief Menu d'accueil du programme, qui permet d'utiliser les différentes fonctionnalité implémentées
 void menu();
+
+/// \fn void clearScreen()
+/// \brief Efface le contenu de la console
 void clearScreen();
 
+/// \fn std::vector<FileInfo> findGraphFiles()
+/// \brief Permet de récupérer les différents fichiers depuis lesquels on va charger les graphes
+/// \return la liste des fichiers récupérés, organisés en structures FileInfo
 std::vector<FileInfo> findGraphFiles();
 
 #endif // UTILS_H_INCLUDED
