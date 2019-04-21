@@ -699,7 +699,14 @@ std::vector<std::vector<bool>>  Graph::filtrage()
 
 void Graph::reset()
 {
-
+    for (int i = 0; i < m_nodes.size(); i++)
+        delete m_nodes[i];
+    for (int i = 0; i < m_connections.size(); i++)
+        delete m_connections[i];
+    m_nodes.clear();
+    m_connections.clear();
+    m_ordre = 0;
+    m_taille = 0;
 }
 
 ///fonction qui trie les solutions dominées et non dominées selon les 2 objectifs et les affiche :
@@ -1072,24 +1079,25 @@ void Graph::bruteForcePareto(std::string filename)
     delete svg;
 }
 
-void Graph::bruteForceParetoConsideringCycles()
+void Graph::bruteForceParetoConsideringCycles(std::string filename)
 {
     float t, dt, start;
 
     std::sort(m_connections.begin(), m_connections.end(), &connectionsComparator);
     std::vector<std::vector<bool>> poss;
+
+    dt = clock();
+    start = dt;
     for(int i = (m_ordre - 1); i <=  m_taille ; i++ )
     {
-        for(auto it : combinations(i,m_taille,this))
-        {
+        std::vector<std::vector<bool>> v = combinations(i, m_taille, this);
+        for(auto it : v)
             poss.push_back(it);
-        }
     }
 
      t = clock();
-    dt = t;
-    start = t;
     std::cout << "All Possibilities : " << t / 1000 << "s" << std::endl;
+    dt = t;
 
     std::vector<Solution> sol;
     int n = 0;
@@ -1125,7 +1133,7 @@ void Graph::bruteForceParetoConsideringCycles()
     }
 
     t = clock();
-    std::cout << n << " Trads to solution + calc costs : " << (t - dt) / 1000 << "s" << std::endl;
+    std::cout << n << " elements valid + calc costs : " << (t - dt) / 1000 << "s" << std::endl;
     dt = t;
 
     for (int i = 0; i < sol.size(); i++)
@@ -1150,7 +1158,7 @@ void Graph::bruteForceParetoConsideringCycles()
 
      ///On va maintenant pouvoir les afficher sur un diagramme 2D :
     ///On crée un autre svg :
-    Svgfile* svg = new Svgfile ("Pareto-front-considering-cycles.svg", 1000, 800);
+    Svgfile* svg = new Svgfile (filename, 1000, 800);
 
 
     ///On parcours toutes les solutions admises et on les dessine, soit en vert pour les solutions non dominées
@@ -1173,8 +1181,6 @@ void Graph::bruteForceParetoConsideringCycles()
     svg->addTriangle(5, 50, 15, 50, 10, 30, "black", 2, "black");
 
     delete svg;
-
-
 }
 
 Graph createManually()

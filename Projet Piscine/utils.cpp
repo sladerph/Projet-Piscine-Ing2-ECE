@@ -143,6 +143,58 @@ void menu()
             }
             case 2:
             {
+                files = findGraphFiles();
+
+                setConsoleColor(LIGHT_RED);
+                do
+                {
+                    std::cout << "You have to open a graph among the followings : " << std::endl << std::endl;
+                    setConsoleColor(GREEN);
+                    for (int i = 0; i < files.size(); i++)
+                        std::cout << " - " << i + 1 << " --> " << files[i].name.substr(0, files[i].name.find(".txt")) << std::endl;
+                    setConsoleColor(LIGHT_RED);
+                    std::cout << std::endl << "Make your choice : ";
+                    std::cin  >> choice;
+                    std::cout << std::endl;
+                    videCin();
+                } while (choice <= 0 || choice > files.size());
+
+                selected_file = files[choice - 1];
+
+                setConsoleColor(LIGHT_RED);
+                do
+                {
+                    std::cout << "Now, please chose the weights of the graph among the followings : " << std::endl << std::endl;
+                    setConsoleColor(GREEN);
+                    for (int i = 0; i < selected_file.weights.size(); i++)
+                        std::cout << " - " << i + 1 << " --> " << selected_file.weights[i].substr(0, selected_file.weights[i].find(".txt")) << std::endl;
+                    setConsoleColor(LIGHT_RED);
+                    std::cout << std::endl << "Make your choice : ";
+                    std::cin  >> choice;
+                    std::cout << std::endl;
+                    videCin();
+                } while (choice <= 0 || choice > selected_file.weights.size());
+
+                setConsoleColor(LIGHT_CYAN);
+                std::cout << "Opening the graph " << selected_file.name.substr(0, selected_file.name.find(".txt")) << " with ";
+                std::cout << selected_file.weights[choice - 1].substr(0, selected_file.weights[choice - 1].find(".txt"));
+
+                std::cout << std::endl << std::endl << std::endl;
+
+                w_index = choice - 1;
+
+                g.reset();
+                if (!g.create("files/" + selected_file.name, "files/" + selected_file.weights[choice - 1]))
+                {
+                    setConsoleColor(LIGHT_RED);
+                    std::cout << "FATAL ERROR -- UNABLE TO OPEN THE FILE" << std::endl << std::endl;
+                    setConsoleColor(WHITE);
+                    exit(-1);
+                }
+
+                Sleep(2000);
+                clearScreen();
+                std::cout << std::endl;
                 break;
             }
             case 3:
@@ -221,7 +273,17 @@ void menu()
             }
             case 6:
             {
+                std::stringstream sw;
+                sw << w_index;
+                std::string filename  = selected_file.name.substr(0, selected_file.name.find(".txt")) + " - weights " + sw.str();
+                            filename += " - Pareto-front-considering-cycles.svg";
 
+                setConsoleColor(CYAN);
+                g.bruteForceParetoConsideringCycles(filename);
+
+                Sleep(2000);
+                clearScreen();
+                std::cout << std::endl;
                 break;
             }
             case 7:
