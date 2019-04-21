@@ -22,12 +22,15 @@
 #define XOFFSET 50  /// \def XOFFSET 50
 #define YOFFSET 50  /// \def YOFFSET 50
 
+
+/// \struct Solution
+/// \brief modèle de d'agencement du graphe constituant un éventuel optimum de pareto
 struct Solution
 {
-    std::vector<bool> vec;
-    float cost_a = 0;
-    float cost_b = 0;
-    bool  dominated = false;
+    std::vector<bool> vec;  ///< vecteur de booléens de même taille que la liste d'arêtes : le booléen d'indice n décrit si l'arête d'indice n est active ou non
+    float cost_a = 0;   ///< cout A de la solution
+    float cost_b = 0;   ///<cout B de la solution
+    bool  dominated = false;    ///<statut dominé ou non de la solution
 };
 
 /// \class Graph
@@ -88,6 +91,10 @@ class Graph
         /// \brief getter qui permet d'obtenir le nombre de sommmet du graphe
         /// \return le nombre de sommet du graphe
         int getOrdre() const {return m_ordre;}; //retourne le nombre de sommets du graphe
+
+        /// \fn int getSize() const
+        /// \brief getter qui permet d'obtenir le nombre d'arête du graphe
+        /// \return le nombre d'arête du graphe
         int getSize () const {return m_taille;};
 
         /// \fn std::vector<bool> getPrim(int weight, float* totalWeight)
@@ -146,7 +153,8 @@ class Graph
         /// \return retourne la liste de tous les arrangements, sous forme de vecteur de booléens de même taille que la liste d'arêtes : le booléen d'indice n décrit si l'arête d'indice n est active ou non
         std::vector<std::vector<bool>> secondEnumeration ();
 
-
+        /// \fn void bruteForcePareto()
+        /// \brief fonction qui trie les solutions dominées et non dominées selon les 2 objectifs et les affiche
         void bruteForcePareto();
 
     private:
@@ -223,26 +231,34 @@ std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> No
 /// \return nombre de booléens de valeur true dans le vecteur
 int howManyTrue(std::vector<bool>& subject);
 
-/// \fn bool add_1bit(bool& r_sortie ,bool r_entree,bool a, bool b)
-/// \brief additionneur 1 bit
-/// \param r_sortie : retenue de fin d'addition, passée par adresse pour être modifiée dans la fonction
-/// \param r_entrée : retenue de l'addition précédente
-/// \param a : élément 1 de l'addition
-/// \param b : élément 2 de l'addition
-/// \return retourne le résultat de l'addition
-bool add_1bit(bool& r_sortie ,bool r_entree,bool a, bool b);
+/// \fn std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight)
+/// \brief trie les arêtes passées en paramètre en fonctions de leur poids d'indice [weight], dans l'ordre croissant
+/// optimisée par une fonction sort de la STL
+/// \param connections : liste des arêtes à trier
+/// \param weight : indice du poids selon lequel on va trier les arêtes
+/// \return la liste des arêtes, triées dans l'ordre des poids croissants
+std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight);
 
-std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight);     ///optimisée par une fonction sort de la STL
-//trie les connexions passées en paramètre en fonctions de leur poids d'indice [weight], dans l'ordre croissant
+/// \fn std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connections)
+/// \brief trie les connexions du vecteur en paramètre en fonction de leur id, dans l'ordre croissant
+/// remplacée par une fonction sort de la STL
+/// \param connections : liste des arêtes à trier
+/// \return la liste des arêtes, triées dans l'ordre des indexs croissants
+std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connections);
 
-///std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connections);  ///remplacée par une fonction sort de la STL
-//trie les connexions du vecteur en paramètre en fonction de leur id, dans l'ordre croissant
+/// \fn std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes)
+/// \brief trie les paires <poids,id>, qui représentent des sommets, en fonction du paramètre poids et dans l'ordre croissant
+/// remplacée par une fonction sort de la STL
+/// \param Nodes : liste des paires <poids,id>, qui représentent des sommets
+/// \return liste des paires triés dans l'ordre des poids croissants
+std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes);
 
-///std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes);   ///remplacée par une fonction sort de la STL
-//trie les paires <poids,id>, qui représentent des sommets, en fonction du paramètre poids et dans l'ordre croissant
-
-
-///additionneur 1 bit :
+/// \fn bool add_1bit(bool a, bool b, bool& c)
+/// \brief additionnneur 1 bit
+/// \param a : paramètre 1 de l'addition
+/// \param b : paramètre 2 de l'addition
+/// \param c : retenue précédente et passée par adresse pour être modifiée et devenir la nouvelle retenue
+/// \return résultat de l'addition
 bool add_1bit(bool a, bool b, bool& c);
 
 /// \fnbool connectionsComparator(const Connection* lhs, const Connection* rhs)
@@ -269,7 +285,19 @@ bool connectionsComparatorWeight0(const Connection* lhs,const Connection* rhs);
 /// \return true si le paramètre 1 a un poids d'indice 1 plus petit que le paramètre 2, false sinon
 bool connectionsComparatorWeight1(const Connection* lhs,const Connection* rhs);
 
+/// \fn std::vector<std::vector<bool>> combinations(int k, int n, Graph* g)
+/// \brief permet d'obtenir la liste des combinations possibles d'arrangements de k arêtes parmi les n arêtes du graphe
+/// \param k : nombre d'arêtes des solutions recherchées
+/// \param n : nombre total d'arêtes du graphe
+/// \param g : pointeur sur le graphe
+/// \return la liste des solutions de taille k
 std::vector<std::vector<bool>> combinations(int k, int n, Graph* g);
+
+/// \fn std::vector<bool> tradIntToBool(std::vector<int> vec, Graph* g)
+/// \brief permet de transcrire la liste des arêtes actives en un vecteur de booléens qui décrit la totalité des arêtes
+/// \param vec : liste des indexs des arêtes actives
+/// \param g : pointeur sur le graphe
+/// \return vecteur de booléens de même taille que la liste d'arêtes : le booléen d'indice n décrit si l'arête d'indice n est active ou non
 std::vector<bool> tradIntToBool(std::vector<int> vec, Graph* g);
 
 #endif // GRAPH_H

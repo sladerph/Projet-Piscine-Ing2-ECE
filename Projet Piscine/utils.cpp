@@ -2,15 +2,16 @@
 
 float mapLine(float val, float xa, float ya, float xb, float yb)
 {
-    float m = (yb - ya) / (xb - xa);
-    float p = ya - m * xa;
+    ///On va chercher les paramètres de la fonction affine décrivant la droite passant par a et b
+    float m = (yb - ya) / (xb - xa);        ///On calcule le coefficient directeur
+    float p = ya - m * xa;          ///On calcule l'ordonnée à l'origine
 
-    return m * val + p;
+    return m * val + p; ///on retourne l'ordonnée du point d'abscisse val
 }
 
 float dist(float xa, float ya, float xb, float yb)
 {
-    return std::sqrt(std::pow(xb - xa, 2) + std::pow(yb - ya, 2));
+    return std::sqrt(std::pow(xb - xa, 2) + std::pow(yb - ya, 2));      ///distance euclidienne
 }
 
 float factorial(float nb)

@@ -910,6 +910,7 @@ int howManyTrue(std::vector<bool>& subject)
 
 
 std::vector<std::vector<bool>> combinations(int k, int n, Graph* g)
+
 {
     std::vector<std::vector<bool>> sol;
     std::vector<int> vec;

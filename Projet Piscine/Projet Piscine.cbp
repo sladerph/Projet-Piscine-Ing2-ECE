@@ -47,6 +47,8 @@
 		<Unit filename="population.h" />
 		<Unit filename="svgfile.cpp" />
 		<Unit filename="svgfile.h" />
+		<Unit filename="utils.cpp" />
+		<Unit filename="utils.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
