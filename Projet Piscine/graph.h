@@ -157,6 +157,8 @@ class Graph
         /// \brief fonction qui trie les solutions dominées et non dominées selon les 2 objectifs et les affiche
         void bruteForcePareto();
 
+        void bruteForceParetoConsideringCycles();
+
     private:
         std::vector<Node*> m_nodes;     ///< liste des sommets du graphe
         std::vector<Connection*> m_connections;     ///< liste des arêtes du graphe

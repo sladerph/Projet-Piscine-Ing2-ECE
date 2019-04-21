@@ -454,12 +454,12 @@ std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> No
 }
 
 
-std::vector<std::pair<float,int>> Graph::getNeighbours(Node* origin,int weight,std::vector<bool> activeConnections)/// le vecteur reçu est à l'envers
+std::vector<std::pair<float,int>> Graph::getNeighbours(Node* origin,int weight,std::vector<bool> activeConnections)
 {
     std::vector<std::pair<float,int>> neighboursId;
     for(auto it : m_connections)
     {
-        if(activeConnections[(int)m_taille-1-(it->getIndex())])
+        if(activeConnections[(it->getIndex())])
         {
             if(it->getNodeA()->getIndex()==origin->getIndex())
                 neighboursId.push_back(std::make_pair(it->getWeights()[weight],it->getNodeB()->getIndex()));
@@ -1060,5 +1060,108 @@ void Graph::bruteForcePareto()
     delete svg;
 }
 
+void Graph::bruteForceParetoConsideringCycles()
+{
+    float t, dt, start;
 
+    std::sort(m_connections.begin(), m_connections.end(), &connectionsComparator);
+    std::vector<std::vector<bool>> poss;
+    for(int i = (m_ordre - 1); i <=  m_taille ; i++ )
+    {
+        for(auto it : combinations(i,m_taille,this))
+        {
+            poss.push_back(it);
+        }
+    }
+
+     t = clock();
+    dt = t;
+    start = t;
+    std::cout << "All Possibilities : " << t / 1000 << "s" << std::endl;
+
+    std::vector<Solution> sol;
+    int n = 0;
+    float x_min = 1000;
+    float x_max = 0;
+    float y_min = 1000;
+    float y_max = 0;
+
+    for (int i = 0; i < poss.size(); i++)
+    {
+        if (connectivityTest(poss[i]))
+        {
+            Solution s;
+            s.vec = poss[i];
+
+            for (int j = 0; j < m_connections.size(); j++)
+            {
+                if (s.vec[j]) //m_connections[j]->getIndex()])
+                {
+                    std::vector<float> w = m_connections[j]->getWeights();
+                    s.cost_a += w[0];
+                }
+            }
+            s.cost_b=getDijkstra(1,s.vec);
+            sol.push_back(s);
+            n++;
+
+            if (s.cost_a < x_min) x_min = s.cost_a;
+            if (s.cost_b < y_min) y_min = s.cost_b;
+            if (s.cost_a > x_max) x_max = s.cost_a;
+            if (s.cost_b > y_max) y_max = s.cost_b;
+        }
+    }
+
+    t = clock();
+    std::cout << n << " Trads to solution + calc costs : " << (t - dt) / 1000 << "s" << std::endl;
+    dt = t;
+
+    for (int i = 0; i < sol.size(); i++)
+    {
+        for (int j = 0; j < sol.size(); j++)
+        {
+            if (i != j)
+            {
+                if (!(sol[i].cost_a < sol[j].cost_a || sol[i].cost_b < sol[j].cost_b))
+                {
+                    sol[i].dominated = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    t = clock();
+    std::cout << "Domination : " << (t - dt   ) / 1000 << "s" << std::endl;
+    std::cout << "Total : "      << (t - start) / 1000 << "s" << std::endl;
+    dt = t;
+
+     ///On va maintenant pouvoir les afficher sur un diagramme 2D :
+    ///On crée un autre svg :
+    Svgfile* svg = new Svgfile ("Pareto-front-considering-cycles.svg", 1000, 800);
+
+
+    ///On parcours toutes les solutions admises et on les dessine, soit en vert pour les solutions non dominées
+    ///soit en rouge pour les solutions dominées
+    for(size_t l = 0; l < sol.size(); l++)
+    {
+        float x = mapLine(sol[l].cost_a, x_min, 100, x_max, 900);
+        float y = mapLine(sol[l].cost_b, y_min, 700, y_max, 100);  //std::abs(400 - somme2[l] * 10);
+
+        if(!sol[l].dominated)
+            svg->addDisk(x, y, 5, "green");
+        else
+            svg->addDisk(x, y, 5, "red");
+    }
+
+    /// Affichage des axes
+    svg->addLine(10, 750, 10 , 50 , "black", 2);
+    svg->addLine(10, 750, 950, 750, "black", 2);
+    svg->addTriangle(950, 745, 950, 755, 970, 750, "black", 2, "black");
+    svg->addTriangle(5, 50, 15, 50, 10, 30, "black", 2, "black");
+
+    delete svg;
+
+
+}
 

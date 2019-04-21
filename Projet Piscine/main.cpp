@@ -28,6 +28,7 @@ int main()
 */
 
     g.bruteForcePareto();
+    g.bruteForceParetoConsideringCycles();
     //g.evaluation();   ///partie 2
     //g.secondEvaluation();     ///partie 3
 
