@@ -330,21 +330,6 @@ bool connectionsComparatorWeight1(const Connection* lhs,const Connection* rhs)
 
 std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight)
 {
-    /*Connection* temp;
-    for(size_t i = 0; i < connections.size()-1; i++)
-    {
-        if(connections[i]->getWeights()[weight] > connections[i+1]->getWeights()[weight])
-        {
-            temp = connections[i];
-            connections[i]=connections[i+1];
-            connections[i+1]=temp;
-            i=0;
-        }
-    }
-    std::vector<Connection*> connectionVector;
-    for(size_t i = 0; i < connections.size(); i++)
-        connectionVector.push_back(connections[i]);
-    return connectionVector;*/
     if(weight==0)
     {
         std::sort(connections.begin(),connections.end(),connectionsComparatorWeight0);
@@ -478,7 +463,6 @@ std::vector<std::pair<float,int>> Graph::getNeighbours(Node* origin,int weight,s
 
 bool Graph::connectivityTest(std::vector<bool>connections)
 {
-//    std::unordered_set<int> discoveredList;
     std::vector<bool> discoveredList(m_ordre, false);
     int nb = 1;
     Node* current;
@@ -544,73 +528,13 @@ float Graph::weightsSum(std::vector<bool> connections, int weight)
     return totalWeight;
 }
 
-///additionneur 1 bit :
+/// additionneur 1 bit :
 
 bool add_1bit(bool a, bool b, bool& c)     ///peut être mettre des else if
 {
     bool r = (!a && !b && c) || (!a && b && !c) || (a && b && c) || (a && !b && !c);
          c = (b && c) || (a && b) || (a && c);
     return r;
-    /*
-    if (a)
-    {
-        if (b)
-        {
-            if(r_entree)
-            {
-                r_sortie = true;
-                return true;
-            }
-            else
-            {
-                r_sortie = true;
-                return false;
-            }
-
-        }
-        else if(r_entree)
-        {
-            r_sortie = true;
-            return false;
-        }
-        else
-        {
-            r_sortie = false;
-            return true;
-        }
-    }
-    else
-    {
-        if (b)
-        {
-            if (r_entree)
-            {
-                r_sortie = true;
-                return false;
-            }
-            else
-            {
-                r_sortie = false;
-                return true;
-            }
-
-        }
-        else
-        {
-            if(r_entree)
-            {
-                r_sortie=false;
-                return true;
-            }
-            else
-            {
-                r_sortie=false;
-                return false;
-            }
-        }
-    }
-    return false;
-    */
 }
 
 
@@ -659,28 +583,9 @@ std::vector<std::vector<bool>>  Graph::filtrage()
 
     std::vector<std::vector<bool>> solAdmis;
     std::vector <int> sommetSelect;
-    //int select=0;
-    //bool arreteOk=false;
+
     for (size_t i=0; i<solExist.size();++i) ///on parcours le vecteur des solutions existantes
     {
-        /*select=0;
-        arreteOk=false;
-        for(size_t j=0;j<solExist[i].size();++j) ///on parcours la solution existante et on compte
-        {
-            if(solExist[i][j]) ///si une arrete est selectionee
-            {
-                ++select; ///on augmente select
-            }
-        }*/
-        // ///on a ainsi le nombre d'arretes selectionees
-
-        // ///on regarde si la solution existante possède ordre-1 arretes :
-
-        /*if( select == (m_ordre-1))
-        {
-            arreteOk=true;  ///on a donc une condition verifié
-        }*/
-
         ///On va maintenant regarder si la solution existante est connexe :
         ///pour cela on fait appel a la fonction testconnectivity
 
@@ -789,16 +694,12 @@ void Graph::evaluation()
     for(size_t l = 0; l < solAdmis.size(); l++)
     {
         float x = mapLine(somme1[l], x_min, 100, x_max, 900);
-        float y = mapLine(somme2[l], y_min, 700, y_max, 100);  //std::abs(400 - somme2[l] * 10);
+        float y = mapLine(somme2[l], y_min, 700, y_max, 100);
 
         if(!dominee[l])
-        {///std::cout<<"non dominee  "<<somme1[l]<<"  "<<somme2[l]<<std::endl;
           svgg->addDisk(x, y, 5, "green");
-        }
         else
-        {///std::cout<<"dominee  "<<somme1[l]<<"  "<<somme2[l]<<std::endl;
             svgg->addDisk(x, y, 5, "red");
-        }
     }
 
     /// Affichage des axes
@@ -1062,7 +963,7 @@ void Graph::bruteForcePareto(std::string filename)
     for(size_t l = 0; l < sol.size(); l++)
     {
         float x = mapLine(sol[l].cost_a, x_min, 100, x_max, 900);
-        float y = mapLine(sol[l].cost_b, y_min, 700, y_max, 100);  //std::abs(400 - somme2[l] * 10);
+        float y = mapLine(sol[l].cost_b, y_min, 700, y_max, 100);
 
         if(!sol[l].dominated)
             svg->addDisk(x, y, 5, "green");
@@ -1115,7 +1016,7 @@ void Graph::bruteForceParetoConsideringCycles(std::string filename)
 
             for (int j = 0; j < m_connections.size(); j++)
             {
-                if (s.vec[j]) //m_connections[j]->getIndex()])
+                if (s.vec[j])
                 {
                     std::vector<float> w = m_connections[j]->getWeights();
                     s.cost_a += w[0];

@@ -67,6 +67,7 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
         setConsoleColor(LIGHT_RED);
         std::cout << std::endl << "Make your choice : ";
         std::cin  >> choice;
+        videCin();
         std::cout << std::endl;
         videCin();      ///On prend soin de vider le tampon clavier au fuir et à mesure du programme
     } while (choice <= 0 || choice > files.size());     ///On blinde la saisie du numéro du graphe à charger
@@ -83,6 +84,7 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
         setConsoleColor(LIGHT_RED);
         std::cout << std::endl << "Make your choice : ";
         std::cin  >> choice;
+        videCin();
         std::cout << std::endl;
         videCin();
     } while (choice <= 0 || choice > selected_file.weights.size());     ///On blinde la saisie du numéro du fichier de poids à charger
@@ -117,18 +119,21 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
         std::cout << "  - 5 --> Dual objective spanning tree optimization (brute force) (\"Partie 2\")." << std::endl << std::endl;
         std::cout << "  - 6 --> Dual objective optimization (cost / distance) (brute force) (\"Partie 3\")." << std::endl << std::endl;
         std::cout << "  - 7 --> Dual objective spanning tree optimization (genetic algorithm)." << std::endl << std::endl;
-        std::cout << "  - 8 --> Create a graph manually." << std::endl << std::endl;
         setConsoleColor(LIGHT_RED);
         std::cout << "Make your choice : ";     ///on demande à l'utilisateur de choisir parmi les options proposées
         std::cin  >> choice;
+        videCin();
         std::cout << std::endl << std::endl << std::endl;
         videCin();
 
         switch (choice)     ///On détaille ensuite l'action du programme dans chaque cas pouvant être choisi par l'utilisateur
         {
             case 0:         ///1er cas : on sort du menu
+            {
                 setConsoleColor(WHITE);
+                g.reset();
                 exit(0);
+            }
             case 1:         ///2e cas : On dessine le graphe sur un fichier svg
             {
                 std::string filename;
@@ -136,6 +141,7 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
                 setConsoleColor(CYAN);
                 std::cout << "Enter the name of the file (without '.svg') : ";
                 std::cin  >> filename;
+                videCin();
                 std::cout << std::endl << std::endl;
 
                 filename = filename + ".svg";
@@ -159,6 +165,7 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
                     setConsoleColor(LIGHT_RED);
                     std::cout << std::endl << "Make your choice : ";
                     std::cin  >> choice;
+                    videCin();
                     std::cout << std::endl;
                     videCin();
                 } while (choice <= 0 || choice > files.size());
@@ -175,6 +182,7 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
                     setConsoleColor(LIGHT_RED);
                     std::cout << std::endl << "Make your choice : ";
                     std::cin  >> choice;
+                    videCin();
                     std::cout << std::endl;
                     videCin();
                 } while (choice <= 0 || choice > selected_file.weights.size());
@@ -214,6 +222,7 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
                         std::cout << "  - " << i + 1 << std::endl << std::endl;
                     std::cout << "Enter your choice : ";
                     std::cin  >> w_choice;
+                    videCin();
                     w_choice--;
                     videCin();
                 } while (w_choice < 0 || w_choice >= g.getConnections()[0]->getWeights().size());
@@ -230,6 +239,7 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
                 bool top = true;
                 std::cout << std::endl << "Do you want to draw the spanning tree on top of the graph ? (y / n) : ";     ///on propose à l'utilisateur d'afficher le graphe produit par l'algorithme de Prim
                 std::cin  >> c;
+                videCin();
 
                 if (c == 'n' || c == 'N') top = false;
 
@@ -306,8 +316,10 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
                 int mut_rate = 5;
                 std::cout << "Enter the population size : ";
                 std::cin  >> pop_size;
+                videCin();
                 std::cout << std::endl << "Enter the mutation rate (1 - 100) : ";
                 std::cin  >> mut_rate;
+                videCin();
 
                 if (pop_size < 100) pop_size = 100;
                 else if (pop_size > 100000) pop_size = 100000;
@@ -320,11 +332,6 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
 
                 clearScreen();
                 std::cout << endl;
-
-                break;
-            }
-            case 8:
-            {
 
                 break;
             }

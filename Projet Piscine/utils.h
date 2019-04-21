@@ -11,7 +11,7 @@
 #include <windows.h>
 
 
-///On attribue une valeur à chaque couleur, que l'on utilisera pour la coloration du texte en console
+/// Liste des couleurs disponibles pour la coloration du texte en console
 #define BLACK			0
 #define BLUE			1
 #define GREEN			2

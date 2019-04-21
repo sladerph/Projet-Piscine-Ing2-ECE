@@ -1,19 +1,24 @@
+
+
+/// \author Pierre Herduin, Mélodie Damas, Simon jolly
+
 #include "population.h"
 
 Population::Population(int pop_size, Graph* structure, int mutation_rate)
 {
+    /// Initialise les données.
     m_pop_size   = pop_size ;
     m_structure  = structure;
     m_generation = 0;
     m_mutation_rate = mutation_rate;
 
     for (int i = 0; i < pop_size; i++)
-        m_pop.push_back(new DNA(structure));
+        m_pop.push_back(new DNA(structure)); /// Crée les premiers individus.
 }
 
 void Population::solve()
 {
-    srand(time(NULL));
+    srand(time(NULL)); /// Initialise les fonctions aléatoires.
     char choice = 'y';
 
     std::cout << std::endl << std::endl;
@@ -22,10 +27,10 @@ void Population::solve()
 
     int tot = 0;
 
-    while (choice != 'n' && choice != 'N') // User interruption loop.
+    while (choice != 'n' && choice != 'N') /// User interruption loop.
     {
         int nb = 0;
-        bool forced = false;
+        bool forced = false; /// En cas d'arret forcé.
         bool pareto_changed;
 
         do
@@ -35,27 +40,27 @@ void Population::solve()
 
             pareto_changed = false;
 
-            evaluateFitness();
+            evaluateFitness(); /// Calcul le fitness.
 
-            checkClones();
-            purify();
+            checkClones(); /// Elimine les clones.
+            purify(); /// Elimine les solutions invalides.
 
-            checkDominated();
+            checkDominated(); /// Vérifie les dominations.
 
-            checkPareto();
+            checkPareto(); /// Met à jour la liste des meilleures solutions actuelles.
 
-            if (last_pareto.size() > 0)
+            if (last_pareto.size() > 0) /// Si il y avait des solutions à la générations précédente.
             {
-                if (last_pareto.size() != m_pareto_bests.size())
+                if (last_pareto.size() != m_pareto_bests.size()) /// si la taille est différente alors ça a changé.
                     pareto_changed = true;
                 else
                 {
                     int nb_ok = 0;
-                    for (int i = 0; i < last_pareto.size(); i++)
+                    for (int i = 0; i < last_pareto.size(); i++) /// Parcours les anciens
                     {
-                        for (int j = 0; j < m_pareto_bests.size(); j++)
+                        for (int j = 0; j < m_pareto_bests.size(); j++) /// Parcours les nouveaux.
                         {
-                            if (last_pareto[i]->operator==(m_pareto_bests[j]) == true)
+                            if (last_pareto[i]->operator==(m_pareto_bests[j]) == true) /// Si ils sont identiques.
                             {
                                 nb_ok++;
                                 break;
@@ -63,12 +68,14 @@ void Population::solve()
                         }
                     }
 
+                    /// Si ils n'y sont pas tous alors ca a changé.
                     if (nb_ok != last_pareto.size()) pareto_changed = true;
                 }
             }
 
             if (pareto_changed)
             {
+                /// Gestion des suppressions - insertions pour indiquer à l'utilisateur de facon claire.
                 setConsoleColor(LIGHT_RED);
                 for (int i = 0; i < last_pareto.size(); i++)
                 {
@@ -106,21 +113,22 @@ void Population::solve()
 
             last_pareto = m_pareto_bests;
 
-            if (pareto_changed)
+            if (pareto_changed) /// Si il y a du changement, afficher les elements non dominés et la liste des meilleurs.
                 showNonDominated();
 
             if (m_pop.size() > 1)
             {
-                if (!reproduce())
-                {
+                if (!reproduce()) /// Reproduction
+                { /// Si elle échoue, on force l'arret.
                     nb = 10 + 1;
                     forced = true;
                 }
                  else
-                    mutate();
+                    mutate(); /// Mutations genetiques.
             }
             else
             {
+                /// Réinitialise la population.
                 for (size_t i = 0; i < m_pop.size(); i++)
                 {
                     delete m_pop[i];
@@ -148,6 +156,7 @@ void Population::solve()
         }
         else
         {
+            /// Demande à l'utilisateur si il veut continuer.
             setConsoleColor(WHITE);
             std::cout << "Do you want to continue the evolution ? (y/n) : ";
             std::cin  >> choice;

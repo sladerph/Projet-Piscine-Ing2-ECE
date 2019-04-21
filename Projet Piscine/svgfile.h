@@ -3,7 +3,7 @@
 
 /// \file svgfile.h
 /// \brief rassemble la classe Svgfile avec toutes les fonctions de dessin sur fichier svg
-/// \author Pierre Herduin
+/// \author Mr Fercoq, Pierre Herduin
 
 #include <string>
 #include <fstream>
