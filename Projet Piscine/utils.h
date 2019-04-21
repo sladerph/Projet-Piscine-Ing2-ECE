@@ -1,6 +1,9 @@
 #ifndef UTILS_H_INCLUDED
 #define UTILS_H_INCLUDED
 
+
+/// \author Pierre Herduin, Mélodie Damas, Simon jolly
+
 #include <iostream>
 #include <limits>
 #include <cmath>

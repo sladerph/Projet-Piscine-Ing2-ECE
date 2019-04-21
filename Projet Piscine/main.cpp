@@ -1,3 +1,7 @@
+
+
+/// \author Pierre Herduin, Mélodie Damas, Simon jolly
+
 #include <iostream>
 #include <cstdlib>
 #include <time.h>

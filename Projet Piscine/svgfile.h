@@ -1,10 +1,6 @@
 ﻿#ifndef SVGFILE_H_INCLUDED
 #define SVGFILE_H_INCLUDED
 
-/// \file
-/// \brief
-/// \author
-
 #include <string>
 #include <fstream>
 #include <set>
