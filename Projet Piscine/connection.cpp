@@ -11,6 +11,13 @@ Connection::Connection(int index, Node* a, Node* b)
     m_node_b = b;
 }
 
+Connection::Connection(int index, Node* a, Node* b,std::vector<float> weights)
+            :m_index{index},m_node_a{a},m_node_b{b},m_weights{weights}
+{
+
+}
+
+
 Connection::~Connection()
 {
     //dtor

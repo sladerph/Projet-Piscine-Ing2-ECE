@@ -174,3 +174,83 @@
 1555866768 source:c:\users\slader_ph\desktop\e.i.h\cours\informatique\projets\ing2\projet-piscine-ing2-ece\projet piscine\utils.cpp
 	"utils.h"
 
+1555865906 source:c:\users\simon\onedrive\bureau\projet piscine\projet-piscine-ing2-ece\projet piscine\connection.cpp
+	"connection.h"
+
+1555865802 c:\users\simon\onedrive\bureau\projet piscine\projet-piscine-ing2-ece\projet piscine\connection.h
+	"node.h"
+	<vector>
+
+1555865453 c:\users\simon\onedrive\bureau\projet piscine\projet-piscine-ing2-ece\projet piscine\node.h
+	"connection.h"
+	<vector>
+
+1555847279 source:c:\users\simon\onedrive\bureau\projet piscine\projet-piscine-ing2-ece\projet piscine\couleur.cpp
+	"couleur.h"
+	"svgfile.h"
+	<iostream>
+
+1555865453 c:\users\simon\onedrive\bureau\projet piscine\projet-piscine-ing2-ece\projet piscine\couleur.h
+	<string>
+	<cstdint>
+
+1555865453 c:\users\simon\onedrive\bureau\projet piscine\projet-piscine-ing2-ece\projet piscine\svgfile.h
+	<string>
+	<fstream>
+	<set>
+
+1555865453 source:c:\users\simon\onedrive\bureau\projet piscine\projet-piscine-ing2-ece\projet piscine\dna.cpp
+	"dna.h"
+
+1555865453 c:\users\simon\onedrive\bureau\projet piscine\projet-piscine-ing2-ece\projet piscine\dna.h
+	"graph.h"
+	"population.h"
+	<vector>
+
+1555866309 c:\users\simon\onedrive\bureau\projet piscine\projet-piscine-ing2-ece\projet piscine\graph.h
+	"node.h"
+	"connection.h"
+	"svgfile.h"
+	"utils.h"
+	<string>
+	<iostream>
+	<fstream>
+	<unordered_set>
+	<queue>
+	<bits/stdc++.h>
+	<limits>
+
+1555865453 c:\users\simon\onedrive\bureau\projet piscine\projet-piscine-ing2-ece\projet piscine\utils.h
+	<cmath>
+
+1555865453 c:\users\simon\onedrive\bureau\projet piscine\projet-piscine-ing2-ece\projet piscine\population.h
+	"dna.h"
+	"utils.h"
+	<windows.h>
+	<sstream>
+	<time.h>
+
+1555865453 source:c:\users\simon\onedrive\bureau\projet piscine\projet-piscine-ing2-ece\projet piscine\node.cpp
+	"node.h"
+	<iostream>
+
+1555865453 source:c:\users\simon\onedrive\bureau\projet piscine\projet-piscine-ing2-ece\projet piscine\population.cpp
+	"population.h"
+
+1555847279 source:c:\users\simon\onedrive\bureau\projet piscine\projet-piscine-ing2-ece\projet piscine\svgfile.cpp
+	<iostream>
+	<sstream>
+
+1555865453 source:c:\users\simon\onedrive\bureau\projet piscine\projet-piscine-ing2-ece\projet piscine\utils.cpp
+	"utils.h"
+
+1555866277 source:c:\users\simon\onedrive\bureau\projet piscine\projet-piscine-ing2-ece\projet piscine\graph.cpp
+	"graph.h"
+
+1555866052 source:c:\users\simon\onedrive\bureau\projet piscine\projet-piscine-ing2-ece\projet piscine\main.cpp
+	<iostream>
+	<cstdlib>
+	<time.h>
+	"graph.h"
+	"population.h"
+

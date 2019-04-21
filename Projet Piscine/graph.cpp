@@ -10,6 +10,12 @@ Graph::Graph()
     //ctor
 }
 
+Graph::Graph(std::vector<Node*>nodes, std::vector<Connection*>connections, int ordre, double taille)
+        :m_nodes{nodes},m_connections{connections},m_ordre{ordre},m_taille{taille}
+{
+
+}
+
 void Graph::show(std::string filename, std::vector<bool>* path)
 {
     Svgfile* svg = createSvgfile(filename);
@@ -454,12 +460,12 @@ std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> No
 }
 
 
-std::vector<std::pair<float,int>> Graph::getNeighbours(Node* origin,int weight,std::vector<bool> activeConnections)/// le vecteur reçu est à l'envers
+std::vector<std::pair<float,int>> Graph::getNeighbours(Node* origin,int weight,std::vector<bool> activeConnections)
 {
     std::vector<std::pair<float,int>> neighboursId;
     for(auto it : m_connections)
     {
-        if(activeConnections[(int)m_taille-1-(it->getIndex())])
+        if(activeConnections[(it->getIndex())])
         {
             if(it->getNodeA()->getIndex()==origin->getIndex())
                 neighboursId.push_back(std::make_pair(it->getWeights()[weight],it->getNodeB()->getIndex()));
@@ -1066,5 +1072,249 @@ void Graph::bruteForcePareto(std::string filename)
     delete svg;
 }
 
+void Graph::bruteForceParetoConsideringCycles()
+{
+    float t, dt, start;
+
+    std::sort(m_connections.begin(), m_connections.end(), &connectionsComparator);
+    std::vector<std::vector<bool>> poss;
+    for(int i = (m_ordre - 1); i <=  m_taille ; i++ )
+    {
+        for(auto it : combinations(i,m_taille,this))
+        {
+            poss.push_back(it);
+        }
+    }
+
+     t = clock();
+    dt = t;
+    start = t;
+    std::cout << "All Possibilities : " << t / 1000 << "s" << std::endl;
+
+    std::vector<Solution> sol;
+    int n = 0;
+    float x_min = 1000;
+    float x_max = 0;
+    float y_min = 1000;
+    float y_max = 0;
+
+    for (int i = 0; i < poss.size(); i++)
+    {
+        if (connectivityTest(poss[i]))
+        {
+            Solution s;
+            s.vec = poss[i];
+
+            for (int j = 0; j < m_connections.size(); j++)
+            {
+                if (s.vec[j]) //m_connections[j]->getIndex()])
+                {
+                    std::vector<float> w = m_connections[j]->getWeights();
+                    s.cost_a += w[0];
+                }
+            }
+            s.cost_b=getDijkstra(1,s.vec);
+            sol.push_back(s);
+            n++;
+
+            if (s.cost_a < x_min) x_min = s.cost_a;
+            if (s.cost_b < y_min) y_min = s.cost_b;
+            if (s.cost_a > x_max) x_max = s.cost_a;
+            if (s.cost_b > y_max) y_max = s.cost_b;
+        }
+    }
+
+    t = clock();
+    std::cout << n << " Trads to solution + calc costs : " << (t - dt) / 1000 << "s" << std::endl;
+    dt = t;
+
+    for (int i = 0; i < sol.size(); i++)
+    {
+        for (int j = 0; j < sol.size(); j++)
+        {
+            if (i != j)
+            {
+                if (!(sol[i].cost_a < sol[j].cost_a || sol[i].cost_b < sol[j].cost_b))
+                {
+                    sol[i].dominated = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    t = clock();
+    std::cout << "Domination : " << (t - dt   ) / 1000 << "s" << std::endl;
+    std::cout << "Total : "      << (t - start) / 1000 << "s" << std::endl;
+    dt = t;
+
+     ///On va maintenant pouvoir les afficher sur un diagramme 2D :
+    ///On crée un autre svg :
+    Svgfile* svg = new Svgfile ("Pareto-front-considering-cycles.svg", 1000, 800);
 
 
+    ///On parcours toutes les solutions admises et on les dessine, soit en vert pour les solutions non dominées
+    ///soit en rouge pour les solutions dominées
+    for(size_t l = 0; l < sol.size(); l++)
+    {
+        float x = mapLine(sol[l].cost_a, x_min, 100, x_max, 900);
+        float y = mapLine(sol[l].cost_b, y_min, 700, y_max, 100);  //std::abs(400 - somme2[l] * 10);
+
+        if(!sol[l].dominated)
+            svg->addDisk(x, y, 5, "green");
+        else
+            svg->addDisk(x, y, 5, "red");
+    }
+
+    /// Affichage des axes
+    svg->addLine(10, 750, 10 , 50 , "black", 2);
+    svg->addLine(10, 750, 950, 750, "black", 2);
+    svg->addTriangle(950, 745, 950, 755, 970, 750, "black", 2, "black");
+    svg->addTriangle(5, 50, 15, 50, 10, 30, "black", 2, "black");
+
+    delete svg;
+
+
+}
+
+Graph createManually()
+{
+    std::vector<Node*> nodes;
+    std::vector<Connection*> connections;
+    int ordre=0;
+    double taille=0.0;
+    int nbWeights=0;
+
+
+    bool fini=false;
+    int choix=-1;
+
+    float x=-1,y=-1;
+
+    std::vector<float> weights;
+    Node* nodeA=nullptr;
+    int indexA=-1;
+    Node* nodeB=nullptr;
+    int indexB=-1;
+    float tempWeight =0;
+
+    Graph temoin{};
+
+    do
+    {
+        std::cout<<"Combien y aura-t-il de poids par aretes ?"<<std::endl;
+        std::cin>>nbWeights;
+        if(!(nbWeights>=0 && nbWeights < std::numeric_limits<int>::max()))
+            std::cout<<std::endl<<"Erreur de saisie : reessayez"<<std::endl;
+    }while(!(nbWeights>=0 && nbWeights < std::numeric_limits<int>::max()));
+
+    do
+    {
+        do
+        {
+            std::cout<<"Que souhaitez vous faire ?"<<std::endl<<"0) - Abandonner"<<std::endl<<"1) - Terminer et creer le graphe"<<std::endl<<"2) - Ajouter un sommet au graphe"
+                <<std::endl<<"3) - Ajouter une arete au graphe"<<std::endl<<"4) - Afficher la liste des sommets"<<std::endl<<"5) - Afficher la liste des aretes"<<std::endl<<std::endl;
+            std::cin>>choix;
+            if(!(choix >= 0 && choix <=3))
+                std::cout<<std::endl<<"Erreur de saisie : reessayez"<<std::endl;
+            if(choix==3 && connections.size()==countCombinations(2,nodes.size()))   ///On check si des arêtes non existantes pourraient être ajoutées
+            {
+                std::cout<<std::endl<<"Il n'y a pas assez de sommets pour ajouter des nouvelles aretes : Veuillez commencer par ajouter des sommets"<<std::endl;
+                choix=-1;
+            }
+        }while(!(choix >= 0 && choix <=5));
+        switch(choix)
+        {
+            case 0 :
+                std::cout<<std::endl<<"Abandon de la creation du graphe"<<std::endl<<std::endl;
+                return temoin;
+                break;
+            case 1 :
+                std::cout<<std::endl<<"Creation du graphe"<<std::endl;
+                fini=true;
+                break;
+            case 2 :
+                x=-1;
+                y=-1;
+                do
+                {
+                    std::cout<<std::endl<<"Saisir l'abscisse du sommet"<<std::endl;
+                    std::cin>>x;
+                    if(!(x>=0 && x < std::numeric_limits<float>::max()))
+                        std::cout<<std::endl<<"Erreur de saisie : reessayez"<<std::endl;
+                }while(!(x>=0 && x < std::numeric_limits<float>::max()));
+                do
+                {
+                    std::cout<<std::endl<<"Saisir l'ordonnee du sommet"<<std::endl;
+                    std::cin>>y;
+                    if(!(y>=0 && y < std::numeric_limits<float>::max()))
+                        std::cout<<std::endl<<"Erreur de saisie : reessayez"<<std::endl;
+                }while(!(y>=0 && y < std::numeric_limits<float>::max()));
+                nodes.push_back(new Node{(int) nodes.size(),x,y});
+                break;
+            case 3 :    ///ajouter une arête au graphe
+                weights.clear();
+                nodeA=nullptr;
+                indexA=-1;
+                nodeB=nullptr;
+                indexB=-1;
+
+                do
+                {
+                    std::cout<<std::endl<<"Quel est l'index du sommet A ?"<<std::endl;
+                    std::cin>>indexA;
+                    std::cout<<std::endl<<"Quel est l'index du sommet B ?"<<std::endl;
+                    std::cin>>indexB;
+                    if(!(indexA>=0 && indexA < nodes.size()))
+                        std::cout<<"Le sommet d'indice "<<indexA<<" n'est pas enregistre : veuillez resaisir les sommets"<<std::endl;
+                    if(!(indexB>=0 && indexB < nodes.size()))
+                        std::cout<<"Le sommet d'indice "<<indexB<<" n'est pas enregistre : veuillez resaisir les sommets"<<std::endl;
+                    if(indexA==indexB)
+                        std::cout<<"Les sommets sont les memes : Veuillez reessayer"<<std::endl;
+                }while(!(indexA>=0 && indexA < nodes.size() && indexB >=0 && indexB < nodes.size() && indexA!=indexB));
+                nodeA = nodes[indexA];
+                nodeB = nodes[indexB];
+
+                for(int k =0; k<nbWeights; k++)
+                {
+                    tempWeight=0;
+                    do
+                    {
+                        std::cout<<"Quel est son poids d'indice "<<k<<" ?"<<std::endl;
+                        std::cin>>tempWeight;
+                        if(!(tempWeight>=0 && tempWeight<std::numeric_limits<float>::max()))
+                            std::cout<<"Erreur de saisie : ressayez"<<std::endl;
+                    }while(!(tempWeight>=0 && tempWeight<std::numeric_limits<float>::max()));
+                }
+                connections.push_back(new Connection{(int) connections.size(),nodeA,nodeB,weights});
+                weights.push_back(tempWeight);
+                break;
+            case 4 :
+                for(auto it : nodes)
+                    std::cout<<"sommet "<<it->getIndex()<<" : x = "<<it->getX()<<"  y = "<<it->getY()<<std::endl;
+                std::cout<<std::endl;
+                break;
+            case 5 :
+                for(auto it : connections)
+                {
+                    std::cout<<"arete "<<it->getIndex()<<" : sommet A = "<<it->getNodeA()->getIndex()<<"  sommet B = "<<it->getNodeB()->getIndex()<<std::endl<<"      ";
+                    int indexpoids=0;
+                    for(auto other: it->getWeights())
+                    {
+                        std::cout<<"poids d'indice "<<indexpoids<<" : "<<other;
+                        indexpoids++;
+                    }
+                    std::cout<<std::endl;
+                }
+                std::cout<<std::endl;
+                break;
+        }
+    }while(!fini);
+    ordre=nodes.size();
+    taille=connections.size();
+
+    Graph g{nodes,connections,ordre,taille};
+    std::cout<<"Le graphe a ete successivement cree !"<<std::endl;
+
+    return g;
+}

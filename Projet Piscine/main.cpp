@@ -18,6 +18,8 @@ int main()
 //    g.create("files/triville.txt", "files/triville_weights_0.txt");
 //    g.create("files/broadway.txt","files/broadway_weights_0.txt");
     g.create("files/manhattan.txt", "files/manhattan_weights_0.txt");
+
+///    g=createManually();
 /*
     float totalWeight=0.0;
     std::vector<bool> boolVector = g.getPrim(0,&totalWeight);
@@ -33,6 +35,10 @@ int main()
 
     //g.bruteForcePareto(); /// Partie 2.
     //g.secondEvaluation();     /// Partie 3.
+    g.bruteForcePareto();
+    g.bruteForceParetoConsideringCycles();
+    //g.evaluation();   ///partie 2
+    //g.secondEvaluation();     ///partie 3
 
     //g.show("output.svg", &boolVector);
     //g.showPrim("output.svg", &boolVector, true);
