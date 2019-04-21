@@ -973,6 +973,11 @@ void Graph::bruteForcePareto()
 
     std::vector<Solution> sol;
     int n = 0;
+    float x_min = 1000;
+    float x_max = 0;
+    float y_min = 1000;
+    float y_max = 0;
+
     for (int i = 0; i < poss.size(); i++)
     {
         if (connectivityTest(poss[i]))
@@ -994,6 +999,11 @@ void Graph::bruteForcePareto()
             }
             sol.push_back(s);
             n++;
+
+            if (s.cost_a < x_min) x_min = s.cost_a;
+            if (s.cost_b < y_min) y_min = s.cost_b;
+            if (s.cost_a > x_max) x_max = s.cost_a;
+            if (s.cost_b > y_max) y_max = s.cost_b;
         }
     }
 
@@ -1020,6 +1030,33 @@ void Graph::bruteForcePareto()
     std::cout << "Domination : " << (t - dt   ) / 1000 << "s" << std::endl;
     std::cout << "Total : "      << (t - start) / 1000 << "s" << std::endl;
     dt = t;
+
+     ///On va maintenant pouvoir les afficher sur un diagramme 2D :
+    ///On crée un autre svg :
+    Svgfile* svg = new Svgfile ("Pareto-front.svg", 1000, 800);
+
+
+    ///On parcours toutes les solutions admises et on les dessine, soit en vert pour les solutions non dominées
+    ///soit en rouge pour les solutions dominées
+
+    for(size_t l = 0; l < sol.size(); l++)
+    {
+        float x = mapLine(sol[l].cost_a, x_min, 100, x_max, 900);
+        float y = mapLine(sol[l].cost_b, y_min, 700, y_max, 100);  //std::abs(400 - somme2[l] * 10);
+
+        if(!sol[l].dominated)
+            svg->addDisk(x, y, 5, "green");
+        else
+            svg->addDisk(x, y, 5, "red");
+    }
+
+    /// Affichage des axes
+    svg->addLine(10, 750, 10 , 50 , "black", 2);
+    svg->addLine(10, 750, 950, 750, "black", 2);
+    svg->addTriangle(950, 745, 950, 755, 970, 750, "black", 2, "black");
+    svg->addTriangle(5, 50, 15, 50, 10, 30, "black", 2, "black");
+
+    delete svg;
 }
 
 
