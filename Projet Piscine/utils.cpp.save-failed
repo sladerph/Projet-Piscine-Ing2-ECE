@@ -1,0 +1,161 @@
+#include "utils.h"
+
+float mapLine(float val, float xa, float ya, float xb, float yb)
+{
+    ///On va chercher les paramètres de la fonction affine décrivant la droite passant par a et b
+    float m = (yb - ya) / (xb - xa);        ///On calcule le coefficient directeur
+    float p = ya - m * xa;          ///On calcule l'ordonnée à l'origine
+
+    return m * val + p; ///on retourne l'ordonnée du point d'abscisse val
+}
+
+float dist(float xa, float ya, float xb, float yb)
+{
+    return std::sqrt(std::pow(xb - xa, 2) + std::pow(yb - ya, 2));      ///distance euclidienne
+}
+
+float factorial(float nb)
+{
+    if (nb <= 0) return 0;
+
+    float r = nb;
+
+    for (int i = nb - 1; i > 1; i--)
+        r *= i;
+    return r;
+}
+
+float countCombinations(float k, float n)
+{
+    return factorial(n) / (factorial(k) * factorial(n - k));
+}
+
+/// Vide tampon clavier - Code du professeur.
+void videCin()
+{
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
+void setConsoleColor(int text_color, int background_color)
+{
+    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(h, background_color * 16 + text_color);
+}
+
+void menu()
+{
+    int choice;
+    setConsoleColor(LIGHT_MAGENTA);
+    std::cout << std::endl << "Welcome into the Graph analysis tool !" << std::endl << std::endl << std::endl;
+
+    std::vector<FileInfo> files = findGraphFiles();
+
+    setConsoleColor(LIGHT_RED);
+    do
+    {
+        std::cout << "First of all, you have to open a graph among the followings : " << std::endl << std::endl;
+        setConsoleColor(GREEN);
+        for (int i = 0; i < files.size(); i++)
+            std::cout << " - " << i + 1 << " --> " << files[i].name.substr(0, files[i].name.find(".txt")) << std::endl;
+        setConsoleColor(LIGHT_RED);
+        std::cout << std::endl << "Make your choice : ";
+        std::cin  >> choice;
+        std::cout << std::endl;
+        videCin();
+    } while (choice <= 0 || choice > files.size());
+
+    FileInfo selected_file = files[choice - 1];
+
+    setConsoleColor(LIGHT_RED);
+    do
+    {
+        std::cout << "Now, please chose the weights of the graph among the followings : " << std::endl << std::endl;
+        setConsoleColor(GREEN);
+        for (int i = 0; i < selected_file.weights.size(); i++)
+            std::cout << " - " << i + 1 << " --> " << selected_file.weights[i].substr(0, selected_file.weights[i].find(".txt")) << std::endl;
+        setConsoleColor(LIGHT_RED);
+        std::cout << std::endl << "Make your choice : ";
+        std::cin  >> choice;
+        std::cout << std::endl;
+        videCin();
+    } while (choice <= 0 || choice > selected_file.weights.size());
+
+    setConsoleColor(LIGHT_CYAN);
+    std::cout << "Opening the graph " << selected_file.name.substr(0, selected_file.name.find(".txt")) << " with ";
+    std::cout << selected_file.weights[choice - 1].substr(0, selected_file.weights[choice - 1].find(".txt"));
+
+    std::cout << std::endl << std::endl << std::endl;
+
+    setConsoleColor(LIGHT_RED);
+    while (true)
+    {
+        std::cout << "Please choose between the following options :" << std::endl << std::endl;
+        setConsoleColor(GREEN);
+        std::cout << "  - 0 --> Quit." << std::endl << std::endl;
+        std::cout << "  - 1 --> Show the graph." << std::endl << std::endl;
+        std::cout << "  - 2 --> Change the graph." << std::endl << std::endl;
+        std::cout << "  - 3 --> Find minimum spanning tree (Prim's algorithm)." << std::endl << std::endl;
+        std::cout << "  - 4 --> Test the connexity of the graph." << std::endl << std::endl;
+        std::cout << "  - 5 --> Dual objective spanning tree optimization (brute force) (\"Partie 2\")." << std::endl << std::endl;
+        std::cout << "  - 6 --> Dual objective optimization (cost / distance) (brute force) (\"Partie 3\")." << std::endl << std::endl;
+        std::cout << "  - 7 --> Dual objective spanning tree optimization (genetic algorithm)." << std::endl << std::endl;
+        std::cout << "  - 8 --> Create a graph manually." << std::endl << std::endl;
+        setConsoleColor(LIGHT_RED);
+        std::cout << "Make your choice : ";
+        std::cin  >> choice;
+        videCin();
+    }
+
+    setConsoleColor(WHITE);
+}
+
+std::vector<FileInfo> findGraphFiles()
+{
+    std::vector<std::string> files;
+    std::vector<FileInfo> infos;
+
+    WIN32_FIND_DATA file;
+    HANDLE hSearch;
+
+    hSearch = FindFirstFile("files/*.txt", &file);
+
+    if (hSearch != INVALID_HANDLE_VALUE)
+    {
+        do {
+            files.push_back(file.cFileName);
+        } while (FindNextFile(hSearch, &file));
+
+        FindClose(hSearch);
+    }
+
+    for (int i = 0; i < files.size(); i++)
+    {
+        if (files[i].find("weights") == std::string::npos) // It contains the weights.
+        {
+            FileInfo f;
+            f.name = files[i];
+            infos.push_back(f);
+            files.erase(files.begin() + i);
+            i--;
+        }
+    }
+
+    for (int i = 0; i < infos.size(); i++)
+    {
+        FileInfo f = infos[i];
+        for (int j = 0; j < files.size(); j++)
+        {
+            if (files[j].find(f.name.substr(0, f.name.find(".txt"))) != std::string::npos)
+            {
+                infos[i].weights.push_back(files[j]);
+                files.erase(files.begin() + j);
+                j--;
+            }
+        }
+    }
+
+    return infos;
+}
+
+

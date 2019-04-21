@@ -10,6 +10,8 @@
 
 #include <vector>
 
+class Graph;
+
 class DNA
 {
     public:
@@ -18,7 +20,7 @@ class DNA
         ~DNA();
 
         DNA* crossover(DNA* parent_b, Graph* structure);
-        void mutate();
+        void mutate(int mutation_rate);
         bool dominated(DNA* b);
 
         void setFitness(float f) {m_fitness = f;};

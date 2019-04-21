@@ -1,10 +1,11 @@
 #include "population.h"
 
-Population::Population(int pop_size, Graph* structure)
+Population::Population(int pop_size, Graph* structure, int mutation_rate)
 {
     m_pop_size   = pop_size ;
     m_structure  = structure;
     m_generation = 0;
+    m_mutation_rate = mutation_rate;
 
     for (int i = 0; i < pop_size; i++)
         m_pop.push_back(new DNA(structure));
@@ -29,7 +30,8 @@ void Population::solve()
 
         do
         {
-            std::cout << "Starting generation " << m_generation << " !" << std::endl;
+            setConsoleColor(CYAN);
+            std::cout << "Starting generation " << m_generation << " !" << std::endl << std::endl;
 
             pareto_changed = false;
 
@@ -65,6 +67,43 @@ void Population::solve()
                 }
             }
 
+            if (pareto_changed)
+            {
+                setConsoleColor(LIGHT_RED);
+                for (int i = 0; i < last_pareto.size(); i++)
+                {
+                    bool found = false;
+                    for (int j = 0; j < m_pareto_bests.size(); j++)
+                    {
+                        if (last_pareto[i]->operator==(m_pareto_bests[j]))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                        std::cout << "Deleted  : " << last_pareto[i]->getFitness() << "__" << last_pareto[i]->getSumA() << "__" << last_pareto[i]->getSumB() << std::endl;
+                }
+                setConsoleColor(LIGHT_GREEN);
+
+                for (int i = 0; i < m_pareto_bests.size(); i++)
+                {
+                    bool found = false;
+                    for (int j = 0; j < last_pareto.size(); j++)
+                    {
+                        if (m_pareto_bests[i]->operator==(last_pareto[j]))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                        std::cout << "Inserted : " << m_pareto_bests[i]->getFitness() << "__" << m_pareto_bests[i]->getSumA() << "__" << m_pareto_bests[i]->getSumB() << std::endl;
+                }
+                std::cout << std::endl;
+            }
+            setConsoleColor(CYAN);
+
             last_pareto = m_pareto_bests;
 
             if (pareto_changed)
@@ -90,10 +129,12 @@ void Population::solve()
                 }
                 for (int i = 0; i < m_pop_size; i++)
                     m_pop.push_back(new DNA(m_structure));
+                setConsoleColor(LIGHT_MAGENTA);
                 std::cout << "No correct individual found, re-starting at random." << std::endl;
+                setConsoleColor(CYAN);
             }
 
-            std::cout << "End of generation " << m_generation << " !" << std::endl;
+            std::cout << "End of generation " << m_generation << " !" << std::endl << std::endl;
 
             m_generation++;
             nb++;
@@ -107,10 +148,14 @@ void Population::solve()
         }
         else
         {
+            setConsoleColor(WHITE);
             std::cout << "Do you want to continue the evolution ? (y/n) : ";
             std::cin  >> choice;
+            setConsoleColor(CYAN);
+            videCin();
         }
     }
+    std::cout << std::endl << std::endl;
 }
 
 void Population::sortByFront()
@@ -216,16 +261,7 @@ void Population::checkClones()
                 DNA* you = m_pop[j];
 
                 if (me != you && me->operator==(you))
-                {
-                    /*
-                    delete you;
-                    you = nullptr;
-                    m_pop.erase(m_pop.begin() + j);
-                    j--;
-                    */
                     you->setDominated(true);
-                    //std::cout << "Eliminate clone" << std::endl;
-                }
             }
         }
     }
@@ -234,7 +270,7 @@ void Population::checkClones()
 void Population::mutate()
 {
     for (size_t i = 0; i < m_pop.size(); i++)
-        m_pop[i]->mutate();
+        m_pop[i]->mutate(m_mutation_rate);
 }
 
 void Population::showNonDominated()
@@ -270,7 +306,6 @@ void Population::showNonDominated()
 
             std::string name = path + nb.str() + "__" + f.str() + "__" + a.str() + "__" + b.str() + ").svg";
 
-//            m_structure->showPrim(path + nb.str() + ".svg", &cons, false);
             m_structure->showPrim(name, &cons, false);
         }
     }
@@ -437,10 +472,6 @@ void Population::purify()
             m_pop.erase(m_pop.begin() + i);
             i--;
         }
-        else if (m_structure->testCycle(choices))
-        {
-            //m_pop[i]->setDominated(true);
-        }
     }
 }
 
@@ -493,8 +524,6 @@ void Population::updateFitness(int dom_front)
     {
         DNA* a = m_pop[i];
 
-        //if (a->getDominated()) return;
-
         if (a->getFront() < dom_front) continue;
         if (a->getFront() > dom_front) break;
 
@@ -510,8 +539,6 @@ void Population::updateFitness(int dom_front)
             float yb = c->getSumB();
             float w  = std::abs(xb - xa);
             float h  = std::abs(yb - ya);
-
-//            float d  = dist(xa, ya, xb, yb);
             float d  = w + h;
             float n  = mapLine(d, 2, 0, 10, a->getFitness() / 2);
             a->setFitness(a->getFitness() - n);

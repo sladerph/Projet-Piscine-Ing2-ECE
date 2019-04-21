@@ -691,6 +691,10 @@ std::vector<std::vector<bool>>  Graph::filtrage()
     return solAdmis;
 }
 
+void Graph::reset()
+{
+
+}
 
 ///fonction qui trie les solutions dominées et non dominées selon les 2 objectifs et les affiche :
 
@@ -960,17 +964,17 @@ std::vector<bool> tradIntToBool(std::vector<int> vec, Graph* g)
     return cons;
 }
 
-void Graph::bruteForcePareto()
+void Graph::bruteForcePareto(std::string filename)
 {
     float t, dt, start;
-
+    dt = clock();
+    start = dt;
     std::sort(m_connections.begin(), m_connections.end(), &connectionsComparator);
     std::vector<std::vector<bool>> poss = combinations(m_ordre - 1, m_taille, this);
 
-     t = clock();
+    t = clock();
+    std::cout << "All Possibilities : " << (t - dt) / 1000 << "s" << std::endl << std::endl;
     dt = t;
-    start = t;
-    std::cout << "All Possibilities : " << t / 1000 << "s" << std::endl;
 
     std::vector<Solution> sol;
     int n = 0;
@@ -1009,7 +1013,7 @@ void Graph::bruteForcePareto()
     }
 
     t = clock();
-    std::cout << n << " Trads to solution + calc costs : " << (t - dt) / 1000 << "s" << std::endl;
+    std::cout << n << " elements detected as solutions + calc costs : " << (t - dt) / 1000 << "s" << std::endl << std::endl;
     dt = t;
 
     for (int i = 0; i < sol.size(); i++)
@@ -1028,13 +1032,15 @@ void Graph::bruteForcePareto()
     }
 
     t = clock();
-    std::cout << "Domination : " << (t - dt   ) / 1000 << "s" << std::endl;
-    std::cout << "Total : "      << (t - start) / 1000 << "s" << std::endl;
+    std::cout << "Domination : " << (t - dt   ) / 1000 << "s" << std::endl << std::endl;
+    std::cout << "Total : "      << (t - start) / 1000 << "s" << std::endl << std::endl;
     dt = t;
 
      ///On va maintenant pouvoir les afficher sur un diagramme 2D :
     ///On crée un autre svg :
-    Svgfile* svg = new Svgfile ("Pareto-front.svg", 1000, 800);
+    Svgfile* svg = new Svgfile (filename, 1000, 800);
+
+    std::cout << std::endl << std::endl;
 
 
     ///On parcours toutes les solutions admises et on les dessine, soit en vert pour les solutions non dominées

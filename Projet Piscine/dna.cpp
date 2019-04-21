@@ -59,11 +59,11 @@ bool DNA::dominated(DNA* b)
     return true;
 }
 
-void DNA::mutate()
+void DNA::mutate(int mutation_rate)
 {
     for (int i = 0; i < m_size; i++)
     {
-        if (std::rand() % 100 < MUTATION_RATE)
+        if (std::rand() % 100 < mutation_rate)
         {
             m_dna[i] = !m_dna[i];
         }

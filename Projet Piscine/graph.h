@@ -155,7 +155,12 @@ class Graph
 
         /// \fn void bruteForcePareto()
         /// \brief fonction qui trie les solutions dominées et non dominées selon les 2 objectifs et les affiche
-        void bruteForcePareto();
+        /// \param filename : Nom du future fichier svg.
+        void bruteForcePareto(std::string filename = "Pareto-front.svg");
+
+        /// \fn void reset()
+        /// \brief fonction qui réinitialise tous les attributs comme si l'objet venait d'être crée.
+        void reset();
 
     private:
         std::vector<Node*> m_nodes;     ///< liste des sommets du graphe

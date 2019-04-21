@@ -2,11 +2,15 @@
 #include <cstdlib>
 #include <time.h>
 
+#include "utils.h"
 #include "graph.h"
 #include "population.h"
 
 int main()
 {
+    SetConsoleTitle("Graph analysis tool !");
+
+    menu();
 
     Graph g{};
 
@@ -27,9 +31,8 @@ int main()
     std::cout<<"cycle ?   "<< g.testCycle(boolVector)<<std::endl;    /// true = cycle, false = pas de cycle (en partant de 0, donc tester avant si connexe)
 */
 
-    g.bruteForcePareto();
-    //g.evaluation();   ///partie 2
-    //g.secondEvaluation();     ///partie 3
+    //g.bruteForcePareto(); /// Partie 2.
+    //g.secondEvaluation();     /// Partie 3.
 
     //g.show("output.svg", &boolVector);
     //g.showPrim("output.svg", &boolVector, true);

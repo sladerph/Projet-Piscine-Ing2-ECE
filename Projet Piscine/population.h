@@ -5,8 +5,6 @@
 /// \brief
 /// \author
 
-#define MUTATION_RATE 5
-
 #include "dna.h"
 #include "utils.h"
 
@@ -15,11 +13,12 @@
 #include <time.h>
 
 class DNA;
+class Graph;
 
 class Population
 {
     public:
-        Population(int pop_size, Graph* structure);
+        Population(int pop_size, Graph* structure, int mutation_rate = 5);
         ~Population();
 
         void evaluateFitness();
@@ -44,6 +43,7 @@ class Population
         std::vector<DNA*> m_pareto_bests;
         int m_pop_size;
         int m_generation;
+        int m_mutation_rate;
         Graph* m_structure;
 
         void sortByFront();

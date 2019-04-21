@@ -1,7 +1,36 @@
 #ifndef UTILS_H_INCLUDED
 #define UTILS_H_INCLUDED
 
+#include <iostream>
+#include <limits>
 #include <cmath>
+#include <windows.h>
+
+#define BLACK			0
+#define BLUE			1
+#define GREEN			2
+#define CYAN			3
+#define RED				4
+#define MAGENTA			5
+#define BROWN			6
+#define LIGHT_GRAY		7
+#define DARK_GRAY		8
+#define LIGHT_BLUE		9
+#define LIGHT_GREEN		10
+#define LIGHT_CYAN		11
+#define LIGHT_RED		12
+#define LIGHT_MAGENTA	13
+#define YELLOW			14
+#define WHITE			15
+
+#include "graph.h"
+#include "population.h"
+
+struct FileInfo
+{
+    std::string name;
+    std::vector<std::string> weights;
+};
 
 /// \fn float mapLine(float val, float xa, float ya, float xb, float yb)
 /// \brief calcule l'ordonnée d'un point d'abscisse passée en paramètre
@@ -34,5 +63,15 @@ float factorial(float nb);
 /// \param n : nombre de places disponibles
 /// \return nombre d'agencement de k éléments parmis n places
 float countCombinations(float k, float n);
+
+/// \fn void videCin()
+/// \brief Vide le tampon de saisie clavier. Fonction réalisée par un professeur de l'ECE.
+void videCin();
+
+void setConsoleColor(int text_color, int background_color = BLACK); /// https://openclassrooms.com/forum/sujet/tuto-couleur-console-windows
+void menu();
+void clearScreen();
+
+std::vector<FileInfo> findGraphFiles();
 
 #endif // UTILS_H_INCLUDED
