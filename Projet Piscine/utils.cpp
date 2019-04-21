@@ -331,7 +331,7 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
                 p.solve();
 
                 clearScreen();
-                std::cout << endl;
+                std::cout << std::endl;
 
                 break;
             }

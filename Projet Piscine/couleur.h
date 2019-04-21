@@ -1,4 +1,4 @@
-/#ifndef COULEUR_H_INCLUDED
+#ifndef COULEUR_H_INCLUDED
 #define COULEUR_H_INCLUDED
 
 /// \file couleur.h
