@@ -1,6 +1,10 @@
 #ifndef UTILS_H_INCLUDED
 #define UTILS_H_INCLUDED
 
+/// \file utils.h
+/// \brief diverses fonctions utilitaires
+/// \author Pierre Herduin
+
 #include <iostream>
 #include <limits>
 #include <cmath>

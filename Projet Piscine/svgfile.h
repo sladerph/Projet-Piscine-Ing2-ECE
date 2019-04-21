@@ -1,9 +1,9 @@
 ﻿#ifndef SVGFILE_H_INCLUDED
 #define SVGFILE_H_INCLUDED
 
-/// \file
-/// \brief
-/// \author
+/// \file svgfile.h
+/// \brief rassemble la classe Svgfile avec toutes les fonctions de dessin sur fichier svg
+/// \author Pierre Herduin
 
 #include <string>
 #include <fstream>

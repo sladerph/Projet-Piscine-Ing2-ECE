@@ -1,5 +1,9 @@
 #include "utils.h"
 
+/// \file utils.cpp
+/// \brief diverses fonctions utilitaires
+/// \author Pierre Herduin
+
 float mapLine(float val, float xa, float ya, float xb, float yb)
 {
     ///On va chercher les paramètres de la fonction affine décrivant la droite passant par a et b
@@ -286,7 +290,7 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
                 std::cout << std::endl;
                 break;
             }
-            case 7:     ///8e cas
+            case 7:     ///8e cas : Optimisaiton bi-objectifs par le biais d'un algorithme génétique (Extension du projet)
             {
                 setConsoleColor(LIGHT_MAGENTA);
                 std::cout << "You are about to use a genetic algorithm in order to try to find the pareto optimal solutions." << std::endl;
