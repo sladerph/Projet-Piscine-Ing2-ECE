@@ -332,7 +332,7 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
     }
 }
 
-std::vector<FileInfo> findGraphFiles()
+std::vector<FileInfo> findGraphFiles()      ///Permet de récupérer les différents fichiers depuis lesquels on va charger les graphes
 {
     std::vector<std::string> files;
     std::vector<FileInfo> infos;
@@ -340,7 +340,7 @@ std::vector<FileInfo> findGraphFiles()
     WIN32_FIND_DATA file;
     HANDLE hSearch;
 
-    hSearch = FindFirstFile("files/*.txt", &file);
+    hSearch = FindFirstFile("files/*.txt", &file);      ///On va chercher tous les fichiers dans le dossier où sont rangés les fichiers décrivant les graphes
 
     if (hSearch != INVALID_HANDLE_VALUE)
     {
@@ -353,7 +353,7 @@ std::vector<FileInfo> findGraphFiles()
 
     for (int i = 0; i < files.size(); i++)
     {
-        if (files[i].find("weights") == std::string::npos) // It contains the weights.
+        if (files[i].find("weights") == std::string::npos) /// On teste si le nom du fichier contient "weights"
         {
             FileInfo f;
             f.name = files[i];
@@ -363,7 +363,7 @@ std::vector<FileInfo> findGraphFiles()
         }
     }
 
-    for (int i = 0; i < infos.size(); i++)
+    for (int i = 0; i < infos.size(); i++)  ///On remplit un vecteur de structures FileInfos avec les noms des fichiers triés, puis on tretourne ce vecteur
     {
         FileInfo f = infos[i];
         for (int j = 0; j < files.size(); j++)
@@ -380,7 +380,7 @@ std::vector<FileInfo> findGraphFiles()
     return infos;
 }
 
-void clearScreen()
+void clearScreen()  ///Efface le contenu de la console
 {
     system("cls");
 }
