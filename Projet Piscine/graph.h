@@ -19,6 +19,8 @@
 #include <bits/stdc++.h>    /// \brief ajoutée pour le sort(vecteur.begin(),vecteur.end());
                             ///https://www.geeksforgeeks.org/sorting-vector-of-pairs-in-c-set-1-sort-by-first-and-second/
 
+#include <limits>
+
 #define XOFFSET 50  /// \def XOFFSET 50
 #define YOFFSET 50  /// \def YOFFSET 50
 
@@ -44,6 +46,15 @@ class Graph
         /// \brief Constructeur
         /// Constructeur de la classe Graph
         Graph();
+
+        /// \fn Graph()
+        /// \brief Constructeur
+        /// Constructeur de la classe Graph
+        /// \param nodes : liste des sommets du graphe
+        /// \param connctions : liste des arêtes du graphe
+        /// \param ordre : nombre de sommets du graphe
+        /// \param taille : nombre d'arêtes du graphe
+        Graph(std::vector<Node*>nodes, std::vector<Connection*>connections, int ordre, double taille);
 
         /// \fn ~Graph()
         /// \brief destructeur
@@ -157,6 +168,8 @@ class Graph
         /// \brief fonction qui trie les solutions dominées et non dominées selon les 2 objectifs et les affiche
         void bruteForcePareto();
 
+        /// \fn void bruteForcePareto()
+        /// \brief fonction qui trie les solutions dominées et non dominées selon les 2 objectifs et les affiche, mais ne filtre pas les cycles
         void bruteForceParetoConsideringCycles();
 
     private:
@@ -301,5 +314,7 @@ std::vector<std::vector<bool>> combinations(int k, int n, Graph* g);
 /// \param g : pointeur sur le graphe
 /// \return vecteur de booléens de même taille que la liste d'arêtes : le booléen d'indice n décrit si l'arête d'indice n est active ou non
 std::vector<bool> tradIntToBool(std::vector<int> vec, Graph* g);
+
+Graph createManually();
 
 #endif // GRAPH_H

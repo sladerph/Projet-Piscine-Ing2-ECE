@@ -14,6 +14,8 @@ int main()
 //    g.create("files/triville.txt", "files/triville_weights_0.txt");
 //    g.create("files/broadway.txt","files/broadway_weights_0.txt");
     g.create("files/manhattan.txt", "files/manhattan_weights_0.txt");
+
+///    g=createManually();
 /*
     float totalWeight=0.0;
     std::vector<bool> boolVector = g.getPrim(0,&totalWeight);

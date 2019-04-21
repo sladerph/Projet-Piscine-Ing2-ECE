@@ -27,6 +27,15 @@ class Connection
         /// \param b : sommet B initial de l'arête
         Connection(int index, Node* a, Node* b);
 
+        /// \fn Connection(int index, Node* a, Node* b)
+        /// \brief Constructeur
+        /// constructeur de la classe Connection
+        /// \param Index : index initial de l'arête
+        /// \param a : sommet A initial de l'arête
+        /// \param b : sommet B initial de l'arête
+        /// \param weights : liste des poids de l'arête
+        Connection(int index, Node* a, Node* b,std::vector<float> weights);
+
         /// \fn ~Connection()
         /// \brief Destructeur
         /// Destructeur de la classe Connection
