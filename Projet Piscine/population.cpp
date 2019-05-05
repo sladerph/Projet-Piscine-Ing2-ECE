@@ -1,10 +1,10 @@
-
-
-/// \author Pierre Herduin, Mélodie Damas, Simon jolly
+/// \file population.h
+/// \brief Regroupe la classe Population et les fonctions intervenants dans l'algorithme génétique.
+/// \author Pierre Herduin
 
 #include "population.h"
 
-Population::Population(int pop_size, Graph* structure, int mutation_rate)
+Population::Population(int pop_size, Graph* structure, int mutation_rate) /// Constructeur.
 {
     /// Initialise les données.
     m_pop_size   = pop_size ;
@@ -16,7 +16,7 @@ Population::Population(int pop_size, Graph* structure, int mutation_rate)
         m_pop.push_back(new DNA(structure)); /// Crée les premiers individus.
 }
 
-void Population::solve()
+void Population::solve() /// Déroulement de l'évolution génétique.
 {
     srand(time(NULL)); /// Initialise les fonctions aléatoires.
     char choice = 'y';
@@ -111,7 +111,9 @@ void Population::solve()
             }
             setConsoleColor(CYAN);
 
-            last_pareto = m_pareto_bests;
+            last_pareto.clear();
+            for (int i = 0; i < m_pareto_bests.size(); i++)
+                last_pareto.push_back(m_pareto_bests[i]->clone());
 
             if (pareto_changed) /// Si il y a du changement, afficher les elements non dominés et la liste des meilleurs.
                 showNonDominated();
@@ -167,7 +169,7 @@ void Population::solve()
     std::cout << std::endl << std::endl;
 }
 
-void Population::sortByFront()
+void Population::sortByFront() /// Trie la population par front de domination.
 {
     for (int i = 0; i < m_pop.size() - 1; i++)
     {
@@ -184,7 +186,7 @@ void Population::sortByFront()
     }
 }
 
-void Population::evaluateDominatedFront()
+void Population::evaluateDominatedFront() /// Calcul les fronts de domination.
 {
     for (int i = 0; i < m_pop.size(); i++)
     {
@@ -205,7 +207,7 @@ void Population::evaluateDominatedFront()
     }
 }
 
-bool Population::isDominated(DNA* dna, std::vector<DNA*> comp)
+bool Population::isDominated(DNA* dna, std::vector<DNA*> comp) /// Vérifie si un élement est dominé par un ensemble d'élements.
 {
     bool dom = false;
 
@@ -226,7 +228,7 @@ bool Population::isDominated(DNA* dna, std::vector<DNA*> comp)
     return dom;
 }
 
-void Population::checkPareto()
+void Population::checkPareto() /// Mise à jour de la liste des meilleurs élements.
 {
     for (int i = 0; i < m_pop.size(); i++)
         if (m_pop[i]->getDominated() == false)
@@ -257,7 +259,7 @@ void Population::checkPareto()
     }
 }
 
-void Population::checkClones()
+void Population::checkClones() /// Elimine les doublons.
 {
     for (size_t i = 0; i < m_pop.size(); i++)
     {
@@ -276,13 +278,13 @@ void Population::checkClones()
     }
 }
 
-void Population::mutate()
+void Population::mutate() /// Gère les mutations génétiques.
 {
     for (size_t i = 0; i < m_pop.size(); i++)
         m_pop[i]->mutate(m_mutation_rate);
 }
 
-void Population::showNonDominated()
+void Population::showNonDominated() /// Affiche les solutions non dominés et les meilleurs.
 {
     std::stringstream ss;
     ss << m_generation;
@@ -290,13 +292,11 @@ void Population::showNonDominated()
     std::string str = "mkdir \"Genetic outputs\\" + ss.str();
 
     system(str.c_str());
-
     // New folder created.
 
     std::string path = "Genetic outputs/" + ss.str() + "/";
 
     str = str + "\\Pareto_bests";
-
     system(str.c_str());
 
     for (int i = 0; i < m_pop.size(); i++)
@@ -313,7 +313,7 @@ void Population::showNonDominated()
             a << m_pop[i]->getSumA();
             b << m_pop[i]->getSumB();
 
-            std::string name = path + nb.str() + "__" + f.str() + "__" + a.str() + "__" + b.str() + ").svg";
+            std::string name = path + nb.str() + "__" + f.str() + "__" + a.str() + "__" + b.str() + ".svg";
 
             m_structure->showPrim(name, &cons, false);
         }
@@ -332,14 +332,14 @@ void Population::showNonDominated()
         a << m_pareto_bests[i]->getSumA();
         b << m_pareto_bests[i]->getSumB();
 
-        std::string name = path + nb.str() + "__" + f.str() + "__" + a.str() + "__" + b.str() + ").svg";
+        std::string name = path + nb.str() + "__" + f.str() + "__" + a.str() + "__" + b.str() + ".svg";
 
         m_structure->showPrim(name, &cons, false);
     }
     std::cout << std::endl;
 }
 
-void Population::checkDominated()
+void Population::checkDominated() /// Vérifie si les individus de la population sont dominés.
 {
     for (size_t i = 0; i < m_pop.size(); i++)
     {
@@ -350,7 +350,7 @@ void Population::checkDominated()
     }
 }
 
-void Population::manageFrontCut(int n)
+void Population::manageFrontCut(int n) /// Gère la siscion d'un front de domination si besoin.
 {
     int curr_front = 0;
     bool changed;
@@ -406,7 +406,7 @@ void Population::manageFrontCut(int n)
     }
 }
 
-bool Population::reproduce()
+bool Population::reproduce() /// Assure la reproduction des individus.
 {
     evaluateDominatedFront();
     sortByFront(); // Sorting the population by ascending domination level.
@@ -445,6 +445,8 @@ bool Population::reproduce()
             mating_pool.push_back(a);
     }
 
+    if (mating_pool.size() == 0) return false;
+
     for (int i = 0; i < m_pop_size; i++)
     {
         int inda = std::rand() % mating_pool.size();
@@ -464,7 +466,7 @@ bool Population::reproduce()
     return true;
 }
 
-void Population::purify()
+void Population::purify() /// Elimine les individus non admissibles.
 {
     for (size_t i = 0; i < m_pop.size(); i++)
     {
@@ -484,7 +486,7 @@ void Population::purify()
     }
 }
 
-std::vector<DNA*> Population::getClosest(DNA* dna)
+std::vector<DNA*> Population::getClosest(DNA* dna) /// Cherche les individus les plus proches sur le diagramme de pareto.
 {
     std::vector<DNA*> sol;
 
@@ -527,7 +529,7 @@ std::vector<DNA*> Population::getClosest(DNA* dna)
     return sol;
 }
 
-void Population::updateFitness(int dom_front)
+void Population::updateFitness(int dom_front) /// Mise à jour du fitness (score) des individus.
 {
     for (int i = 0; i < m_pop.size(); i++)
     {
@@ -580,7 +582,7 @@ void Population::updateFitness(int dom_front)
     }
 }
 
-void Population::evaluateFitness()
+void Population::evaluateFitness() /// Calcul le fitness (score).
 {
     for (size_t i = 0; i < m_pop.size(); i++)
     {

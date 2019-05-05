@@ -4,7 +4,7 @@
 
 #include "dna.h"
 
-DNA::DNA(Graph* structure)
+DNA::DNA(Graph* structure) /// Constructeur.
 {
     std::vector<Connection*> cons = structure->getConnections(); /// Récupère les connexions.
 
@@ -26,9 +26,9 @@ DNA::DNA(Graph* structure)
     m_sum_cost_b = 0;
 }
 
-DNA::DNA() {}
+DNA::DNA() {} /// Constructeur par défaut pour la copie.
 
-DNA* DNA::clone()
+DNA* DNA::clone() /// Crée un nouvel objet DNA identique à this.
 {
     DNA* d = new DNA(); /// Crée un nouvel objet vide.
 
@@ -45,7 +45,7 @@ DNA* DNA::clone()
     return d;
 }
 
-bool DNA::dominated(DNA* b)
+bool DNA::dominated(DNA* b) /// Vérifie si this est dominé par b.
 {
     /// Si il n'est pas strictement meilleur que b sur au moins un objectif alors il est dominé par b.
     if (m_sum_cost_a < b->getSumA() || m_sum_cost_b < b->getSumB())
@@ -53,14 +53,14 @@ bool DNA::dominated(DNA* b)
     return true;
 }
 
-void DNA::mutate(int mutation_rate)
+void DNA::mutate(int mutation_rate) /// Gère les mutations génétiques.
 {
     for (int i = 0; i < m_size; i++) /// Parcours les connexions.
         if (std::rand() % 100 < mutation_rate) /// mutation_rate chances sur 100 de muter.
             m_dna[i] = !m_dna[i];
 }
 
-DNA* DNA::crossover(DNA* parent_b, Graph* structure)
+DNA* DNA::crossover(DNA* parent_b, Graph* structure) /// Crée un enfant à partir de this et parent_b.
 {
     size_t n = std::rand() % m_dna.size(); /// Endroit de coupure choisi aléatoirement.
 
@@ -83,8 +83,9 @@ DNA* DNA::crossover(DNA* parent_b, Graph* structure)
     return dna; /// Renvoie l'enfant créée.
 }
 
-bool DNA::operator==(const DNA* b)
+bool DNA::operator==(DNA* b) /// Opérateur d'égalité pour vérifier si deux objets DNA sont identiques.
 {
+    if (b == nullptr) return false;
     std::vector<bool> bdna = b->getDNA();
 
     for (size_t i = 0; i < m_dna.size(); i++)
@@ -94,7 +95,7 @@ bool DNA::operator==(const DNA* b)
     return true;
 }
 
-DNA::~DNA() {}
+DNA::~DNA() {} /// Destructeur.
 
 
 

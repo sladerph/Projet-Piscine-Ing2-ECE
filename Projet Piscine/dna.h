@@ -10,6 +10,8 @@
 
 #include <vector>
 
+/// \class Graph.
+/// \brief Inclue ici pour raison de double inclusion.
 class Graph;
 
 /// \class DNA
@@ -84,10 +86,10 @@ class DNA
         /// \param f : la nouvelle valeur du front de domination.
         void setFront(int f) {m_front = f;};
 
-        /// \fn std::vector<bool> getDNA() const
-        /// \brief Fonction constante qui récupère le vecteur de booléens.
+        /// \fn std::vector<bool> getDNA()
+        /// \brief Fonction qui récupère le vecteur de booléens.
         /// \return retourne le vecteur de booléens.
-        std::vector<bool> getDNA() const {return m_dna;};
+        std::vector<bool> getDNA() {return m_dna;};
 
         /// \fn float getFitness() const
         /// \brief Fonction constante qui récupère le fitness.
@@ -118,7 +120,7 @@ class DNA
         /// \brief Fonction operateur qui regarde si deux éléments de type DNA* sont identiques.
         /// \param b : l'élément à comparer avec this.
         /// \return retourne le front de domination.
-        bool operator==(const DNA* b);
+        bool operator==(DNA* b);
 
         /// \fn DNA* clone()
         /// \brief Fonction qui crée un clone de this.
@@ -126,13 +128,13 @@ class DNA
         DNA* clone();
 
     private:
-        std::vector<bool> m_dna; /// vecteur qui indique si la connexion est active.
-        int m_size; /// La taille du vecteur.
-        int m_front; /// Le nombre d'éléments qui le dominent.
-        float m_sum_cost_a; /// La somme des coûts 1.
-        float m_sum_cost_b; /// La somme des coûts 2.
-        float m_fitness; /// Le fitness.
-        bool m_dominated; /// booléen pour savoir si this est dominé.
+        std::vector<bool> m_dna; ///< vecteur qui indique si la connexion est active.
+        int m_size; ///< La taille du vecteur.
+        int m_front; ///< Le nombre d'éléments qui le dominent.
+        float m_sum_cost_a; ///< La somme des coûts 1.
+        float m_sum_cost_b; ///< La somme des coûts 2.
+        float m_fitness; ///< Le fitness.
+        bool m_dominated; ///< booléen pour savoir si this est dominé.
 };
 
 #endif // DNA_H

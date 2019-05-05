@@ -2,7 +2,7 @@
 #define CONNECTION_H
 
 /// \file connection.h
-/// \brief contient la classe connection, qui représente une arête
+/// \brief Contient la classe connection, qui représente une arête d'un graphe.
 /// \author Pierre Herduin, Mélodie Damas, Simon jolly
 
 #include "node.h"
@@ -20,19 +20,18 @@ class Connection
 {
     public:
         /// \fn Connection(int index, Node* a, Node* b)
-        /// \brief Constructeur
-        /// constructeur de la classe Connection
-        /// \param Index : index initial de l'arête
-        /// \param a : sommet A initial de l'arête
-        /// \param b : sommet B initial de l'arête
+        /// \brief Constructeur de la classe Connection
+        /// \param Index : index de l'arête, son identité
+        /// \param a : sommet A de l'arête
+        /// \param b : sommet B de l'arête
         Connection(int index, Node* a, Node* b);
 
         /// \fn Connection(int index, Node* a, Node* b)
         /// \brief Constructeur
         /// constructeur de la classe Connection
-        /// \param Index : index initial de l'arête
-        /// \param a : sommet A initial de l'arête
-        /// \param b : sommet B initial de l'arête
+        /// \param Index : index de l'arête, son identité
+        /// \param a : sommet A de l'arête
+        /// \param b : sommet B de l'arête
         /// \param weights : liste des poids de l'arête
         Connection(int index, Node* a, Node* b,std::vector<float> weights);
 

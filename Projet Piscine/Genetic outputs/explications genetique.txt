@@ -1,2 +1,0 @@
-Pour l'instant ce fichier sert juste à avoir 
-le dossier "Genetic outputs" sur Github.

@@ -4,7 +4,7 @@
 /// \brief diverses fonctions utilitaires
 /// \author Pierre Herduin
 
-float mapLine(float val, float xa, float ya, float xb, float yb)
+float mapLine(float val, float xa, float ya, float xb, float yb) /// Calcule l'ordonnée d'un point d'abscisse passée en paramètre
 {
     ///On va chercher les paramètres de la fonction affine décrivant la droite passant par a et b
     float m = (yb - ya) / (xb - xa);        ///On calcule le coefficient directeur
@@ -13,12 +13,12 @@ float mapLine(float val, float xa, float ya, float xb, float yb)
     return m * val + p; ///on retourne l'ordonnée du point d'abscisse val
 }
 
-float dist(float xa, float ya, float xb, float yb)
+float dist(float xa, float ya, float xb, float yb) /// Calcule la distance euclidienne entre deux points.
 {
     return std::sqrt(std::pow(xb - xa, 2) + std::pow(yb - ya, 2));      ///distance euclidienne
 }
 
-float factorial(float nb)
+float factorial(float nb) /// Calcule la factorielle d'un nombre.
 {
     if (nb < 0) return 0;       /// on n'appliquera pas la fonction factorielle aux nombres négatifs
     if( nb ==0 ) return 1;      /// cas particulier : 0! = 1
@@ -30,7 +30,7 @@ float factorial(float nb)
     return r;
 }
 
-float countCombinations(float k, float n)
+float countCombinations(float k, float n) /// Compte le nombre de combinaisons de k élements parmis n places.
 {
     return factorial(n) / (factorial(k) * factorial(n - k));
 }
@@ -42,17 +42,17 @@ void videCin()
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-void setConsoleColor(int text_color, int background_color)      ///Règle les couleurs de police et d'arrière plan dans la console
+void setConsoleColor(int text_color, int background_color) /// Règle les couleurs de police et d'arrière plan dans la console
 {
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(h, background_color * 16 + text_color);
 }
 
-void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différentes fonctionnalité implémentées
+void menu() /// Menu d'accueil du programme, qui permet d'utiliser les différentes fonctionnalité implémentées
 {
     int choice;
     int w_index;
-    setConsoleColor(LIGHT_MAGENTA);     ///On règle la couleur de la police au fur et à mesure du programme
+    setConsoleColor(LIGHT_MAGENTA);     /// On règle la couleur de la police au fur et à mesure du programme
     std::cout << std::endl << "Welcome into the Graph analysis tool !" << std::endl << std::endl << std::endl;
 
     std::vector<FileInfo> files = findGraphFiles(); ///On récupère tous les fichiers contenant les information des graphes à charger
@@ -67,7 +67,6 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
         setConsoleColor(LIGHT_RED);
         std::cout << std::endl << "Make your choice : ";
         std::cin  >> choice;
-        videCin();
         std::cout << std::endl;
         videCin();      ///On prend soin de vider le tampon clavier au fuir et à mesure du programme
     } while (choice <= 0 || choice > files.size());     ///On blinde la saisie du numéro du graphe à charger
@@ -84,7 +83,6 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
         setConsoleColor(LIGHT_RED);
         std::cout << std::endl << "Make your choice : ";
         std::cin  >> choice;
-        videCin();
         std::cout << std::endl;
         videCin();
     } while (choice <= 0 || choice > selected_file.weights.size());     ///On blinde la saisie du numéro du fichier de poids à charger
@@ -122,7 +120,6 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
         setConsoleColor(LIGHT_RED);
         std::cout << "Make your choice : ";     ///on demande à l'utilisateur de choisir parmi les options proposées
         std::cin  >> choice;
-        videCin();
         std::cout << std::endl << std::endl << std::endl;
         videCin();
 
@@ -167,7 +164,6 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
                     std::cin  >> choice;
                     videCin();
                     std::cout << std::endl;
-                    videCin();
                 } while (choice <= 0 || choice > files.size());
 
                 selected_file = files[choice - 1];
@@ -182,7 +178,6 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
                     setConsoleColor(LIGHT_RED);
                     std::cout << std::endl << "Make your choice : ";
                     std::cin  >> choice;
-                    videCin();
                     std::cout << std::endl;
                     videCin();
                 } while (choice <= 0 || choice > selected_file.weights.size());
@@ -222,7 +217,6 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
                         std::cout << "  - " << i + 1 << std::endl << std::endl;
                     std::cout << "Enter your choice : ";
                     std::cin  >> w_choice;
-                    videCin();
                     w_choice--;
                     videCin();
                 } while (w_choice < 0 || w_choice >= g.getConnections()[0]->getWeights().size());
@@ -339,7 +333,7 @@ void menu() ///Menu d'accueil du programme, qui permet d'utiliser les différente
     }
 }
 
-std::vector<FileInfo> findGraphFiles()      ///Permet de récupérer les différents fichiers depuis lesquels on va charger les graphes
+std::vector<FileInfo> findGraphFiles() /// Permet de récupérer les différents fichiers depuis lesquels on va charger les graphes
 {
     std::vector<std::string> files;
     std::vector<FileInfo> infos;

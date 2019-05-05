@@ -5,29 +5,27 @@
 #include "graph.h"
 
 
-Graph::Graph()
-{
-    //ctor
-}
+Graph::Graph() /// Constructeur par défaut.
+{}
 
-Graph::Graph(std::vector<Node*>nodes, std::vector<Connection*>connections, int ordre, double taille)
+Graph::Graph(std::vector<Node*>nodes, std::vector<Connection*>connections, int ordre, double taille) /// Constructeur avec paramètres.
         :m_nodes{nodes},m_connections{connections},m_ordre{ordre},m_taille{taille}
 {
 
 }
 
-void Graph::show(std::string filename, std::vector<bool>* path)
+void Graph::show(std::string filename, std::vector<bool>* path) /// Gère l'affichage.
 {
-    Svgfile* svg = createSvgfile(filename);
+    Svgfile* svg = createSvgfile(filename); /// Création du fichier svg.
 
-    showConnections(svg, path);
-    showNodes(svg);
-    showBounds(svg);
+    showConnections(svg, path); /// Affichage des connectipns.
+    showNodes(svg); /// Affichage des noeuds.
+    showBounds(svg); /// Affichage des bords.
 
-    delete svg;
+    delete svg; /// Détruit l'instance du fichier pour le fermer et terminer son édition.
 }
 
-void Graph::showBounds(Svgfile* svg)
+void Graph::showBounds(Svgfile* svg) /// Affichage des bords.
 {
     svg->addLine(0, 0, svg->getWidth(), 0, "black");
     svg->addLine(0, 0, 0, svg->getHeight(), "black");
@@ -35,11 +33,11 @@ void Graph::showBounds(Svgfile* svg)
     svg->addLine(svg->getWidth(), svg->getHeight(), 0, svg->getHeight(), "black");
 }
 
-void Graph::showPrim(std::string filename, std::vector<bool>* path, bool onTopOfGraph)
+void Graph::showPrim(std::string filename, std::vector<bool>* path, bool onTopOfGraph) /// Affichage d'un graphe partiel.
 {
     if (!path) return;
 
-    if (!onTopOfGraph)
+    if (!onTopOfGraph) /// Affichage du graphe partiel seul.
     {
         Svgfile* svg = createSvgfile(filename);
 
@@ -78,16 +76,16 @@ void Graph::showPrim(std::string filename, std::vector<bool>* path, bool onTopOf
 
         delete svg;
     }
-    else
+    else /// Affichage du graphe partiel par dessus le graphe original.
         show(filename, path);
 }
 
-Svgfile* Graph::createSvgfile(std::string filename)
+Svgfile* Graph::createSvgfile(std::string filename) /// Création d'un fichier svg.
 {
     float x_max  = 0;
     float y_max  = 0;
 
-    for (size_t i = 0; i < m_nodes.size(); ++i)
+    for (size_t i = 0; i < m_nodes.size(); ++i) /// Calcul des dimensions du graphe.
     {
         if (m_nodes[i]->getX() > x_max)
             x_max = m_nodes[i]->getX();
@@ -100,7 +98,7 @@ Svgfile* Graph::createSvgfile(std::string filename)
 
 }
 
-void Graph::showConnections(Svgfile* svg, std::vector<bool>* path) const
+void Graph::showConnections(Svgfile* svg, std::vector<bool>* path) const /// Affichage des connections.
 {
     for (size_t i = 0; i < m_connections.size(); ++i)
     {
@@ -117,7 +115,7 @@ void Graph::showConnections(Svgfile* svg, std::vector<bool>* path) const
 
         std::vector<float> weights = m_connections[i]->getWeights();
 
-        if (path)
+        if (path) /// Eventuel affichage de l'arête du sous graphe si il est fournis.
             if (path->operator[](m_connections[i]->getIndex()))
                 svg->addLine(xa, ya, xb, yb, "green", 3);
             else
@@ -137,7 +135,7 @@ void Graph::showConnections(Svgfile* svg, std::vector<bool>* path) const
     }
 }
 
-void Graph::showNodes(Svgfile* svg) const
+void Graph::showNodes(Svgfile* svg) const /// Affichage des noeuds.
 {
     int radius = 20;
 
@@ -152,7 +150,7 @@ void Graph::showNodes(Svgfile* svg) const
     }
 }
 
-bool Graph::create(std::string topology, std::string costs)
+bool Graph::create(std::string topology, std::string costs) /// Création d'un graphe à partir de deux fichiers texte.
 {
     std::ifstream file_topo, file_costs;
     std::string line;
@@ -246,7 +244,7 @@ bool Graph::create(std::string topology, std::string costs)
     return true;
 }
 
-Node* Graph::getNode(int index)
+Node* Graph::getNode(int index) /// Getter pour récupérer le noeud avec un certain index.
 {
     for (size_t i = 0; i < m_nodes.size(); i++)
     {
@@ -259,7 +257,7 @@ Node* Graph::getNode(int index)
     return nullptr;
 }
 
-Connection* Graph::getConnection(int index)
+Connection* Graph::getConnection(int index) /// Getter pour récupérer l'arête avec un certain index.
 {
     for (size_t i = 0; i < m_connections.size(); i++)
     {
@@ -272,12 +270,11 @@ Connection* Graph::getConnection(int index)
     return nullptr;
 }
 
-Graph::~Graph()
+Graph::~Graph() /// Destructeur.
 {
-    //dtor
 }
 
-std::vector<bool> Graph::getPrim(int weight, float* totalWeight)
+std::vector<bool> Graph::getPrim(int weight, float* totalWeight) /// Exécute l'algorithme de Prim sur le graphe.
 {
     std::vector<bool> shortestPath (m_connections.size(),false);   //déclare un vecteur de booléen, et le rempli d'autant de "false" qu'il y a d'arêtes
     std::unordered_set<int> usedIdList;     //liste des sommets découverts
@@ -318,17 +315,17 @@ std::vector<bool> Graph::getPrim(int weight, float* totalWeight)
     return shortestPath;
 }
 
-bool connectionsComparatorWeight0(const Connection* lhs,const Connection* rhs)
+bool connectionsComparatorWeight0(const Connection* lhs,const Connection* rhs) /// Comparateur de poids 0 pour les arêtes.
 {
     return lhs->getWeights()[0] < rhs->getWeights()[0];
 }
 
-bool connectionsComparatorWeight1(const Connection* lhs,const Connection* rhs)
+bool connectionsComparatorWeight1(const Connection* lhs,const Connection* rhs) /// Comparateur de poids 1 pour les arêtes.
 {
     return lhs->getWeights()[1] < rhs->getWeights()[1];
 }
 
-std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight)
+std::vector<Connection*> sortConnections(std::vector<Connection*> connections, int weight) /// Trie des arêtes.
 {
     if(weight==0)
     {
@@ -341,10 +338,10 @@ std::vector<Connection*> sortConnections(std::vector<Connection*> connections, i
     return connections;
 }
 
-bool connectionsComparator(const Connection* lhs, const Connection* rhs)
+bool connectionsComparator(const Connection* lhs, const Connection* rhs) /// Comparateur d'index des arêtes.
    {return lhs->getIndex() < rhs->getIndex();}
 
-std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connections)
+std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connections) /// Trie les arêtes par index.
 {
     Connection* temp;
     for(size_t i = 0; i < connections.size()-1; i++)
@@ -363,8 +360,8 @@ std::vector<Connection*> sortConnectionsByIndex(std::vector<Connection*> connect
     return connectionVector;
 }
 
-float Graph::getDijkstra(int weight, std::vector<bool> activeConnections)   ///le vecteur de bool est reçu à l'envers
-{
+float Graph::getDijkstra(int weight, std::vector<bool> activeConnections) /// Exécute l'algorithme de Dijkstra.
+{   /// Le vecteur de bool est reçu à l'envers
     std::vector<std::pair<float,int>> successorsVector;     ///<paires de <poids,id> des sommets découverts mais pas marqués
     std::vector<std::pair<float,int>> dijkstraResults;      ///<paires de <poids,id> représentant les sommets et le poids du cplus court chemin depuis le sommet de base étudié et le sommet d'index "id"
 
@@ -425,7 +422,7 @@ float Graph::getDijkstra(int weight, std::vector<bool> activeConnections)   ///l
 
 
 
-std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes)
+std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> Nodes) /// Trie les noeuds.
 {
     std::pair<float,int> temp;
     std::vector<std::pair<float,int>> retour;
@@ -445,7 +442,7 @@ std::vector<std::pair<float,int>> sortNodes(std::vector<std::pair<float,int>> No
 }
 
 
-std::vector<std::pair<float,int>> Graph::getNeighbours(Node* origin,int weight,std::vector<bool> activeConnections)
+std::vector<std::pair<float,int>> Graph::getNeighbours(Node* origin,int weight,std::vector<bool> activeConnections) /// Cherche les voisins d'un noeud.
 {
     std::vector<std::pair<float,int>> neighboursId;
     for(auto it : m_connections)
@@ -461,7 +458,7 @@ std::vector<std::pair<float,int>> Graph::getNeighbours(Node* origin,int weight,s
     return neighboursId;
 }
 
-bool Graph::connectivityTest(std::vector<bool>connections)
+bool Graph::connectivityTest(std::vector<bool>connections) /// Vérifie si le graphe est connexe.
 {
     std::vector<bool> discoveredList(m_ordre, false);
     int nb = 1;
@@ -502,7 +499,7 @@ bool Graph::connectivityTest(std::vector<bool>connections)
     return false;
 }
 
-bool Graph::testCycle(std::vector<bool> connections)
+bool Graph::testCycle(std::vector<bool> connections) /// Vérifie si le graphe possède des cycles.
 {
     int nbConnections=0;
     {
@@ -517,7 +514,7 @@ bool Graph::testCycle(std::vector<bool> connections)
     return true;
 }
 
-float Graph::weightsSum(std::vector<bool> connections, int weight)
+float Graph::weightsSum(std::vector<bool> connections, int weight) /// Calcul la somme des poids du sous graphe passé en paramètre.
 {
     float totalWeight=0;
     for(size_t i = 0; i < connections.size(); i++)
@@ -528,9 +525,7 @@ float Graph::weightsSum(std::vector<bool> connections, int weight)
     return totalWeight;
 }
 
-/// additionneur 1 bit :
-
-bool add_1bit(bool a, bool b, bool& c)     ///peut être mettre des else if
+bool add_1bit(bool a, bool b, bool& c) /// Additionneur 1 bit.
 {
     bool r = (!a && !b && c) || (!a && b && !c) || (a && b && c) || (a && !b && !c);
          c = (b && c) || (a && b) || (a && c);
@@ -570,9 +565,7 @@ std::vector<std::vector<bool>> Graph::enumeration()
 
 std::vector<std::vector<bool>>  Graph::filtrage()
 {
-/**
-    Fonction qui selectionne les solutions admissibles parmis les solutions existantes :
-*/
+/// Fonction qui selectionne les solutions admissibles parmis les solutions existantes :
     std::vector<std::vector<bool>> solExist = enumeration();
 
     clock_t ms = clock()  ;
@@ -602,7 +595,7 @@ std::vector<std::vector<bool>>  Graph::filtrage()
     return solAdmis;
 }
 
-void Graph::reset()
+void Graph::reset() /// Réinitialise un graphe comme si l'objet venait d'être instancié.
 {
     for (int i = 0; i < m_nodes.size(); i++)
         delete m_nodes[i];
@@ -614,7 +607,7 @@ void Graph::reset()
     m_taille = 0;
 }
 
-///fonction qui trie les solutions dominées et non dominées selon les 2 objectifs et les affiche :
+/// Fonction qui trie les solutions dominées et non dominées selon les 2 objectifs et les affiche :
 
 void Graph::evaluation()
 {
@@ -711,7 +704,7 @@ void Graph::evaluation()
     delete svgg;
 }
 
-void Graph::secondEvaluation()
+void Graph::secondEvaluation() /// Fonction d'évaluation des solutions trouvées pour la deuxième partie.
 {
     std::vector<std::vector<bool>> admissibles = secondfiltrage();
     std :: vector <float> somme1 (admissibles.size(),0);
@@ -781,7 +774,7 @@ void Graph::secondEvaluation()
     //rajouter les axes plus tard ?  poid1 en abscisse poids2 en ordonnée
 }
 
-std::vector<std ::vector<bool>> Graph::secondfiltrage ()
+std::vector<std ::vector<bool>> Graph::secondfiltrage () /// Filtrage pour la deuxième partie.
 {
     std::vector < std:: vector<bool> > solExist= this->secondEnumeration();
     std::vector<std::vector<bool>> admissibles;
@@ -793,7 +786,7 @@ std::vector<std ::vector<bool>> Graph::secondfiltrage ()
     return admissibles;
 }
 
-std::vector < std::vector<bool> > Graph ::  secondEnumeration ()
+std::vector < std::vector<bool> > Graph ::  secondEnumeration () /// Enumérations des solutions potentielles pour la partie 2.
 {
     std :: vector<bool> zero (m_taille,false);  ///on initialise toutes les solutions avec autant de zéro que d'arretes :
     std::vector < std::vector<bool> >  sol_exist (pow(2,m_taille),zero);    ///on crée 2^taille solutions
@@ -817,7 +810,7 @@ std::vector < std::vector<bool> > Graph ::  secondEnumeration ()
        return retour;
 }
 
-int howManyTrue(std::vector<bool>& subject)
+int howManyTrue(std::vector<bool>& subject) /// Renvoie le nombre d'élements true dans le vecteur subject.
 {
     int n = 0;
     for(int i = 0; i < subject.size(); i++)
@@ -827,8 +820,7 @@ int howManyTrue(std::vector<bool>& subject)
 }
 
 
-std::vector<std::vector<bool>> combinations(int k, int n, Graph* g)
-
+std::vector<std::vector<bool>> combinations(int k, int n, Graph* g) /// Calcule les combinaisons de k parmis n.
 {
     std::vector<std::vector<bool>> sol;
     std::vector<int> vec;
@@ -869,7 +861,7 @@ std::vector<std::vector<bool>> combinations(int k, int n, Graph* g)
     return sol;
 }
 
-std::vector<bool> tradIntToBool(std::vector<int> vec, Graph* g)
+std::vector<bool> tradIntToBool(std::vector<int> vec, Graph* g) /// Traduit un vecteur de int en vecteur de bool adapté au graphe.
 {
     std::vector<bool> cons(g->getSize(), false);
 
@@ -878,8 +870,8 @@ std::vector<bool> tradIntToBool(std::vector<int> vec, Graph* g)
     return cons;
 }
 
-void Graph::bruteForcePareto(std::string filename)
-{
+void Graph::bruteForcePareto(std::string filename) /// Trouve les solutions de pareto par la méthode brute force.
+{                                                  /// Echoue sur les graphes trop grands, par manque de mémoire.
     float t, dt, start;
     dt = clock();
     start = dt;
@@ -980,7 +972,7 @@ void Graph::bruteForcePareto(std::string filename)
     delete svg;
 }
 
-void Graph::bruteForceParetoConsideringCycles(std::string filename)
+void Graph::bruteForceParetoConsideringCycles(std::string filename) /// Calcule les optimum de pareto en autorisant les cycles avec la méthode brute force.
 {
     float t, dt, start;
 
@@ -1084,8 +1076,8 @@ void Graph::bruteForceParetoConsideringCycles(std::string filename)
     delete svg;
 }
 
-Graph createManually()
-{
+Graph createManually() /// Crée un graphe manuellement.
+{                      /// Fonction inachevée.
     std::vector<Node*> nodes;
     std::vector<Connection*> connections;
     int ordre=0;

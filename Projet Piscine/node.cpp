@@ -5,14 +5,14 @@
 #include "node.h"
 #include <iostream>
 
-Node::Node(int index, float x, float y)
+Node::Node(int index, float x, float y) /// Constructeur.
 {
     m_index = index;
     m_x     = x    ;
     m_y     = y    ;
 }
 
-Node::~Node()
+Node::~Node() /// Destructeur.
 {
     //dtor
 }

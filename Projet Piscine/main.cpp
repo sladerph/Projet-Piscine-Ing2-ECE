@@ -1,5 +1,6 @@
 
-
+/// \file main.cpp
+/// \brief Contient la fonction main qui contrôle l'exécution du programme.
 /// \author Pierre Herduin, Mélodie Damas, Simon jolly
 
 #include <iostream>

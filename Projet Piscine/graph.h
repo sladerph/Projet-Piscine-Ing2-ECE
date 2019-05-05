@@ -23,7 +23,8 @@
 
 #define XOFFSET 50  /// \def XOFFSET 50
 #define YOFFSET 50  /// \def YOFFSET 50
-
+/// Ces define sont utilisés pour l'affichage des graphes sur un fichier svg. Ils permettent de mettre de la distance
+/// entre la marge et le début de l'affichage.
 
 /// \struct Solution
 /// \brief modèle de d'agencement du graphe constituant un éventuel optimum de pareto
@@ -321,6 +322,9 @@ std::vector<std::vector<bool>> combinations(int k, int n, Graph* g);
 /// \return vecteur de booléens de même taille que la liste d'arêtes : le booléen d'indice n décrit si l'arête d'indice n est active ou non
 std::vector<bool> tradIntToBool(std::vector<int> vec, Graph* g);
 
+/// \fn Graph createManually()
+/// \brief Permet de créer un graphe manuellement. Cette fonction est inachevée.
+/// \return Le graphe récemment créée.
 Graph createManually();
 
 #endif // GRAPH_H

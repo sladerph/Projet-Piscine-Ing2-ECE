@@ -37,8 +37,8 @@
 /// \brief Rassemble les informations relatives aux fichiers contenant les informations des graphes
 struct FileInfo
 {
-    std::string name;       /// <nom du fichier contenant les sommets et les arêtes
-    std::vector<std::string> weights;       ///liste des fichiers décrivant les différents agencements de poids relatifs aux fichier contenant les sommets et arêtes
+    std::string name; /// <nom du fichier contenant les sommets et les arêtes
+    std::vector<std::string> weights; ///liste des fichiers décrivant les différents agencements de poids relatifs aux fichier contenant les sommets et arêtes
 };
 
 /// \fn float mapLine(float val, float xa, float ya, float xb, float yb)

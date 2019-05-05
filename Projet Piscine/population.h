@@ -1,9 +1,9 @@
 #ifndef POPULATION_H
 #define POPULATION_H
 
-/// \file
-/// \brief
-/// \author Pierre Herduin, Mélodie Damas, Simon jolly
+/// \file population.h
+/// \brief Regroupe la classe Population et les fonctions intervenants dans l'algorithme génétique.
+/// \author Pierre Herduin
 
 #include "dna.h"
 #include "utils.h"
@@ -12,7 +12,12 @@
 #include <sstream>
 #include <time.h>
 
+/// \class DNA
+/// \brief Inclue ici pour raison de double inclusion.
 class DNA;
+
+/// \class Graph
+/// \brief Inclue ici pour raison de double inclusion.
 class Graph;
 
 /// \class Population
@@ -33,7 +38,7 @@ class Population
         ~Population();
 
         /// \fn void evaluateFitness()
-        /// \brief Calcul le fitness des individus.
+        /// \brief Calcul le fitness (score) des individus.
         void evaluateFitness();
 
         /// \fn void purify()
@@ -76,7 +81,7 @@ class Population
         void evaluateDominatedFront();
 
         /// \fn bool isDominated(DNA* dna, std::vector<DNA*> comp)
-        /// \brief vérifie si un element est dominé par un conteneur d'elements.
+        /// \brief Vérifie si un élement est dominé par un conteneur d'élements.
         /// \param dna : element à verifier.
         /// \param comp : conteneur d'element contre qui confronter dna.
         /// \return retourne vrai si dna est dominé.
@@ -87,12 +92,12 @@ class Population
         void solve();
 
     private:
-        std::vector<DNA*> m_pop;
-        std::vector<DNA*> m_pareto_bests;
-        int m_pop_size;
-        int m_generation;
-        int m_mutation_rate;
-        Graph* m_structure;
+        std::vector<DNA*> m_pop; ///< Vecteur de DNA* qui représente la population.
+        std::vector<DNA*> m_pareto_bests; ///< Vecteur de DNA* qui stocke les meilleures solutions trouvées.
+        int m_pop_size; ///< La taille de la population.
+        int m_generation; ///< Le nombre de générations déjà écoulées.
+        int m_mutation_rate; ///< Le pourcentage de chance de subir une mutation génétique.
+        Graph* m_structure; ///< La structure des individus de la population.
 
         /// \fn void sortByFront()
         /// \brief Trie les individus par front de domination montant.

@@ -20,8 +20,7 @@ class Node
 {
     public:
         /// \fn Node(int index, float x, float y)
-        /// \brief constructeur
-        /// Constructeur de la classe Node
+        /// \brief Constructeur de la classe Node
         /// \param index  : index initial du sommet.
         /// \param x : abscisse initiale du sommet
         /// \param y : ordonnée initiale du sommet
